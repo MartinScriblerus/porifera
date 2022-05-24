@@ -1,2 +1,2 @@
 # porifera
-A project in proocess
+A project in process
