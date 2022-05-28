@@ -1,0 +1,20 @@
+{
+  "name": "porifera",
+  "version": "1.0.0",
+  "description": "A project in process",
+  "main": "a.out.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinScriblerus/porifera.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinScriblerus/porifera/issues"
+  },
+  "homepage": "https://github.com/MartinScriblerus/porifera#readme"
+}
+

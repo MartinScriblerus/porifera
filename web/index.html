@@ -1,0 +1,48 @@
+<html>
+  <body>
+    <div>
+      <h1>
+        HELLO Christan!
+      </h1>
+    </div>
+    <!-- <script src="../src/server.js"></script> -->
+    <script src="gen/hello.js"></script>
+    <script>
+      class Fib {
+        constructor() {
+          this.cppInstance = Module._new_fib();
+        }
+        next() {
+          return Module._next_val(this.cppInstance);
+        }
+      }
+
+      function functionExists(f) {
+        return f && typeof f === "function";
+      }
+      function isNumber(n) {
+        return typeof n === "number";
+      }
+      function testFunctionBinding() {
+        assert(functionExists(Module._new_fib));
+        assert(functionExists(Module._next_val));
+      }
+      // int is part of the interface
+      function testNextValReturnsInt() { 
+        assert(isNumber(new Fib().next()));
+      }
+
+      Module.onRuntimeInitialized = function() {
+        let fib1 = new Fib();
+        console.log(fib1.next());
+        console.log(fib1.next());
+        console.log(fib1.next());
+        testFunctionBinding();
+        testNextValReturnsInt();
+      }
+    </script>
+    <script>
+      console.log("module: ", Module);
+    </script>
+  </body>
+</html>
