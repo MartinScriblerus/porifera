@@ -1,19 +1,14 @@
-const { say } = require('../pkg/wasmedge_nodejs_starter_lib.js');
+var ref = require("ref");
+var ffi = require("ffi");
 
-const http = require('http');
-const url = require('url');
-const hostname = '0.0.0.0';
-const port = 3000;
+// typedefs
+var myobj = ref.types.void // we don't know what the layout of "myobj" looks like
+var myobjPtr = ref.refType(myobj);
 
-const server = http.createServer((req, res) => {
-  const queryObject = url.parse(req.url,true).query;
-  if (!queryObject['name']) {
-    res.end(`Please use command curl http://${hostname}:${port}/?name=MyName \n`);
-  } else {
-    res.end(say(queryObject['name']) + '\n');
-  }
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+var MyLibrary = ffi.Library('libmylibrary', {
+  "do_some_number_fudging": [ 'double', [ 'double', 'int' ] ],
+  "create_object": [ myobjPtr, [] ],
+  "do_stuff_with_object": [ "double", [ myobjPtr ] ],
+  "use_string_with_object": [ "void", [ myobjPtr, "string" ] ],
+  "delete_object": [ "void", [ myobjPtr ] ]
 });
