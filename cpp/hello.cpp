@@ -6,6 +6,7 @@
 extern "C" {
  int new_fib();
  int next_val(int fib_instance);
+inline uint32_t do_math(uint32_t a, uint32_t b) { return a+b; }
 }
 auto instances = std::vector<Fib>();
 int next_val(int fib_instance) {
@@ -19,6 +20,6 @@ int new_fib() {
 int main() {
  int fib1 = new_fib();
  next_val(fib1);
- printf("hi\n");
+ printf("hi ROWAN!!!\n");
  return 0;
 }

@@ -1,0 +1,101 @@
+import nltk
+from flask import Flask, request
+import requests
+import sys, json 
+
+app = Flask(__name__)
+
+# ========================================================
+# PYTHON ROUTES
+# ========================================================
+
+@app.route('/')
+def hello():
+    # Create Dictionary
+    value = {
+        "greeting": "Hello World!"
+    }
+    # return json.dumps(value)
+    return value
+    
+
+@app.route('/<name>')
+def hello_name(name):
+    value = {
+        "name": name
+    }
+    # return "Hello {}!".format(name)
+    # d=string_sum.sum_as_string(12,13)
+    # print(d)
+    
+
+@app.route('/', methods=['POST'])
+def my_form_post():
+    # text = request.form['text']
+    text = "Can you see who is on the wall--it is a beautiful bird."
+    nltk.download('vader_lexicon')
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
+    sid = SentimentIntensityAnalyzer()
+    score = ((sid.polarity_scores(str(text))))['compound']
+    if(score > 0):
+        label = 'This sentence is positive'
+    elif(score == 0):
+        label = 'This sentence is neutral'
+    else:
+        label = 'This sentence is negative'
+    # return(render_template('index.html', variable=label))
+    value = {
+        "text": text,
+        "sentiment": label
+    }
+    return value
+
+# ========================================================
+# (RECEIVE FROM) NODE INTEROP ROUTE
+# ========================================================
+
+# Setup url route which will calculate
+# total sum of array.
+@app.route('/arraysum', methods = ['POST']) 
+def sum_of_array(): 
+    data = request.get_json() 
+    print(f"data(sum of array): {data}")
+    
+    # Data variable contains the 
+    # data from the node server
+    ls = data['array'] 
+    result = sum(ls) # calculate the sum
+
+    # Return data in json format 
+    return json.dumps({"result":result})
+
+
+
+# ========================================================
+# (SEND TO) NODE INTEROP ROUTE
+# ========================================================
+@app.route('/toNode', methods = ['POST']) 
+def toNode():
+    # Sample array
+    array = [1,2,3,4,5,6]
+    
+    # Data that we will send in post request.
+    data = {'array':array}
+    
+    # The POST request to our node server
+    res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
+    
+    # Convert response data to json
+    returned_data = res.json() 
+    
+    print(returned_data)
+    result = returned_data['result'] 
+    print("just got this data from node!:", result)
+    # return result
+    return json.dumps({"result":result})
+    ############
+
+# ========================================================
+# APP & SERVER
+if __name__ == "__main__":
+    app.run(port='8088', threaded=False, debug=True)

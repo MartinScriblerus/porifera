@@ -1,0 +1,27 @@
+alembic==1.7.7
+beautifulsoup4==4.8.2
+certifi==2022.5.18.1
+chardet==3.0.4
+click==8.1.3
+Flask==2.1.2
+Flask-Migrate==2.5.2
+Flask-SQLAlchemy==2.4.1
+greenlet==1.1.2
+idna==2.8
+importlib-metadata==4.11.4
+itsdangerous==2.1.2
+Jinja2==3.1.2
+Mako==1.2.0
+MarkupSafe==2.1.1
+maturin==0.12.17
+nltk==3.4.5
+psycopg2-binary==2.9.3
+requests==2.22.0
+rust-node @ file:///var/folders/cy/sszlg5vx5c906q51zrf8q7y40000gn/T/.tmpuDItIl/rust_node-0.1.0-cp39-cp39-macosx_10_7_x86_64.whl
+six==1.16.0
+soupsieve==2.3.2.post1
+SQLAlchemy==1.4.36
+tomli==2.0.1
+urllib3==1.25.11
+Werkzeug==2.1.2
+zipp==3.8.0

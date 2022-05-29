@@ -1,0 +1,39 @@
+[package]
+name = "rust-node"
+version = "0.1.0"
+license = "ISC"
+edition = "2018"
+exclude = ["index.node"]
+
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.neon]
+version = "0.10"
+default-features = false
+features = ["napi-6"]
+
+[dependencies]
+num_cpus = "1"
+wasm-bindgen = "0.2.50"
+js-sys = "0.3.57"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies.pyo3]
+version = "0.16.5"
+
+features = ["extension-module"]
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+  'Document',
+  'Element',
+  'HtmlElement',
+  'Node',
+  'Window',
+]     
+
