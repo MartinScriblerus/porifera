@@ -1,7 +1,7 @@
 set(project "hello")
 project(${project})
 cmake_minimum_required(VERSION 3.12)
-
+target_include_directories(test PRIVATE ${"/Users/matthewreilly/emsdk/upstream/emscripten/cache/sysroot/include/"})
 set(src 
    hello.cpp
    fib.cpp

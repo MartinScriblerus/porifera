@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "macos-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/**}",
+        "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/system/lib/html5/**}"
+      ],
+      "defines": [],
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+      ],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "${default}",
+      "intelliSenseMode": "macos-gcc-x64",
+      "configurationProvider": "go2sh.cmake-integration",
+      "cppStandard": "${default}"
+    }
+  ],
+  "version": 4
+}

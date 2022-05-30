@@ -1680,7 +1680,7 @@ var tempI64;
 var ASM_CONSTS = {
   
 };
-
+function two_alerts() { alert('hai'); alert('bai'); }
 
 
 
@@ -2038,7 +2038,8 @@ var asmLibraryArg = {
   "emscripten_memcpy_big": _emscripten_memcpy_big,
   "emscripten_resize_heap": _emscripten_resize_heap,
   "fd_write": _fd_write,
-  "setTempRet0": _setTempRet0
+  "setTempRet0": _setTempRet0,
+  "two_alerts": two_alerts
 };
 var asm = createWasm();
 /** @type {function(...*):?} */

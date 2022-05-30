@@ -6,3 +6,12 @@ mv hello.js ../web/gen/
 mv hello.wasm ../web/gen/
 node ../lib/server.js
 
+
+# configure FFMpeg with Emscripten
+ARGS=(
+  --target-os=none        # use none to prevent any os specific configurations
+  --arch=x86_32           # use x86_32 to achieve minimal architectural optimization
+  --enable-cross-compile  # enable cross compile
+  --disable-x86asm        # disable x86 asm
+)
+emconfigure ./configure "${ARGS[@]}"
