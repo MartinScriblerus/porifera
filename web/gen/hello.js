@@ -1665,7 +1665,7 @@ var tempI64;
 var ASM_CONSTS = {
   
 };
-function two_alerts() { alert('hello world!'); }
+function two_alerts() { alert('hello world from c++ to js!'); }
 
 
 

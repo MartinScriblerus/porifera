@@ -204,7 +204,27 @@
       }
     </script>
     <script>
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://localhost:8081');
+
+    // Connection opened
+    socket.addEventListener('message', function (event) {
+        socket.send('Hello Server!');
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+
+    socket.addEventListener('something', function (event) {
+        console.log('Message!!! from server ', event.data);
+    });
+   
+    </script>
+    <script type="module">
       console.log("module: ", Module);
+ 
     </script>
 
     <!-- JavaScript Bundle with Popper -->
