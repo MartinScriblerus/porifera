@@ -2,8 +2,92 @@ body {
     background-color: grey;
 }
 
-#rowan {
-    background-color: fuchsia;
-    color: grey;
-    font-size: 64px;
+h3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#border-box {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+}
+
+.column {
+    background-color: white;
+
+}
+
+.row {
+    background-color: rgb(98, 176, 155);
+    min-height: 160px;
+}
+
+.box {
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+}
+.box.lang-name-box {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.row-title {
+    writing-mode: vertical-rl;
+    transform: rotate(-180deg);
+}
+.to-js {
+    float: left;
+    color: white;
+    width: 45%;
+    justify-content: center;
+    text-align: center;
+}
+.from-js {
+    float: right;
+    color: white;
+    width: 45%;
+    justify-content: center;
+    text-align: center;
+}
+.cpp {
+    color: black;
+}
+.py {
+    color: blue;
+}
+.rs {
+    color: brown
+}
+.node {
+    color: yellow;
+}
+
+.cpp-row {
+    border-bottom: solid 1px black;
+}
+
+.py-row {
+    border-bottom: solid 1px blue;
+}
+
+.rust-row {
+    border-bottom: solid 1px brown;
+}
+
+.node-row {
+    border-bottom: solid 1px yellow;
+}
+
+.old-num-cpp {
+    visibility: none;
+}
+
+.inner-box {
+    display: flex;
+    flex-direction: column;
+    min-width: 264px;
 }

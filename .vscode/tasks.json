@@ -10,8 +10,11 @@
             "args": [
 				"-g",
 				"-I",
-                "-I${/Users/matthewreilly/emsdk/upstream/emscripten/system/lib/html5}",
-                "-I${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten.h}",
+                "-I${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h}",
+                "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/val.h}",
+                "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/html5.h}",
+                "-I${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/**}",
+
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/*.cpp",
                 "-o"

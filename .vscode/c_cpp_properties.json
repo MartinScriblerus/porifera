@@ -4,8 +4,12 @@
       "name": "macos-gcc-x64",
       "includePath": [
         "${workspaceFolder}/**",
-        "${../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/**}",
-        "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/system/lib/html5/**}"
+        "${../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h}",
+        "${{workspaceFolder}/../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/html5.h}",
+        "${{workspaceFolder}/../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/val.h}",
+        "${../../../tmp/emsdk/upstream/emscripten/system/include/emscripten/val.h}",
+        "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/system/lib/html5/**}",
+        "${/usr/local/include/faust/vst/**}"
       ],
       "defines": [],
       "macFrameworkPath": [
