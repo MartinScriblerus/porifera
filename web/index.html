@@ -1,234 +1,238 @@
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  <title>Porifera</title>
-</head>  
-<body>
-    <div id="border-box" class="container-md">
-      
-      <h1>
-        Porifera: Interops Tests
-      </h1>
-      <!-- <div> -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Porifera</title>
+  </head>  
+  <body>
+      <div id="border-box" class="container-md">
         
-        <div class="row cpp-row">
-          <div class="box">
-            <div class="box lang-name-box">
-              <h2 class="row-title cpp">
-                C++
-              </h2>
-            </div>
-            <div class="box from-js cpp-to">
-              <div class="inner-box">
-                <h3>
-                  Js to C++
-                </h3>
-                <div class="box">
-                  <h5 id="jsToCppProof1">
-                    Math Result: <span id="newMathCpp"></span>
-                  </h5>
+        <h1>
+          Porifera: Interops Tests
+        </h1>
+        <!-- <div> -->
+          
+          <div class="row cpp-row">
+            <div class="box">
+              <div class="box lang-name-box">
+                <h2 class="row-title cpp">
+                  C++
+                </h2>
+              </div>
+              <div class="box from-js cpp-to">
+                <div class="inner-box">
+                  <h3>
+                    Js to C++
+                  </h3>
+                  <div class="box">
+                    <h5 id="jsToCppProof1">
+                      Math Result: <span id="newMathCpp"></span>
+                    </h5>
+                  </div>
+                  <input type = "button" onclick = "doMathCpp()" value = "Addition">  
+                  <input type = "button" onclick = "sendName()" value = "Send Yr Name"> 
                 </div>
-                <input type = "button" onclick = "doMathCpp()" value = "Addition">  
+              </div>
+              <div id="cppToJs" class="box to-js cpp-from">
+                <div class="inner-box">
+                  <h3>
+                    C++ to Js
+                  </h3>
+                  <div class="box">
+                    <h5 id="cppToJsProof1">
+                      Single Fibunacci Number Val: <span id="newNumCpp"></span>
+                    </h5>
+                  </div>
+                  <input type = "button" onclick = "getNewNum()" value = "Increment">  
+                  
+                </div>
               </div>
             </div>
-            <div id="cppToJs" class="box to-js cpp-from">
-              <div class="inner-box">
+          </div>
+
+          <div class="row py-row">
+            <div class="box">
+              <div class="box lang-name-box">
+                <h2 class="row-title py">
+                  Python
+                </h2>
+              </div>
+              <div class="box from-js py-to">
                 <h3>
-                  C++ to Js
+                  Js to Python
                 </h3>
-                <div class="box">
-                  <h5 id="cppToJsProof1">
-                    Single Fibunacci Number Val: <span id="newNumCpp"></span>
-                  </h5>
-                </div>
-                <input type = "button" onclick = "getNewNum()" value = "Increment">  
+              </div>
+              <div id="pyToJs" class="box to-js py-from">
+                <h3>
+                  Python to Js
+                </h3>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="row py-row">
-          <div class="box">
-            <div class="box lang-name-box">
-              <h2 class="row-title py">
-                Python
-              </h2>
-            </div>
-            <div class="box from-js py-to">
-              <h3>
-                Js to Python
-              </h3>
-            </div>
-            <div class="box to-js py-from">
-              <h3>
-                Python to Js
-              </h3>
+          <div class="row rust-row">
+            <div class="box">
+              <div class="box lang-name-box">
+                <h2 class="row-title rs">
+                  Rust
+                </h2>
+              </div>
+              <div class="box from-js rust-to">
+                <h3>
+                  Js to Rust
+                </h3>
+              </div>
+              <div class="box to-js rust-from">
+                <h3>
+                  Rust to Js
+                </h3>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="row rust-row">
-          <div class="box">
-            <div class="box lang-name-box">
-              <h2 class="row-title rs">
-                Rust
-              </h2>
-            </div>
-            <div class="box from-js rust-to">
-              <h3>
-                Js to Rust
-              </h3>
-            </div>
-            <div class="box to-js rust-from">
-              <h3>
-                Rust to Js
-              </h3>
-            </div>
-          </div>
-        </div>
-        
-        <div class="row node-row">
-          <div class="box">
-            <div class="box lang-name-box">
-              <h2 class="row-title node">
-                Node
-              </h2>
-            </div>
-            <div class="box from-js node-to">
-              <h3>
-                Js to Node
-              </h3>
-            </div>
-            <div class="box to-js node-from">
-              <h3>
-                Node to Js
-              </h3>
+          
+          <div class="row node-row">
+            <div class="box">
+              <div class="box lang-name-box">
+                <h2 class="row-title node">
+                  Node
+                </h2>
+              </div>
+              <div class="box from-js node-to">
+                <h3>
+                  Js to Node
+                </h3>
+              </div>
+              <div class="box to-js node-from">
+                <h3>
+                  Node to Js
+                </h3>
+              </div>
             </div>
           </div>
-        </div>
-   
-      </div> 
-    </div>
+    
+        </div> 
+      </div>
 
+    
+      <!-- <script src="../src/server.js"></script> -->
+      <script src="gen/hello.js"></script>
+
+      <script>
+        function getNewNum(){
+          let newFib = Module._next_val(_new_fib);
+          showCppWasm(newFib);
+          // return Module.onRuntimeInitialized();
+        }
+      </script>
+
+      <script>
+        function doMathCpp(){
+          let x = prompt("choose a number");
+          let y = prompt("choose a second number");
+          let result = Module._do_math(x,y);
+          print("HAY! ", result);
+          let showJsToCpp = document.getElementById("newMathCpp");
+          postMath(showJsToCpp, result);
+        }
+
+        function postMath(showJsToCpp, result){
+          if(showJsToCpp){
+            let oldNums = showJsToCpp.childNodes
   
-    <!-- <script src="../src/server.js"></script> -->
-    <script src="gen/hello.js"></script>
-
-    <script>
-      function getNewNum(){
-        let newFib = Module._next_val(_new_fib);
-        showCppWasm(newFib);
-        // return Module.onRuntimeInitialized();
-      }
-    </script>
-
-    <script>
-      function doMathCpp(){
-        let x = prompt("choose a number");
-        let y = prompt("choose a second number");
-        let result = Module._do_math(x,y);
-        print("HAY! ", result);
-        let showJsToCpp = document.getElementById("newMathCpp");
-        postMath(showJsToCpp, result);
-      }
-
-      function postMath(showJsToCpp, result){
-        if(showJsToCpp){
-          console.log("appending this value: ", showJsToCpp);
-          let oldNums = showJsToCpp.childNodes
- 
-          for(let i = 0; i < oldNums.length; i++){
-            oldNums[i].remove();
-            delete oldNums[i];
+            for(let i = 0; i < oldNums.length; i++){
+              oldNums[i].remove();
+              delete oldNums[i];
+            }
+            showJsToCpp.append(result);
           }
-          showJsToCpp.append(result);
         }
-      }
-    </script>
+      </script>
 
-    <script>
-      two_alerts();
-    </script>
+      <!-- <script>
+        two_alerts();
+      </script> -->
 
-    <script>
-      class Fib {
-        constructor() {
-          this.cppInstance = Module._new_fib();
-        }
-        next() {
-          return Module._next_val(this.cppInstance);
-        }
-      }
-
-      function functionExists(f) {
-        return f && typeof f === "function";
-      }
-      function isNumber(n) {
-        return typeof n === "number";
-      }
-      function testFunctionBinding() {
-        assert(functionExists(Module._new_fib));
-        assert(functionExists(Module._next_val));
-      }
-      // int is part of the interface
-      function testNextValReturnsInt() { 
-        assert(isNumber(new Fib().next()));
-      }
-
-
-
-      Module.onRuntimeInitialized = function() {
-        let fib1 = new Fib();
-        testFunctionBinding();
-        testNextValReturnsInt();
-        let fibunacciNumber = fib1.next();
-        showCppWasm(fibunacciNumber);
-      }
-
-      function showCppWasm(val){
-        console.log("what type is val?: ", typeof val);
-        let showCppToJs = document.getElementById("newNumCpp");
-        if(showCppToJs){
-          console.log("appending this value: ", showCppToJs);
-          let oldNums = showCppToJs.childNodes
- 
-          for(let i = 0; i < oldNums.length; i++){
-            oldNums[i].remove();
-            delete oldNums[i];
+      <script>
+        class Fib {
+          constructor() {
+            this.cppInstance = Module._new_fib();
           }
-          showCppToJs.append(val);
+          next() {
+            return Module._next_val(this.cppInstance);
+          }
         }
-      }
-    </script>
-    <script>
-    // Create WebSocket connection.
-    const socket = new WebSocket('ws://localhost:8081');
 
-    // Connection opened
-    socket.addEventListener('message', function (event) {
-        socket.send('Hello Server!');
-    });
+        function functionExists(f) {
+          return f && typeof f === "function";
+        }
+        function isNumber(n) {
+          return typeof n === "number";
+        }
+        function testFunctionBinding() {
+          assert(functionExists(Module._new_fib));
+          assert(functionExists(Module._next_val));
+        }
+        // int is part of the interface
+        function testNextValReturnsInt() { 
+          assert(isNumber(new Fib().next()));
+        }
 
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
-    });
 
-    socket.addEventListener('something', function (event) {
-        console.log('Message!!! from server ', event.data);
-    });
-   
-    </script>
-    <script type="module">
-      console.log("module: ", Module);
- 
-    </script>
 
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+        Module.onRuntimeInitialized = function() {
+          let fib1 = new Fib();
+          testFunctionBinding();
+          testNextValReturnsInt();
+          let fibunacciNumber = fib1.next();
+          showCppWasm(fibunacciNumber);
+        }
+
+        function showCppWasm(val){
+          console.log("what type is val?: ", typeof val);
+          let showCppToJs = document.getElementById("newNumCpp");
+          if(showCppToJs){
+            let oldNums = showCppToJs.childNodes
+  
+            for(let i = 0; i < oldNums.length; i++){
+              oldNums[i].remove();
+              delete oldNums[i];
+            }
+            showCppToJs.append(val);
+          }
+        }
+      </script>
+      <script>
+      // Create WebSocket connection.
+      const socket = new WebSocket('ws://localhost:8081');
+
+      // Connection opened
+      socket.addEventListener('message', function (event) {
+          socket.send('Hello Server!');
+      });
+
+      // Listen for messages
+      socket.addEventListener('message', function (event) {
+          document.getElementById("pyToJs").append(event.data);
+          console.log('Message from server ', event.data);
+      });
+
+      socket.addEventListener('something', function (event) {
+          console.log('Message!!! from server ', event.data);
+      });
+    
+      </script>
+      <script>
+        function sendName(){
+          let name = prompt("what is yr name?");
+          let get_name = Module.cwrap('get_name', 'string', ['string'])
+          get_name(name);
+        };
+      </script>
+
+      <!-- JavaScript Bundle with Popper -->
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
   </body>
 </html>

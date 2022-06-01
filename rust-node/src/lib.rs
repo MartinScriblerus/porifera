@@ -30,7 +30,7 @@ fn get_js_nums(mut cx: FunctionContext) -> JsResult<JsNumber> {
     Ok(cx.number(690.00 as f64))
 }
 
-pub fn getAlert(mut cx: FunctionContext) -> Result<(), wasm_bindgen::JsValue> {
+pub fn get_alert(_cx: FunctionContext) -> Result<(), wasm_bindgen::JsValue> {
     let window = window().unwrap();
     window.alert_with_message("Hello from WASM!")
   }

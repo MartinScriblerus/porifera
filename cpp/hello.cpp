@@ -12,13 +12,32 @@
 using emscripten::val;
 
 
+
+
 // #include "html5.h"
+EM_JS(void, two_alerts, (std::string someName), {
+  // alert('hello world from c++ to js!');
+  // char str; 
+  // name = &str;
+
+  alert(UTF8ToString(someName));      
+  document.getElementById("cppToJs").append(UTF8ToString(someName));
+});
+
 
 extern "C" {
   int new_fib();
   int next_val(int fib_instance);
   int get_new_number();
   int do_math(uint32_t a, uint32_t b) { return a+b; }
+  char *get_name(char *nom){
+    std::cout << "I am stupid " << nom << std::endl;
+    std::string someName(nom);
+    std::cout << "??? " << someName << std::endl;
+
+    two_alerts(someName);
+    return nom;
+  };
 }
 // Use thread_local when you want to retrieve & cache a global JS variable once per thread.
 thread_local const val document = val::global("document");
@@ -34,6 +53,12 @@ EM_BOOL one_iter(double time, void* userData) {
   // Return true to keep the loop running.
   return EM_TRUE;
 }
+
+
+
+
+
+
 
 auto instances = std::vector<Fib>();
 
@@ -61,9 +86,7 @@ int get_new_number(){
 //   function("get_new_number",get_new_number);
 // }
 
-EM_JS(void, two_alerts, (), {
-  alert('hello world from c++ to js!');
-});
+
 
 
 
@@ -75,11 +98,9 @@ int main() {
   get_new_number();
  
   #ifdef __EMSCRIPTEN__
-    
- 
-
     printf("hi ROWAN!!!\n");
- 
+       // Write the code to call the function and get the returned pointer.
+    // get_name("Birds on my head");
   #else
     while (1) {
       // one_iter();

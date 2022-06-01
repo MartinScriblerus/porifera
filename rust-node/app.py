@@ -15,18 +15,20 @@ def hello():
     value = {
         "greeting": "Hello World!"
     }
-    # return json.dumps(value)
     return value
-    
 
-@app.route('/<name>')
+    
+@app.route('/return_name/<name>')
 def hello_name(name):
     value = {
         "name": name
     }
-    # return "Hello {}!".format(name)
-    # d=string_sum.sum_as_string(12,13)
-    # print(d)
+    return value
+    
+
+#     # return "Hello {}!".format(name)
+#     # d=string_sum.sum_as_string(12,13)
+#     # print(d)
     
 
 @app.route('/', methods=['POST'])
@@ -53,28 +55,34 @@ def my_form_post():
 # ========================================================
 # (RECEIVE FROM) NODE INTEROP ROUTE
 # ========================================================
-
+last_val = {}
 # Setup url route which will calculate
 # total sum of array.
 @app.route('/arraysum', methods = ['POST']) 
 def sum_of_array(): 
     data = request.get_json() 
+    
     print(f"data(sum of array): {data}")
     
     # Data variable contains the 
     # data from the node server
     ls = data['array'] 
+    print(f"DATA FROM NODE {ls}")
     result = sum(ls) # calculate the sum
-
+    print(result)
+    last_val = result
+    if(result != last_val):
+        res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Return data in json format 
     return json.dumps({"result":result})
+
 
 
 
 # ========================================================
 # (SEND TO) NODE INTEROP ROUTE
 # ========================================================
-@app.route('/toNode', methods = ['POST']) 
+@app.route('/to_node', methods = ['POST']) 
 def toNode():
     # Sample array
     array = [1,2,3,4,5,6]
@@ -92,7 +100,7 @@ def toNode():
     result = returned_data['result'] 
     print("just got this data from node!:", result)
     # return result
-    return json.dumps({"result":result})
+    return result
     ############
 
 # ========================================================

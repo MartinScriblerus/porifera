@@ -3,7 +3,7 @@ import sys, json
 # Function to calculate the sum of array
 def arraysum(arr):
     return sum(arr)
-  
+
 # Get the command line arguments
 # and parse it to json
 data = json.loads(sys.argv[1])
