@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/MartinScriblerus/porifera#readme",
   "dependencies": {
+    "api-benchmark": "^1.0.1",
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "child_process": "^1.0.2",
     "cluster": "^0.7.7",
@@ -24,6 +26,7 @@
     "http": "0.0.1-security",
     "isomorphic-ws": "^4.0.1",
     "os": "^0.1.2",
+    "redis": "^4.1.0",
     "request-promise": "^4.2.6",
     "url": "^0.11.0",
     "ws": "^8.7.0"

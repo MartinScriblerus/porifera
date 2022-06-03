@@ -63,6 +63,8 @@
                 <h3>
                   Js to Python
                 </h3>
+                <input type = "button" onclick = "triggerMathPy()" value = "Trigger New Py Arr"> 
+                
               </div>
               <div id="pyToJs" class="box to-js py-from">
                 <h3>
@@ -118,7 +120,7 @@
     
       <!-- <script src="../src/server.js"></script> -->
       <script src="gen/hello.js"></script>
-
+      
       <script>
         function getNewNum(){
           let newFib = Module._next_val(_new_fib);
@@ -147,6 +149,20 @@
             }
             showJsToCpp.append(result);
           }
+        }
+      </script>
+
+      <script>
+        function triggerMathPy(){
+          let toPy = {"numArray: ": [3,4,6,5,45,6,7,8,6,9,9,9,9,9,9,9]};
+          fetch('http://localhost:8088/to_node', {
+            method: 'POST',
+            body: JSON.stringify(toPy),
+            headers: {'Content-type': 'application/json; charset=UTF-8'
+        }
+          })
+          .then(response => response.json())
+          .then(json => console.log(json));
         }
       </script>
 
@@ -205,7 +221,7 @@
       </script>
       <script>
       // Create WebSocket connection.
-      const socket = new WebSocket('ws://localhost:8081');
+      const socket = new WebSocket('ws://127.0.0.1:8081');
 
       // Connection opened
       socket.addEventListener('message', function (event) {
@@ -214,15 +230,27 @@
 
       // Listen for messages
       socket.addEventListener('message', function (event) {
+        console.log("EVENT: ", event);
           document.getElementById("pyToJs").append(event.data);
-          console.log('Message from server ', event.data);
+          console.log('Message! from server ', event.data);
       });
 
       socket.addEventListener('something', function (event) {
+          socket.onmessage = async function(event){
+            console.log("WHOOO OHOOO", event);
+          }
+          console.log("eventt", event);
           console.log('Message!!! from server ', event.data);
       });
     
       </script>
+
+      <script>
+        fetch('http://localhost:3000/')
+          .then(response => response.json())
+          .then(json => console.log(json));
+      </script>
+
       <script>
         function sendName(){
           let name = prompt("what is yr name?");
@@ -230,6 +258,9 @@
           get_name(name);
         };
       </script>
+
+
+
 
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>

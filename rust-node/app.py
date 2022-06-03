@@ -2,8 +2,10 @@ import nltk
 from flask import Flask, request
 import requests
 import sys, json 
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # ========================================================
 # PYTHON ROUTES
@@ -84,6 +86,7 @@ def sum_of_array():
 # ========================================================
 @app.route('/to_node', methods = ['POST']) 
 def toNode():
+    
     # Sample array
     array = [1,2,3,4,5,6]
     
@@ -92,15 +95,17 @@ def toNode():
     
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
-    
     # Convert response data to json
     returned_data = res.json() 
-    
+    print(type(returned_data))
     print(returned_data)
     result = returned_data['result'] 
+    requests.post('http://127.0.0.1:3000/updateArraySum', json={'array':result}) 
+    print(type(result))
     print("just got this data from node!:", result)
+   
     # return result
-    return result
+    return json.dumps({"response": result})
     ############
 
 # ========================================================

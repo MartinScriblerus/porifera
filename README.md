@@ -1,6 +1,8 @@
 # porifera
 A project in process
 
+currently, node is connected to c++ modules & a python server (hit "to_node") through websockets and redis pubsub
+
 ## Enter rust/python env
 cd rust-node
 
