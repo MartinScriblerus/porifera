@@ -91,3 +91,10 @@ h3 {
     flex-direction: column;
     min-width: 264px;
 }
+
+#pitchDisplay {
+    font-size: 128px;
+    color:black;
+    background-color: brown;
+    border: white solid 1px;
+}

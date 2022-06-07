@@ -21,7 +21,7 @@ export default class PitchProcessor extends AudioWorkletProcessor {
   onmessage(event) {
     console.log("MESSAGE EVENT: ", event);
     if (event.type === "send-wasm-module") {        
-      console.log("made it!");
+      // WASM MODULE LOADED
       init(WebAssembly.compile(event.wasmBytes)).then(() => {
         
         this.port.postMessage({ type: 'wasm-module-loaded' });
@@ -89,6 +89,10 @@ export default class PitchProcessor extends AudioWorkletProcessor {
     // Once our buffer has enough samples, pass them to the Wasm pitch detector.
     if (this.totalSamples >= this.numAudioSamplesPerAnalysis && this.detector) {
       let detector = this.detector;
+      
+      // THIS IS THE BYTE ARRAY OF AUDIO SAMPLES
+      // console.log("WHAT IS DETECTOR?? ", this.samples);
+
       //console.log("WHAT IS THIS DETECTOR>? ", detector.ptr);
       const result = this.detector.detect_pitch(this.samples);
       //console.log("DO WE EVER GET HERE ??? ", result);

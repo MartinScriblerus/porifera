@@ -13,7 +13,7 @@ console.log("What are factory keys? ", Object.keys(factory));
 var request = require('request-promise');
 var bodyParser = require('body-parser');
 // const path = require('node:path');
-const {test} = require('../rust-node/index.node');
+const {test} = require('../web/rust-node/index.node');
 // const arraySum = require('arraysum.js');
 
 var corsOptions = {
@@ -162,7 +162,7 @@ async function rustInterop_(x, y, z){
 
 }
 
-let addon=require('../rust-node/index.node');
+let addon=require('../web/rust-node/index.node');
 // console.log(addon.hello);
 const works = addon;
 

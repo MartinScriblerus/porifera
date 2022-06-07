@@ -1,3 +1,5 @@
+import {pitchChanged, audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
+
 export default class PitchNode extends AudioWorkletNode {
     /**
      * Initialize the Audio processor by sending the fetched WebAssembly module to
@@ -41,7 +43,9 @@ export default class PitchNode extends AudioWorkletNode {
         });
       } else if (event.type === "pitch") {
         // A pitch was detected. Invoke our callback which will result in the UI updating.
-        console.log("WTF IS THISSSSSSSS: ", this);
+        
+        // HERE WE IMPLEMENT HOOK(S) CALLBACKS!
+        pitchChanged(event.pitch);
         // this.onPitchDetectedCallback(event.pitch);
 
       }

@@ -1,4 +1,11 @@
 import PitchNode from "/PitchNode.js";
+import {pitchChanged, audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
+
+console.log("CONNECTED TO SETUP AUDIO!!!");
+
+function testConnect(u){
+  console.log("WEEEEE ARRREEE CONNNECTTTTED: ", u);
+}
 
 async function getWebAudioMediaStream() {
   if (!window.navigator.mediaDevices) {
@@ -86,19 +93,21 @@ async function setupAudio(onPitchDetectedCallback) {
     );
   }
   console.log(node);
+  runningChanged(context.state);
   return { context, node };
 }
-let x = document.getElementById("getUserAudio");
-let y = document.getElementById("setUpAudio");
-console.log(x);
+// let x = document.getElementById("getUserAudio");
+// let y = document.getElementById("setUpAudio");
+// console.log(x);
 
-x.addEventListener("click",function(){
-  getWebAudioMediaStream();
-});
-y.addEventListener("click",function(){
-  setupAudio();
-});
+// x.addEventListener("click",function(){
+//   getWebAudioMediaStream();
+// });
+// y.addEventListener("click",function(){
+//   setupAudio();
+// });
 
+export { getWebAudioMediaStream, setupAudio, testConnect };
 
 
 

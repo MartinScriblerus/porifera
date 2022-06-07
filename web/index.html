@@ -92,9 +92,18 @@
                 </h3>
               </div>
               <div class="box to-js rust-from">
-                <h3>
-                  Rust to Js
-                </h3>
+  
+
+                <div class="inner-box">
+                  <h3>
+                    Rust to Js
+                  </h3>
+                  <div class="box">
+                    <h5 id="jsFromRustProof1">
+                      Pitch: <span id="pitchDisplay"></span>
+                    </h5>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -125,7 +134,7 @@
     
       <!-- <script src="../src/server.js"></script> -->
       <script src="gen/hello.js"></script>
-
+      
       <script>
         function getNewNum(){
           let newFib = Module._next_val(_new_fib);
@@ -146,7 +155,7 @@
 
         function postMath(showJsToCpp, result){
           if(showJsToCpp){
-            let oldNums = showJsToCpp.childNodes
+            let oldNums = showJsToCpp.childNodes;
   
             for(let i = 0; i < oldNums.length; i++){
               oldNums[i].remove();
@@ -263,20 +272,8 @@
         };
       </script>
  
-<script>
-  // Audio already initialized. Suspend / resume based on its current state.
-  // const { context } = audio;
-  // async function setRunning(){
-  //     if (running) {
-  //       await context.suspend();
-  //       running = context.state === "running";
-  //     } else {
-  //       await context.resume();
-  //       running = context.state === "running";
-  //     }
-  //   }
-</script>
-
+      <script type="module" src="./AudioThreadManagerHooks.js"></script>
+      <!-- <script type="module"> import('//unpkg.com/uhooks?module') </script> -->
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
