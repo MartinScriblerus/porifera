@@ -88,7 +88,7 @@ def sum_of_array():
 def toNode():
     
     # Sample array
-    array = [1,2,3,4,5,6]
+    array = [4,5,6,7,8,9,10]
     
     # Data that we will send in post request.
     data = {'array':array}

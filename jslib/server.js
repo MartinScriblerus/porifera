@@ -5,6 +5,7 @@ var child_process = require('child_process');
 const redis = require('redis');
 const http = require('http');
 var cors = require('cors');
+var fs = require('fs');
 
 const factory = require('../web/gen/hello.js')
 console.log("What are factory keys? ", Object.keys(factory));
@@ -12,7 +13,7 @@ console.log("What are factory keys? ", Object.keys(factory));
 var request = require('request-promise');
 var bodyParser = require('body-parser');
 // const path = require('node:path');
-const {test} = require('../rust-node');
+const {test} = require('../rust-node/index.node');
 // const arraySum = require('arraysum.js');
 
 var corsOptions = {
@@ -157,9 +158,11 @@ async function rustInterop_(x, y, z){
   console.log("Called on get root// x value from rust: ", x);
   console.log("Called on get root// y value from rust: ", y);
   console.log("Called on get root// z value from rust: ", z);
+
+
 }
 
-let addon=require('../rust-node');
+let addon=require('../rust-node/index.node');
 // console.log(addon.hello);
 const works = addon;
 
@@ -218,17 +221,29 @@ arraysum(data);
 // =============================================
 
 app.get('/', cors(corsOptions), (req, res) => {
+  console.log("works: ", works);
   let x = works.get();
   let y = works.getNum();
   let z = works.getHello();
+
+  
   // let xx = works.timed();
   // console.log("WORKS:", works);
   console.log(`$x ${x} // y ${y} // z ${z}`);
   // res.json({x:x,y:y,z:z});
   rustInterop_(x, y, z);  
-  res.json({"rust_x": x, "rust_y": y, "rust_z": z});
+  res.json({"rust_x": x, "rust_y": y, "rust_z": z, "data": data});
   return;
 });
+
+app.get('/rust_pkg_wasm', cors(corsOptions), (req,res) => {
+  try {
+    const data = fs.readFileSync('/Users/matthewreilly/Desktop/porifera/rust-node/pkg/rust_node.js', 'utf8');
+    return console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+})
 
 app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
   createRedisSubscriber();
