@@ -1,4 +1,4 @@
-import {pitchChanged, audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
+import {pitchChanged} from "./AudioThreadManagerHooks.js";
 
 export default class PitchNode extends AudioWorkletNode {
     /**

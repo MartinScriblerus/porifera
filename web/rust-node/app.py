@@ -1,11 +1,19 @@
+from ast import While
 import nltk
 from flask import Flask, request
 import requests
 import sys, json 
 from flask_cors import CORS
+import asyncio
+from datetime import datetime
+import websockets 
+from websockets import connect
+
+print(sys.path)
 
 app = Flask(__name__)
 CORS(app)
+
 
 # ========================================================
 # PYTHON ROUTES
@@ -80,15 +88,31 @@ def sum_of_array():
 
 
 
+# ========================================================
+# SOCKETS ROUTE
+# ========================================================
+async def test_sockets(path):
+    async with connect(path) as websocket:
+        now = datetime.now()
+        await websocket.send(f"Python sends now: {now}")
+
+        test = await websocket.recv()
+        print(f'Python receives {test}')
+            
+# while True:        
+asyncio.run(test_sockets("ws://localhost:8081"))
+
 
 # ========================================================
 # (SEND TO) NODE INTEROP ROUTE
 # ========================================================
 @app.route('/to_node', methods = ['POST']) 
 def toNode():
-    
+    data1 = request.get_json() 
+    asyncio.run(test_sockets("ws://localhost:8081"))
     # Sample array
-    array = [4,5,6,7,8,9,10]
+    # array = [4,5,6,7,8,9,10]
+    array = data1
     
     # Data that we will send in post request.
     data = {'array':array}
@@ -108,7 +132,11 @@ def toNode():
     return json.dumps({"response": result})
     ############
 
+
+
+
 # ========================================================
 # APP & SERVER
 if __name__ == "__main__":
     app.run(port='8088', threaded=False, debug=True)
+    

@@ -100,9 +100,18 @@
                   </h3>
                   <div class="box">
                     <h5 id="jsFromRustProof1">
-                      Pitch: <span id="pitchDisplay"></span>
+                      <div class="inner-row box">
+                        Pitch: <span id="pitchDisplay"></span>
+                      </div>
+                      <div class="inner-row box">
+                        Note: <span id="pitchDisplayLetter"></span>
+                      </div>
+                      <div class="inner-row box">
+                        Octave: <span id="pitchDisplayOctave"></span>
+                      </div>
                     </h5>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -134,7 +143,22 @@
     
       <!-- <script src="../src/server.js"></script> -->
       <script src="gen/hello.js"></script>
-      
+      <!-- <script type="module" src="sockets.js"> -->
+
+      </script>
+
+<!-- load OpusMediaRecorder.umd.js. OpusMediaRecorder will be loaded. -->
+<script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OpusMediaRecorder.umd.js"></script>
+<!-- load encoderWorker.umd.js. This should be after OpusMediaRecorder. -->
+<!-- This script tag will create OpusMediaRecorder.encoderWorker. -->
+<script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/encoderWorker.umd.js"></script>
+
+<script src="index.js">
+
+</script>
+      <script>
+        window.game = {};
+      </script>
       <script>
         function getNewNum(){
           let newFib = Module._next_val(_new_fib);
@@ -155,7 +179,7 @@
 
         function postMath(showJsToCpp, result){
           if(showJsToCpp){
-            let oldNums = showJsToCpp.childNodes;
+            let oldNums = showJsToCpp.childNodes
   
             for(let i = 0; i < oldNums.length; i++){
               oldNums[i].remove();
@@ -169,14 +193,18 @@
       <script>
         function triggerMathPy(){
           let toPy = {"numArray: ": [3,4,6,5,45,6,7,8,6,9,9,9,9,9,9,9]};
-          fetch('http://localhost:8088/to_node', {
-            method: 'POST',
-            body: JSON.stringify(toPy),
-            headers: {'Content-type': 'application/json; charset=UTF-8'
-        }
-          })
-          .then(response => response.json())
-          .then(json => console.log(json));
+          try{
+            fetch('http://localhost:8088/to_node', {
+              method: 'POST',
+              body: JSON.stringify(toPy),
+              headers: {'Content-type': 'application/json; charset=UTF-8'
+          }
+            })
+            .then(response => response.json())
+            .then(json => console.log(json));
+          } catch (e){
+            console.log("error from python interop: ", e);
+          }
         }
       </script>
 
@@ -231,8 +259,14 @@
             showCppToJs.append(val);
           }
         }
-      </script>
+    </script>
+
       <script>
+        console.log("WHAT IS GAME? : ", game);
+      </script>
+    
+      <script>
+            
       // Create WebSocket connection.
       const socket = new WebSocket('ws://127.0.0.1:8081');
 
@@ -256,6 +290,7 @@
           console.log('Message!!! from server ', event.data);
       });
     
+
       </script>
 
       <script>
@@ -272,10 +307,12 @@
         };
       </script>
  
+ 
       <script type="module" src="./AudioThreadManagerHooks.js"></script>
       <!-- <script type="module"> import('//unpkg.com/uhooks?module') </script> -->
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+  
   </body>
 </html>

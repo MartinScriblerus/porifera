@@ -24,10 +24,20 @@ h3 {
     min-height: 160px;
 }
 
+.inner-row {
+    background-color: rgb(98, 176, 155);
+    width: 100%;
+    text-align: right;
+}
 .box {
     position: relative;
     display: inline-flex;
     flex-direction: row;
+}
+.inner-box {
+    display: flex;
+    flex-direction: column;
+    min-width: 264px;
 }
 .box.lang-name-box {
     width: 10%;
@@ -86,15 +96,9 @@ h3 {
     visibility: none;
 }
 
-.inner-box {
-    display: flex;
-    flex-direction: column;
-    min-width: 264px;
-}
-
-#pitchDisplay {
-    font-size: 128px;
-    color:black;
-    background-color: brown;
-    border: white solid 1px;
+#pitchDisplay, #pitchDisplayLetter, #pitchDisplayOctave {
+    font-size: 32px;
+    color:brown;
+    width: 100%;
+    background-color: rgb(98, 176, 155);
 }

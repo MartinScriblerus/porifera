@@ -1,11 +1,9 @@
 import PitchNode from "/PitchNode.js";
-import {pitchChanged, audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
+import { audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
+// import { game } from "/index.js";
 
-console.log("CONNECTED TO SETUP AUDIO!!!");
-
-function testConnect(u){
-  console.log("WEEEEE ARRREEE CONNNECTTTTED: ", u);
-}
+// game.user = {};
+// game.user.audio = [9,9,9,9,9,9,9];
 
 async function getWebAudioMediaStream() {
   if (!window.navigator.mediaDevices) {
@@ -20,6 +18,7 @@ async function getWebAudioMediaStream() {
       video: false,
     });
     // setupAudio();
+    audioChanged(result);
     return result;
   } catch (e) {
     switch (e.name) {
@@ -47,6 +46,8 @@ async function setupAudio(onPitchDetectedCallback) {
   const context = new window.AudioContext();
   const audioSource = context.createMediaStreamSource(mediaStream);
 
+
+
   let node;
 
   try {
@@ -64,6 +65,9 @@ async function setupAudio(onPitchDetectedCallback) {
       );
     }
 
+    console.log("RAW DATA!!!!! ", context.audioWorklet);
+    console.log("whole context@!!! ", context);
+    
     // Create the AudioWorkletNode which enables the main JavaScript thread to
     // communicate with the audio processor (which runs in a Worklet).
     node = new PitchNode(context, "PitchProcessor");
@@ -92,22 +96,30 @@ async function setupAudio(onPitchDetectedCallback) {
       `Failed to load audio analyzer WASM module. Further info: ${err.message}`
     );
   }
-  console.log(node);
-  runningChanged(context.state);
+
+
+  // TODO -> IMPLEMENT PAUSE PITCH GATHER HERE
+  ///////////////////////////////////////////////////
+  // if(context.state !== "running"){
+  //   await context.suspend();
+  //   console.log("WHAT IS CONTEXT>>> ", context);
+  //   console.log("WHAT IS AUDIOSOURCE?? ", audioSource);
+  //   runningChanged(undefined)
+  //   mediaStream.enabled = false;
+
+  // } else {
+  //   await context.resume();
+  //   runningChanged("running");
+  //   mediaStream.enabled = true;
+  // }
+
+  
+
   return { context, node };
 }
-// let x = document.getElementById("getUserAudio");
-// let y = document.getElementById("setUpAudio");
-// console.log(x);
 
-// x.addEventListener("click",function(){
-//   getWebAudioMediaStream();
-// });
-// y.addEventListener("click",function(){
-//   setupAudio();
-// });
 
-export { getWebAudioMediaStream, setupAudio, testConnect };
+export { getWebAudioMediaStream, setupAudio };
 
 
 

@@ -1,5 +1,6 @@
 import init, { WasmPitchDetector } from "/rust_node.js";
 
+
 export default class PitchProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
@@ -34,7 +35,7 @@ export default class PitchProcessor extends AudioWorkletProcessor {
       this.numAudioSamplesPerAnalysis = numAudioSamplesPerAnalysis;
 
       this.detector = WasmPitchDetector.new(sampleRate, numAudioSamplesPerAnalysis);
-      console.log("RTF IS DUSSSSS>? ", this.detector);
+      
       // Holds a buffer of audio sample values that we'll send to the Wasm module
       // for analysis at regular intervals.
       this.samples = new Array(numAudioSamplesPerAnalysis).fill(0);
@@ -90,8 +91,13 @@ export default class PitchProcessor extends AudioWorkletProcessor {
     if (this.totalSamples >= this.numAudioSamplesPerAnalysis && this.detector) {
       let detector = this.detector;
       
-      // THIS IS THE BYTE ARRAY OF AUDIO SAMPLES
-      // console.log("WHAT IS DETECTOR?? ", this.samples);
+      
+      // THIS.Samples IS THE BYTE ARRAY OF AUDIO SAMPLES
+        // Connection opened
+
+      // console.log("GAME USER AUDIO: ", this.samples);
+      // window.game.users["000000"].audioData = this.samples;
+      // console.log("!!!! ", window.game.users.id["000000"].audioData);
 
       //console.log("WHAT IS THIS DETECTOR>? ", detector.ptr);
       const result = this.detector.detect_pitch(this.samples);

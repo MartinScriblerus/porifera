@@ -47,17 +47,17 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ port : 8081});
 const ws = new WebSocket('ws://127.0.0.1:8081');
 
-function passSocket(data){
-  // const ws = new WebSocket('ws://127.0.0.1:8081');
-  // wss.on('connection', function(ws) {
-  //   console.log("MADE IT INTO FUNCTION");
-  //   ws.on('something', function(data){
-  //     console.log('client!!?? received:', data);
-  //   });
-  //   ws.send(JSON.stringify({ message: data }));
-  // });
+// export function passSocket(data){
+//   const ws = new WebSocket('ws://127.0.0.1:8081');
+//   wss.on('connection', function(ws) {
+//     console.log("MADE IT INTO FUNCTION");
+//     ws.on('something', function(data){
+//       console.log('client!!?? received:', data);
+//     });
+//     ws.send(JSON.stringify({ message: data }));
+//   });
   
-}
+// }
 ws.on('message', function(data) {
   console.log('client received:', data);
 });
@@ -67,9 +67,10 @@ wss.on('connection', function connection(ws) {
     console.log('received: %s', data);
   });
 
-  ws.send('something: ', data);
-});
+  data = [1, 1, 2]
 
+  ws.send(JSON.stringify(data));
+});
 
 const redisPort = 6379
 const client = redis.createClient(redisPort);
@@ -92,8 +93,12 @@ async function createRedisPublisher (msg) {
     name: 'Using Redis Pub/Sub with Node.js',
     message: msg || 'that is right, motherfucker',
   };
-
-  await publisher.connect();
+  try{
+    await publisher.connect();
+  } catch(e){
+    console.log(e);
+  }
+  
   console.log(article); // 'message'
   await publisher.publish('article', JSON.stringify(article));
 };
@@ -225,7 +230,7 @@ app.get('/', cors(corsOptions), (req, res) => {
   let x = works.get();
   let y = works.getNum();
   let z = works.getHello();
-
+  createRedisSubscriber();
   
   // let xx = works.timed();
   // console.log("WORKS:", works);
@@ -246,14 +251,14 @@ app.get('/rust_pkg_wasm', cors(corsOptions), (req,res) => {
 })
 
 app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
-  createRedisSubscriber();
+  // createRedisSubscriber();
   createRedisPublisher(req.body.array);
   
   let wsMsg = req.body.array;
 
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({message: wsMsg }));
+      client.send(JSON.stringify({message: "???? " + wsMsg }));
     }
   });
 
