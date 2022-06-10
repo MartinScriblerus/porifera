@@ -43,9 +43,9 @@ export default class PitchNode extends AudioWorkletNode {
         });
       } else if (event.type === "pitch") {
         // A pitch was detected. Invoke our callback which will result in the UI updating.
-        
+        let user = game.user;
         // HERE WE IMPLEMENT HOOK(S) CALLBACKS!
-        pitchChanged(event.pitch);
+        pitchChanged(user, event.pitch);
         // this.onPitchDetectedCallback(event.pitch);
 
       }

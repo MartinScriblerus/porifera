@@ -1,11 +1,11 @@
 import { getWebAudioMediaStream, setupAudio } from "./setupAudio.js";
 import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
-
+import "./index.js";
 // ========================================
 // HOOKS IMPLEMENTATION
 // ========================================
 
-export function pitchChanged(newPitch){
+export function pitchChanged(user, newPitch){
     let newPitchTwoDecimals = parseFloat(newPitch).toFixed(2);
     setLatestPitch(newPitchTwoDecimals);
     // * THE PITCH SHOULD NOW BE CHANGED! *
@@ -487,8 +487,9 @@ export function pitchConversion(latestPitch){
   pitchLetterDisplayDOM.innerHTML = latestPitchNote;
   pitchOctaveDisplayDOM.innerHTML = latestOctaveNote;
   if(latestPitchNote && latestOctaveNote){
-    console.log("MAKIBG IT HERE!!");
-    beginPyAnalysisNote(latestPitchNote, latestOctaveNote);
+    console.log("TODO=> make html for bpm");
+    let bpm = 120;
+    beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, bpm);
   }
 }
 

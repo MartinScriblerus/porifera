@@ -7,5 +7,7 @@
         
 //     }
 //   }
+let game = {};
+game.user = "000000000000";
 console.log("we do hit index.js even though nothing is here **** ");
 
