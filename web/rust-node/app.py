@@ -135,7 +135,7 @@ def toNode():
     # Data that we will send in post request.
     data = {'array':array}
     print(f"here's the data {data}")
-    mingus_calcs.mingus_calcs()
+    mingus_calcs.mingus_calcs(data)
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Convert response data to json

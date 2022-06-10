@@ -32,6 +32,7 @@ rust-node @ file:///var/folders/cy/sszlg5vx5c906q51zrf8q7y40000gn/T/.tmpnbZksJ/r
 six==1.16.0
 soupsieve==2.3.2.post1
 SQLAlchemy==1.4.36
+tabulate==0.8.9
 tomli==2.0.1
 urllib3==1.25.11
 websocket==0.2.1
