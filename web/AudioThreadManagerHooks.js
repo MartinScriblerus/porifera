@@ -1,5 +1,5 @@
 import { getWebAudioMediaStream, setupAudio } from "./setupAudio.js";
-
+import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
 
 // ========================================
 // HOOKS IMPLEMENTATION
@@ -483,8 +483,13 @@ export function pitchConversion(latestPitch){
       console.log("!!!: ", latestPitch);
       latestPitchNote = "other";
   }
+  console.log("PITCH AND OCTAGVE REVRIHEFEH");
   pitchLetterDisplayDOM.innerHTML = latestPitchNote;
   pitchOctaveDisplayDOM.innerHTML = latestOctaveNote;
+  if(latestPitchNote && latestOctaveNote){
+    console.log("MAKIBG IT HERE!!");
+    beginPyAnalysisNote(latestPitchNote, latestOctaveNote);
+  }
 }
 
 export function audioChanged(newAudio){

@@ -2,6 +2,7 @@ from ast import While
 import nltk
 from flask import Flask, request
 import requests
+import mingus_calcs
 import sys, json 
 from flask_cors import CORS
 import asyncio
@@ -12,8 +13,20 @@ from websockets import connect
 print(sys.path)
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True)
 
+def application(environ, start_response):
+  if environ['REQUEST_METHOD'] == 'OPTIONS':
+    start_response(
+      '200 OK',
+      [
+        ('Content-Type', 'application/json'),
+        ('Access-Control-Allow-Origin', '*'),
+        ('Access-Control-Allow-Headers', 'Authorization, Content-Type'),
+        ('Access-Control-Allow-Methods', 'POST'),
+      ]
+    )
+    return ''
 
 # ========================================================
 # PYTHON ROUTES
@@ -109,14 +122,20 @@ asyncio.run(test_sockets("ws://localhost:8081"))
 @app.route('/to_node', methods = ['POST']) 
 def toNode():
     data1 = request.get_json() 
-    asyncio.run(test_sockets("ws://localhost:8081"))
+
+    # #TODO: MOVE TEST_SOCKETS TO AFTER DATA ANALYSIS
+    # asyncio.run(test_sockets("ws://localhost:8081"))
+
     # Sample array
     # array = [4,5,6,7,8,9,10]
-    array = data1
     
+    array = data1
+    print(f'array is... {array}')
+
     # Data that we will send in post request.
     data = {'array':array}
-    
+    print(f"here's the data {data}")
+    mingus_calcs.mingus_calcs()
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Convert response data to json
@@ -127,7 +146,7 @@ def toNode():
     requests.post('http://127.0.0.1:3000/updateArraySum', json={'array':result}) 
     print(type(result))
     print("just got this data from node!:", result)
-   
+    
     # return result
     return json.dumps({"response": result})
     ############

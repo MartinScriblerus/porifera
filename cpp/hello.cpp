@@ -29,6 +29,7 @@ extern "C" {
   int new_fib();
   int next_val(int fib_instance);
   int get_new_number();
+  double render();
   int do_math(uint32_t a, uint32_t b) { return a+b; }
   char *get_name(char *nom){
     std::cout << "I am stupid " << nom << std::endl;
@@ -42,6 +43,7 @@ extern "C" {
 // Use thread_local when you want to retrieve & cache a global JS variable once per thread.
 thread_local const val document = val::global("document");
 
+
 // Main Emscripten Loop
 // Our "main loop" function. This callback receives the current time as
 // reported by the browser, and the user data we provide in the call to
@@ -49,7 +51,6 @@ thread_local const val document = val::global("document");
 EM_BOOL one_iter(double time, void* userData) {
   // Can render to the screen here, etc.
   puts("one iteration");
-  std::cout << "hit!" << std::endl;
   // Return true to keep the loop running.
   return EM_TRUE;
 }
@@ -88,15 +89,66 @@ int get_new_number(){
 
 
 
+int render_loop(){
+  std::cout << "hitting this!!!" << std::endl;
+  return 0;
+}
 
 
 
+
+
+static int quit = 0;
+
+EM_JS(void, update_browser_tick, (clock_t now, clock_t delta, double seconds_elapsed), {
+  // console.log("Clock Now: ", now);
+  // console.log("Delta: ", delta);
+  // console.log("Seconds Elapsed: ", seconds_elapsed);
+  
+  return now;
+});
+
+double render()
+{
+  // std::cout << "IN RENDER" << std::endl;
+  // return 0;
+  const clock_t start = clock();
+  // do stuff here
+  clock_t now = clock();
+  clock_t delta = now - start;
+  double seconds_elapsed = static_cast<double>(delta) / CLOCKS_PER_SEC;
+  update_browser_tick(now, delta, seconds_elapsed);
+  // std::cout << now << std::endl;
+  get_new_number();
+  return now;
+}
+
+#if __EMSCRIPTEN__
+void main_tick() {
+    render();
+#else
+    return 0;
+#endif
+}
+
+void main_loop()
+{
+
+#if __EMSCRIPTEN__
+    emscripten_set_main_loop(main_tick, -1, 0);
+#else
+    while (0 == quit)
+    {
+        main_tick();
+    }
+#endif
+}
 
 
 int main() {
 
   get_new_number();
- 
+  
   #ifdef __EMSCRIPTEN__
     printf("hi ROWAN!!!\n");
        // Write the code to call the function and get the returned pointer.
@@ -109,6 +161,9 @@ int main() {
       SDL_Delay(time_to_next_frame());
     }
   #endif
+
+
+    main_loop();
   return 0;
 }
 

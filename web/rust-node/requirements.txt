@@ -19,9 +19,13 @@ Jinja2==3.1.2
 Mako==1.2.0
 MarkupSafe==2.1.1
 maturin==0.12.17
+mingus==0.6.1
 nltk==3.4.5
+numpy==1.22.4
 psycopg2-binary==2.9.3
+pyFluidSynth==1.3.0
 python-engineio==4.3.2
+python-ly==0.9.7
 python-socketio==5.6.0
 requests==2.22.0
 rust-node @ file:///var/folders/cy/sszlg5vx5c906q51zrf8q7y40000gn/T/.tmpnbZksJ/rust_node-0.1.0-cp39-cp39-macosx_10_7_x86_64.whl

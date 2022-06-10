@@ -78,6 +78,14 @@ const client = redis.createClient(redisPort);
 const publisher = redis.createClient();
 var redisSubscriber = redis.createClient();
 var redisPublisher = redis.createClient();
+async function connectPublisher(){
+  try{
+    await publisher.connect();
+  } catch(e){
+    console.log(e);
+  }
+}
+connectPublisher();
 redisSubscriber.on('subscribe', function (channel, count) {
   console.log('client subscribed to ' + channel + ', ' + count + ' total subscriptions');
 });
@@ -86,19 +94,13 @@ redisSubscriber.on('message', function (channel, message) {
   console.log('client channel ' + channel + ': ' + message);
   wss.emit('connection', message);
 });
-async function createRedisPublisher (msg) {
 
+async function createRedisPublisher (msg) {
   const article = {
     id: '123456',
     name: 'Using Redis Pub/Sub with Node.js',
     message: msg || 'that is right, motherfucker',
-  };
-  try{
-    await publisher.connect();
-  } catch(e){
-    console.log(e);
-  }
-  
+  };  
   console.log(article); // 'message'
   await publisher.publish('article', JSON.stringify(article));
 };
@@ -252,13 +254,13 @@ app.get('/rust_pkg_wasm', cors(corsOptions), (req,res) => {
 
 app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
   // createRedisSubscriber();
-  createRedisPublisher(req.body.array);
+  createRedisPublisher(req.body);
   
-  let wsMsg = req.body.array;
+  let wsMsg = req.body;
 
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({message: "???? " + wsMsg }));
+      client.send(JSON.stringify({message: wsMsg }));
     }
   });
 
@@ -296,7 +298,7 @@ app.post("/arraysum", cors(corsOptions), (req, res) => {
   console.log("sum of that array: ", sum);
   
   // Return json response
-  res.json({ result: sum });
+  res.json({ result: array });
 });
 
 

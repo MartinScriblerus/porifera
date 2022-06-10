@@ -39,6 +39,7 @@
               </div>
               <div id="cppToJs" class="box to-js cpp-from">
                 <div class="inner-box">
+                  <canvas id="canvas" style="width:100%; height:100%"></canvas>
                   <h3>
                     C++ to Js
                   </h3>
@@ -140,7 +141,11 @@
         </div> 
       </div>
 
-    
+
+
+
+      
+
       <!-- <script src="../src/server.js"></script> -->
       <script src="gen/hello.js"></script>
       <!-- <script type="module" src="sockets.js"> -->
@@ -158,6 +163,7 @@
 </script>
       <script>
         window.game = {};
+       
       </script>
       <script>
         function getNewNum(){
@@ -165,6 +171,18 @@
           showCppWasm(newFib);
           // return Module.onRuntimeInitialized();
         }
+
+        
+        // console.log("MAIN TICK: ", mainTick);
+        // function getTick(mainLoop){
+        //   console.log("Main loop: ", mainLoop);
+        // }
+        // function tryTick(){
+        //   let mainLoop = Module._render();
+        //   console.log("hit this@!! ", mainLoop);
+        //   getTick(mainLoop);
+        // }
+  
       </script>
 
       <script>
@@ -191,23 +209,33 @@
       </script>
 
       <script>
-        function triggerMathPy(){
-          let toPy = {"numArray: ": [3,4,6,5,45,6,7,8,6,9,9,9,9,9,9,9]};
-          try{
-            fetch('http://localhost:8088/to_node', {
-              method: 'POST',
-              body: JSON.stringify(toPy),
-              headers: {'Content-type': 'application/json; charset=UTF-8'
-          }
-            })
-            .then(response => response.json())
-            .then(json => console.log(json));
-          } catch (e){
-            console.log("error from python interop: ", e);
+        let doThisOnBackendSamplesArr  = []
+        function triggerMathPy(numForArray){
+          doThisOnBackendSamplesArr.push(numForArray);
+          let toPy = {"notesForAnalysis": doThisOnBackendSamplesArr};
+          
+          // TODO: add a switch for over limit of loop interval
+          if(doThisOnBackendSamplesArr.length > 1){
+            try{
+              fetch('http://localhost:8088/to_node', {
+                method: 'POST',
+                body: JSON.stringify(toPy),
+                headers: {'Content-type': 'application/json; charset=UTF-8'
+            }
+              })
+              .then(response => response.json())
+              .then(json => console.log(json))
+              .then(doThisOnBackendSamplesArr = []);
+            } catch (e){
+              console.log("error from python interop: ", e);
+            }
+          } else {
+            console.log("samples: ", doThisOnBackendSamplesArr);
           }
         }
       </script>
-
+ 
+      
 
       <script src="dist/bundle.js"></script>
 
@@ -259,6 +287,8 @@
             showCppToJs.append(val);
           }
         }
+    
+    
     </script>
 
       <script>
@@ -313,6 +343,6 @@
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
-  
+      <script>console.log("MODULE: ", Module);</script>
   </body>
 </html>
