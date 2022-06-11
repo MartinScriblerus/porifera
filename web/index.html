@@ -7,15 +7,44 @@
     <title>Porifera</title>
     <script type="module" src="./setupAudio.js">
     </script>
+        <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
+        <!-- <script type="module-shim">
+          import * as BABYLON from "https://unpkg.com/@babylonjs/core@4.0.0-beta.1/index.js"
+          console.log(BABYLON)
+        </script>
+        <script>
+
+
+
+const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+// Add your code here matching the playground format
+
+const scene = createScene(); //Call the createScene function
+
+// Register a render loop to repeatedly render the scene
+engine.runRenderLoop(function () {
+  scene.render();
+});
+
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+  engine.resize();
+});
+        </script> -->
   </head>  
   <body>
+    <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
       <div id="border-box" class="container-md">
         
         <h1>
           Porifera: Interops Tests
         </h1>
         <!-- <div> -->
-          
+          <!-- <canvas id="renderCanvas" touch-action="none"></canvas> -->
           <div class="row cpp-row">
             <div class="box">
               <div class="box lang-name-box">
@@ -39,7 +68,7 @@
               </div>
               <div id="cppToJs" class="box to-js cpp-from">
                 <div class="inner-box">
-                  <canvas id="canvas" style="width:100%; height:100%"></canvas>
+                  
                   <h3>
                     C++ to Js
                   </h3>
@@ -73,6 +102,7 @@
                 <h3>
                   Python to Js
                 </h3>
+                <div id="pyMsgs"></div>
               </div>
             </div>
           </div>
@@ -87,7 +117,12 @@
               <div class="box from-js rust-to">
                 <h3>
                   Js to Rust
-                 
+                  <div>
+                    <select id = "selectedAudioDevice" value="">  
+                      <option> ---Choose Device--- </option>  
+
+                      </select>  
+                  </div>
                   <input id="getUserAudio" type = "button" value = "Set Audio"> 
                   <input id="setUpAudio" type = "button" value = "Set Running"> 
                 </h3>
@@ -143,7 +178,7 @@
 
 
 
-
+      
       
 
       <!-- <script src="../src/server.js"></script> -->
@@ -161,11 +196,8 @@
 <script src="index.js">
 
 </script>
-      <script>
-        window.game = {};
-        let game = window.game;
-        window.game.user = "000000000001";
-       
+      <script type="module" src="selectAudioDevice.js">
+        
       </script>
       <script>
         function getNewNum(){
@@ -213,11 +245,22 @@
       <script>
         let doThisOnBackendSamplesArr  = []
         function triggerMathPy(numForArray){
+          // for(let i = 0; i < numForArray.length; i++){
+          //   if (numForArray[i].includes('&#x266f')){
+          //     numForArray[i].replace('&#x266f', '#')
+          //   }
+          //   if (numForArray[i].includes('&#x266d')){
+          //     numForArray[i].replace('&#x266d', 'b')
+          //   }
+          // }
+          
+          
+          
           doThisOnBackendSamplesArr.push(numForArray);
           let toPy = {notesForAnalysis: doThisOnBackendSamplesArr};
           
           // TODO: add a switch for over limit of loop interval
-          if(doThisOnBackendSamplesArr.length > 1){
+          if(doThisOnBackendSamplesArr.length > 12){
             try{
               fetch('http://localhost:8088/to_node', {
                 method: 'POST',
@@ -293,9 +336,7 @@
     
     </script>
 
-      <script>
-        console.log("WHAT IS GAME? : ", game);
-      </script>
+
     
       <script>
             
@@ -310,7 +351,9 @@
       // Listen for messages
       socket.addEventListener('message', function (event) {
         console.log("EVENT: ", event);
-          document.getElementById("pyToJs").append(event.data);
+          document.getElementById("pyMsgs").innerText = "";
+          document.getElementById("pyMsgs").append(event.data);
+
           console.log('Message! from server ', event.data);
       });
 
@@ -346,5 +389,13 @@
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
       <script>console.log("MODULE: ", Module);</script>
+      <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script>
+      <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+      <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
+      <script type="module" src="./babylonScene.js">
+        
+      </script>
+
+
   </body>
 </html>

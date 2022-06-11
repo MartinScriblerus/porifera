@@ -1,4 +1,3 @@
-import mingus.core.notes as notes
 from tabulate import tabulate
 import notesData 
 import pandas as pd
@@ -12,7 +11,14 @@ def mingus_calcs(data):
     notesDataFrame = notesData.notes_DataFrames(notesDf, receivedData[0]['notesForAnalysis'])
     print(tabulate(notesDataFrame, headers='keys', tablefmt='psql'))
     notesDf = notesDataFrame
+    # mingus_get_notes(data)
     return notesDf
+
+# def mingus_get_notes(data):
+#     for i in data:
+#         print(f'HEYYYYYYYY: {notes.is_valid_note(i)}')
+
+
 
 if __name__ == '__main__':
     # test1.py executed as script

@@ -1,13 +1,6 @@
-// class HelloWorld {
-//     greet() {
-//         // console.log("Accessed PitchNode: ", PitchNode);
-//         // console.log("Accessed PitchProcessor: ", PitchProcessor);
-
-//         // console.log("Setup Audio", setupAudio); 
-        
-//     }
-//   }
 let game = {};
-game.user = "000000000000";
+game.user = game.user || {};
+game.user.audioDevice = game.user.audioDevice || '';
+game.user.timeRecordingStart = game.user.timeRecordingStart || 0;
+game.user.timeRecordingStart = Date.now(); 
 console.log("we do hit index.js even though nothing is here **** ");
-

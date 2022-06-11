@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A project in process",
   "main": "a.out.js",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js"
@@ -17,9 +18,12 @@
     "url": "https://github.com/MartinScriblerus/porifera/issues"
   },
   "homepage": "https://github.com/MartinScriblerus/porifera#readme",
+  
+  
   "dependencies": {
     "api-benchmark": "^1.0.1",
     "axios": "^0.27.2",
+    "babylonjs": "^5.10.0",
     "body-parser": "^1.20.0",
     "child_process": "^1.0.2",
     "cluster": "^0.7.7",
@@ -36,6 +40,8 @@
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
+    "@babylonjs/core": "^5.10.0",
+    "@babylonjs/inspector": "^5.10.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.5",
     "babel-preset-env": "^1.7.0",

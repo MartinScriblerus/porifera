@@ -1,8 +1,9 @@
 import PitchNode from "/PitchNode.js";
 import { audioChanged, runningChanged} from "./AudioThreadManagerHooks.js";
-// import { game } from "/index.js";
+import "/index.js";
+import selectAudioDevice from "./selectAudioDevice.js";
 
-// game.user = {};
+
 // game.user.audio = [9,9,9,9,9,9,9];
 
 async function getWebAudioMediaStream() {
@@ -11,10 +12,67 @@ async function getWebAudioMediaStream() {
       "This browser does not support web audio or it is not enabled."
     );
   }
+  
+  // game.user['000000000000'].audioDevice = document.getElementById("selectedAudioDevice").value;
+  // if(audioDevice === ""){
+  //   game.user['000000000000'].audioDevice = document.getElementById("selectedAudioDevice").childNodes[1].deviceId;
+  // }
+  navigator.mediaDevices.enumerateDevices()
+  .then(function(devices) {
+    devices.forEach(function(device) {
+      // console.log("D_E_V_I_C_E_S: ", device.kind + ": " + device.label +
+      //             " id = " + device.deviceId);
+      
+    });
+  })
+  .catch(function(err) {
+    console.log(err.name + ": " + err.message);
+  });
+  let audioDeviceSelect = document.getElementById("selectedAudioDevice");
 
+  if (!window.navigator.mediaDevices) {
+      throw new Error(
+        "This browser does not support web audio or it is not enabled."
+      );
+    }
+    let devices = {};
+    
+    navigator.mediaDevices.enumerateDevices()
+    .then(function(devices) {
+      devices.forEach(function(device) {
+          if(device.kind === "audioinput"){
+          
+              let option = document.createElement("option");
+              option.value= device.deviceId;
+              option.text = device.label;
+
+              audioDeviceSelect.addEventListener("onchange", function(e){
+                  chosenAudioDevice(e.target);
+                  console.log("e.target is ", e.target);
+                  console.log("AUDIO DEVICE VALUE: ", audioDeviceSelect.value);
+                  game.user['000000000000'].audioDevice = document.getElementById("selectedAudioDevice").value;
+                  if(audioDevice === ""){
+                    game.user['000000000000'].audioDevice = document.getElementById("selectedAudioDevice").childNodes[1].deviceId;
+                  }
+              })
+              audioDeviceSelect.appendChild(option);
+              console.log("D_E_V_I_C_E_S: ", option);
+              
+              return audioDeviceSelect;
+          }
+      });
+      console.log("AUDIO DEVICE SELECT ", audioDeviceSelect.options);
+    
+    })
+    .catch(function(err) {
+      console.log(err.name + ": " + err.message);
+    });
+  
   try {
     const result = await window.navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: {
+        "deviceId": audioDeviceSelect.value || audioDeviceSelect.childNodes[1].deviceId 
+       },
       video: false,
     });
     // setupAudio();
@@ -42,7 +100,8 @@ async function setupAudio(onPitchDetectedCallback) {
 
   // Get the browser audio. Awaits user "allowing" it for the current tab.
   const mediaStream = await getWebAudioMediaStream();
-
+  const tracks = mediaStream.getAudioTracks();
+  console.log("T_R_A_C_K_S: ", tracks);
   const context = new window.AudioContext();
   const audioSource = context.createMediaStreamSource(mediaStream);
 

@@ -3,6 +3,7 @@ import nltk
 from flask import Flask, request
 import requests
 import mingus_calcs
+import notesData
 import sys, json 
 from flask_cors import CORS
 import asyncio
@@ -134,14 +135,15 @@ def toNode():
 
     # Data that we will send in post request.
     data = {'array':array}
-    print(f"here's the data {data}")
+    # print(f"here's the data {data}")
     mingus_calcs.mingus_calcs(data)
+    notesData.mingus_get_notes(array)
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Convert response data to json
     returned_data = res.json() 
-    print(type(returned_data))
-    print(returned_data)
+    # print(type(returned_data))
+    # print(returned_data)
     result = returned_data['result'] 
     requests.post('http://127.0.0.1:3000/updateArraySum', json={'array':result}) 
     print(type(result))

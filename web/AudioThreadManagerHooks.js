@@ -483,9 +483,14 @@ export function pitchConversion(latestPitch){
       console.log("!!!: ", latestPitch);
       latestPitchNote = "other";
   }
-  console.log("PITCH AND OCTAGVE REVRIHEFEH");
+  console.log("PITCH AND OCTAGVE REVRIHEFEH ", latestPitchNote);
   pitchLetterDisplayDOM.innerHTML = latestPitchNote;
   pitchOctaveDisplayDOM.innerHTML = latestOctaveNote;
+  if (latestPitchNote.indexOf('&#x266f') !== -1){
+    latestPitchNote = latestPitchNote[0] + '#';
+    console.log("IN HERE LATEST PITCH++++++++++++++++++++: ", latestPitch);
+  }
+
   if(latestPitchNote && latestOctaveNote){
     console.log("TODO=> make html for bpm");
     let bpm = 120;

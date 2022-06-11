@@ -1,5 +1,4 @@
 // 'use strict';
-
 const express = require('express');
 var child_process = require('child_process');
 const redis = require('redis');
