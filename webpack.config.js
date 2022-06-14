@@ -17,6 +17,25 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.css$/i,
+        loader: "css-loader",
+        options: {
+          module: true,
+          import: {
+            filter: (url, media, resourcePath) => {
+              // resourcePath - path to css file
+
+              // Don't handle `style.css` import
+              if (url.includes("style.css")) {
+                return false;
+              }
+
+              return true;
+            },
+          },
+        },
+      },
         {
           test: /\.js$/,
           exclude: /(node_modules)/,
@@ -42,10 +61,17 @@ module.exports = {
                      }
                    }
                  ]
-          }
+          },
+          {
+            test: /\.(woff|woff2)$/,
+            use: {
+              loader: 'url-loader',
+            },
+          },
     ]
     
   },
+
   // Default mode for Webpack is production.
   // Depending on mode Webpack will apply different things
   // on the final bundle. For now, we don't need production's JavaScript 

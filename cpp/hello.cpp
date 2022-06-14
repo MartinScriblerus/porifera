@@ -1,6 +1,7 @@
 #include "emscripten.h"
 #include "emscripten/html5.h"
 #include "emscripten/val.h"
+#include "emscripten/bind.h"
 #include "SDL.h"
 
 #include <iostream>
@@ -104,23 +105,31 @@ EM_JS(void, update_browser_tick, (clock_t now, clock_t delta, double seconds_ela
   // console.log("Clock Now: ", now);
   // console.log("Delta: ", delta);
   // console.log("Seconds Elapsed: ", seconds_elapsed);
-  
   return now;
 });
-
+clock_t start = clock();
 double render()
 {
   // std::cout << "IN RENDER" << std::endl;
   // return 0;
-  const clock_t start = clock();
+  
   // do stuff here
   clock_t now = clock();
   clock_t delta = now - start;
   double seconds_elapsed = static_cast<double>(delta) / CLOCKS_PER_SEC;
-  update_browser_tick(now, delta, seconds_elapsed);
-  // std::cout << now << std::endl;
-  get_new_number();
-  return now;
+  // update_browser_tick(now, delta, seconds_elapsed);
+  if(delta > 100000){
+    // std::cout << start << std::endl;
+    get_new_number();
+    start = now;
+    update_browser_tick(now, delta, seconds_elapsed);
+    return start;
+  } else {
+    // std::cout << 0 << std::endl;
+    return 0;
+  }
+  return EM_TRUE;
+  // return now;
 }
 
 #if __EMSCRIPTEN__

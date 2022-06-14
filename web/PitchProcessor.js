@@ -13,14 +13,14 @@ export default class PitchProcessor extends AudioWorkletProcessor {
 
     // Listen to events from the PitchNode running on the main thread.
     this.port.onmessage = (event) => {
-      console.log("EVENT::::: ", event);
+      // console.log("EVENT::::: ", event);
       this.onmessage(event.data);
     }
     this.detector = null;
   }
 
   onmessage(event) {
-    console.log("MESSAGE EVENT: ", event);
+    // console.log("MESSAGE EVENT: ", event);
     if (event.type === "send-wasm-module") {        
       // WASM MODULE LOADED
       init(WebAssembly.compile(event.wasmBytes)).then(() => {

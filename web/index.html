@@ -7,185 +7,162 @@
     <title>Porifera</title>
     <script type="module" src="./setupAudio.js">
     </script>
-        <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script>
-        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-        <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
-        <!-- <script type="module-shim">
-          import * as BABYLON from "https://unpkg.com/@babylonjs/core@4.0.0-beta.1/index.js"
-          console.log(BABYLON)
-        </script>
-        <script>
-
-
-
-const canvas = document.getElementById("renderCanvas"); // Get the canvas element
-const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
-
-// Add your code here matching the playground format
-
-const scene = createScene(); //Call the createScene function
-
-// Register a render loop to repeatedly render the scene
-engine.runRenderLoop(function () {
-  scene.render();
-});
-
-// Watch for browser/canvas resize events
-window.addEventListener("resize", function () {
-  engine.resize();
-});
-        </script> -->
-  </head>  
-  <body>
-    <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
-      <div id="border-box" class="container-md">
-        
-        <h1>
-          Porifera: Interops Tests
-        </h1>
-        <!-- <div> -->
-          <!-- <canvas id="renderCanvas" touch-action="none"></canvas> -->
-          <div class="row cpp-row">
-            <div class="box">
-              <div class="box lang-name-box">
-                <h2 class="row-title cpp">
-                  C++
-                </h2>
-              </div>
-              <div class="box from-js cpp-to">
-                <div class="inner-box">
-                  <h3>
-                    Js to C++
-                  </h3>
-                  <div class="box">
-                    <h5 id="jsToCppProof1">
-                      Math Result: <span id="newMathCpp"></span>
-                    </h5>
-                  </div>
-                  <input type = "button" onclick = "doMathCpp()" value = "Addition">  
-                  <input type = "button" onclick = "sendName()" value = "Send Yr Name"> 
-                </div>
-              </div>
-              <div id="cppToJs" class="box to-js cpp-from">
-                <div class="inner-box">
-                  
-                  <h3>
-                    C++ to Js
-                  </h3>
-                  <div class="box">
-                    <h5 id="cppToJsProof1">
-                      Single Fibunacci Number Val: <span id="newNumCpp"></span>
-                    </h5>
-                  </div>
-                  <input type = "button" onclick = "getNewNum()" value = "Increment">  
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row py-row">
-            <div class="box">
-              <div class="box lang-name-box">
-                <h2 class="row-title py">
-                  Python
-                </h2>
-              </div>
-              <div class="box from-js py-to">
-                <h3>
-                  Js to Python
-                </h3>
-                <input type = "button" onclick = "triggerMathPy()" value = "Trigger New Py Arr"> 
-                
-              </div>
-              <div id="pyToJs" class="box to-js py-from">
-                <h3>
-                  Python to Js
-                </h3>
-                <div id="pyMsgs"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row rust-row">
-            <div class="box">
-              <div class="box lang-name-box">
-                <h2 class="row-title rs">
-                  Rust
-                </h2>
-              </div>
-              <div class="box from-js rust-to">
-                <h3>
-                  Js to Rust
-                  <div>
-                    <select id = "selectedAudioDevice" value="">  
-                      <option> ---Choose Device--- </option>  
-
-                      </select>  
-                  </div>
-                  <input id="getUserAudio" type = "button" value = "Set Audio"> 
-                  <input id="setUpAudio" type = "button" value = "Set Running"> 
-                </h3>
-              </div>
-              <div class="box to-js rust-from">
   
 
-                <div class="inner-box">
-                  <h3>
-                    Rust to Js
-                  </h3>
-                  <div class="box">
-                    <h5 id="jsFromRustProof1">
-                      <div class="inner-row box">
-                        Pitch: <span id="pitchDisplay"></span>
-                      </div>
-                      <div class="inner-row box">
-                        Note: <span id="pitchDisplayLetter"></span>
-                      </div>
-                      <div class="inner-row box">
-                        Octave: <span id="pitchDisplayOctave"></span>
-                      </div>
-                    </h5>
-                  </div>
+  </head>  
+  <body>
 
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="row node-row">
-            <div class="box">
-              <div class="box lang-name-box">
-                <h2 class="row-title node">
-                  Node
-                </h2>
-              </div>
-              <div class="box from-js node-to">
-                <h3>
-                  Js to Node
-                </h3>
-              </div>
-              <div class="box to-js node-from">
-                <h3>
-                  Node to Js
-                </h3>
-              </div>
-            </div>
-          </div>
-    
-        </div> 
+    <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
+    <h1 id="siteTitle" class="opening-header">
+      Pitch Perfect
+    </h1>
+    <div id="devicesBox" class="box from-js rust-to">
+      <div class="btn-group dropright">
+        <select id = "selectedAudioDevice" value="" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+          <option> ---Choose Device--- </option>  
+        </select>  
       </div>
+      <input id="getUserAudio" type="button" class="btn btn-secondary" value = "Set Audio"> 
+      <input id="setUpAudio" type="button" class="btn btn-secondary" value = "Set Running"> 
+  </div>
+  <div id="pitchBox">
+    <h5 id="jsFromRustProof1">
+      <div class="inner-row box">
+        <span id="pitchDisplayLetter"></span>
+        <span id="pitchDisplayOctave"></span>
+      </div>
+      <div class="inner-row box">
+        <span id="pitchDisplay"></span>
+      </div>
+    </h5>
 
+  </div>
 
-
+    
+  <div style="display:none">
+    <div id="border-box" class="container-md">
       
-      
 
-      <!-- <script src="../src/server.js"></script> -->
-      <script src="gen/hello.js"></script>
-      <!-- <script type="module" src="sockets.js"> -->
 
-      </script>
+      <!-- <div> -->
+        <!-- <canvas id="renderCanvas" touch-action="none"></canvas> -->
+        <div class="row cpp-row">
+          <div class="box">
+            <div class="box lang-name-box">
+              <h2 class="row-title cpp">
+                C++
+              </h2>
+            </div>
+            <div class="box from-js cpp-to">
+              <div class="inner-box">
+                <h3>
+                  Js to C++
+                </h3>
+                <div class="box">
+                  <h5 id="jsToCppProof1">
+                    Math Result: <span id="newMathCpp"></span>
+                  </h5>
+                </div>
+                <input type = "button" onclick = "doMathCpp()" value = "Addition">  
+                <input type = "button" onclick = "sendName()" value = "Send Yr Name"> 
+              </div>
+            </div>
+            <div id="cppToJs" class="box to-js cpp-from">
+              <div class="inner-box">
+                
+                <h3>
+                  C++ to Js
+                </h3>
+                <div class="box">
+                  <h5 id="cppToJsProof1">
+                    Single Fibunacci Number Val: <span id="newNumCpp"></span>
+                  </h5>
+                </div>
+                <input type = "button" onclick = "getNewNum()" value = "Increment">  
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row py-row">
+          <div class="box">
+            <div class="box lang-name-box">
+              <h2 class="row-title py">
+                Python
+              </h2>
+            </div>
+            <div class="box from-js py-to">
+              <h3>
+                Js to Python
+              </h3>
+              <input type = "button" onclick = "noteDataToPy()" value = "Trigger New Py Arr"> 
+              
+            </div>
+            <div id="pyToJs" class="box to-js py-from">
+              <h3>
+                Python to Js
+              </h3>
+              <div id="pyMsgs"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row rust-row">
+          <div class="box">
+            <div class="box lang-name-box">
+              <h2 class="row-title rs">
+                Rust
+              </h2>
+            </div>
+
+            <div class="box to-js rust-from">
+
+
+              <div class="inner-box">
+                <h3>
+                  Rust to Js
+                </h3>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row node-row">
+          <div class="box">
+            <div class="box lang-name-box">
+              <h2 class="row-title node">
+                Node
+              </h2>
+            </div>
+            <div class="box from-js node-to">
+              <h3>
+                Js to Node
+              </h3>
+            </div>
+            <div class="box to-js node-from">
+              <h3>
+                Node to Js
+              </h3>
+            </div>
+          </div>
+        </div>
+
+      </div> 
+    </div>
+
+
+</div>
+  
+  
+  
+  <!-- <script src="../src/server.js"></script> -->
+  <script src="gen/hello.js"></script>
+  <!-- <script type="module" src="sockets.js"> -->
+
+  </script>
 
 <!-- load OpusMediaRecorder.umd.js. OpusMediaRecorder will be loaded. -->
 <script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OpusMediaRecorder.umd.js"></script>
@@ -207,7 +184,7 @@ window.addEventListener("resize", function () {
         }
 
         
-        // console.log("MAIN TICK: ", mainTick);
+        // // console.log("MAIN TICK: ", mainTick);
         // function getTick(mainLoop){
         //   console.log("Main loop: ", mainLoop);
         // }
@@ -216,6 +193,7 @@ window.addEventListener("resize", function () {
         //   console.log("hit this@!! ", mainLoop);
         //   getTick(mainLoop);
         // }
+        
   
       </script>
 
@@ -244,18 +222,8 @@ window.addEventListener("resize", function () {
 
       <script>
         let doThisOnBackendSamplesArr  = []
-        function triggerMathPy(numForArray){
-          // for(let i = 0; i < numForArray.length; i++){
-          //   if (numForArray[i].includes('&#x266f')){
-          //     numForArray[i].replace('&#x266f', '#')
-          //   }
-          //   if (numForArray[i].includes('&#x266d')){
-          //     numForArray[i].replace('&#x266d', 'b')
-          //   }
-          // }
-          
-          
-          
+        function noteDataToPy(numForArray){
+
           doThisOnBackendSamplesArr.push(numForArray);
           let toPy = {notesForAnalysis: doThisOnBackendSamplesArr};
           
@@ -285,6 +253,7 @@ window.addEventListener("resize", function () {
       <script src="dist/bundle.js"></script>
 
       <script>
+
         class Fib {
           constructor() {
             this.cppInstance = Module._new_fib();
@@ -309,7 +278,16 @@ window.addEventListener("resize", function () {
           assert(isNumber(new Fib().next()));
         }
 
-
+        // console.log("MAIN TICK: ", mainTick);
+        function getTick(mainLoop){
+          console.log("Main loop: ", mainLoop);
+        }
+        function tryTick(){
+          let mainLoop = Module._render();
+          console.log("hit this@!! ", mainLoop);
+          getTick(mainLoop);
+          
+        }
 
         Module.onRuntimeInitialized = function() {
           let fib1 = new Fib();
@@ -317,6 +295,23 @@ window.addEventListener("resize", function () {
           testNextValReturnsInt();
           let fibunacciNumber = fib1.next();
           showCppWasm(fibunacciNumber);
+          
+          
+          game.user.timeStart = game.user.timeStart || undefined;
+          game.user.timeNow = game.user.timeNow || undefined; 
+          game.user.timeStart = window.__emscripten_date_now();
+          setInterval(()=>{
+            game.user.timeNow = window.__emscripten_date_now();
+            game.user.timeElapsed = game.user.timeNow - game.user.timeStart;
+            console.log("yaya!!!: ", game.user.timeNow - game.user.timeStart);
+            if(game.user.timeElapsed > 8000){
+              document.getElementById("siteTitle").classList.add("displayNone");
+              if(!game.user.isPlaying){
+                let x = document.getElementById("devicesBox"); 
+                x.style.display = "flex";
+              }
+            }
+          }, 1000);
         }
 
         function showCppWasm(val){
@@ -354,7 +349,11 @@ window.addEventListener("resize", function () {
           document.getElementById("pyMsgs").innerText = "";
           document.getElementById("pyMsgs").append(event.data);
 
-          console.log('Message! from server ', event.data);
+          console.log('Message! from server ', JSON.stringify(event.data).array);
+          // console.log("!!!!!!!!!!!!!!!!!!!! ", event.data.body);
+          // TODO !!!! REFACTOR LINES BELOW TO BETTER PASS VARIABLES
+          //game.scene.meshes[0].position.z = event.data.octave;
+
       });
 
       socket.addEventListener('something', function (event) {
@@ -389,13 +388,12 @@ window.addEventListener("resize", function () {
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
       <script>console.log("MODULE: ", Module);</script>
-      <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script>
-      <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-      <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
-      <script type="module" src="./babylonScene.js">
-        
-      </script>
 
 
+
+
+
+      <script type="module" src="./babylonScene.js"></script>
+      
   </body>
 </html>

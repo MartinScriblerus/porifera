@@ -97,11 +97,14 @@ async function getWebAudioMediaStream() {
 }
 
 async function setupAudio(onPitchDetectedCallback) {
-
+  if(!game.user.isPlaying){
+    game.user.isPlaying = true;
+  }
   // Get the browser audio. Awaits user "allowing" it for the current tab.
   const mediaStream = await getWebAudioMediaStream();
   const tracks = mediaStream.getAudioTracks();
   console.log("T_R_A_C_K_S: ", tracks);
+  
   const context = new window.AudioContext();
   const audioSource = context.createMediaStreamSource(mediaStream);
 
@@ -123,7 +126,7 @@ async function setupAudio(onPitchDetectedCallback) {
         `Failed to load audio analyzer worklet at url: ${processorUrl}. Further info: ${e.message}`
       );
     }
-
+    // document.getElementById("pitchBox").style.display = "none";
     console.log("RAW DATA!!!!! ", context.audioWorklet);
     console.log("whole context@!!! ", context);
     

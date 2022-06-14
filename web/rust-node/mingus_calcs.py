@@ -14,12 +14,6 @@ def mingus_calcs(data):
     # mingus_get_notes(data)
     return notesDf
 
-# def mingus_get_notes(data):
-#     for i in data:
-#         print(f'HEYYYYYYYY: {notes.is_valid_note(i)}')
-
-
-
 if __name__ == '__main__':
     # test1.py executed as script
     mingus_calcs()

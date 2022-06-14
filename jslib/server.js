@@ -6,6 +6,9 @@ const http = require('http');
 var cors = require('cors');
 var fs = require('fs');
 
+var im = require('imagemagick');
+
+
 const factory = require('../web/gen/hello.js')
 console.log("What are factory keys? ", Object.keys(factory));
 
