@@ -131,23 +131,23 @@ def toNode():
     # array = [4,5,6,7,8,9,10]
     
     array = data1
-    print(f'array is... {array}')
+    # print(f'array is... {array}')
 
     # Data that we will send in post request.
     data = {'array':array}
     # print(f"here's the data {data}")
     mingus_calcs.mingus_calcs(data)
     notesData.mingus_get_notes(array)
+    
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Convert response data to json
     returned_data = res.json() 
-    # print(type(returned_data))
-    # print(returned_data)
+
     result = returned_data['result'] 
-    requests.post('http://127.0.0.1:3000/updateArraySum', json={'array':result}) 
-    print(type(result))
-    print("just got this data from node!:", result)
+    requests.post('http://127.0.0.1:3000/updateArraySum', json={'array':result})  
+    # print(type(result))
+    # print("just got this data from node!:", result)
     
     # return result
     return json.dumps({"response": result})

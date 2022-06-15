@@ -105,9 +105,12 @@ EM_JS(void, update_browser_tick, (clock_t now, clock_t delta, double seconds_ela
   // console.log("Clock Now: ", now);
   // console.log("Delta: ", delta);
   // console.log("Seconds Elapsed: ", seconds_elapsed);
+
   return now;
 });
 clock_t start = clock();
+
+#ifdef __EMSCRIPTEN__
 double render()
 {
   // std::cout << "IN RENDER" << std::endl;
@@ -117,9 +120,9 @@ double render()
   clock_t now = clock();
   clock_t delta = now - start;
   double seconds_elapsed = static_cast<double>(delta) / CLOCKS_PER_SEC;
-  // update_browser_tick(now, delta, seconds_elapsed);
+  update_browser_tick(now, delta, seconds_elapsed);
   if(delta > 100000){
-    // std::cout << start << std::endl;
+    // std::cout << "NOW from c++: " << start << std::endl;
     get_new_number();
     start = now;
     update_browser_tick(now, delta, seconds_elapsed);
@@ -131,6 +134,9 @@ double render()
   return EM_TRUE;
   // return now;
 }
+#else
+    return 0;
+#endif
 
 #if __EMSCRIPTEN__
 void main_tick() {

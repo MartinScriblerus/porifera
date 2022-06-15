@@ -38,7 +38,7 @@ scene.getCameraByID("camera1").beta = 1.77290545417584;
 scene.activeCameras.push(camera1);
 scene.activeCameras.push(camera);
 
-camera.viewport = new BABYLON.Viewport(0, 0, 0.3, 1.0);
+camera.viewport = new BABYLON.Viewport(0.6, 0.4, 0.6, 0.8);
 camera1.viewport = new BABYLON.Viewport(0, 0, 1.0, 1.0);
 
 
@@ -77,19 +77,25 @@ if(game.scene.cameras.length){
 }
 
 // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
 
 // Default intensity is 1. Let's dim the light a small amount
-light.intensity = 0.3;
+light.intensity = 0.45;
 
 // Our built-in 'player' shape.
 var player = BABYLON.MeshBuilder.CreateSphere("player", {diameter: 2, segments: 32}, scene);
 player.position.x = 0;
 player.position.y = 1;
 player.position.z = 0; 
+let boxDimens = player.getBoundingInfo().boundingBox;
+console.log("box DIMENS ++++++++++++++++++ ", boxDimens);
 player.scaling.x = player.scaling.y = player.scaling.z = 12/128;
 
+const playerY_Observable = new BABYLON.Observable();
 
+scene.onBeforeRenderObservable.add(function(){
+    camera.position.z = player.position.z;
+});
 
 // Our built-in 'ground' shape.
 var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 30, height: 10}, scene);
@@ -99,7 +105,7 @@ ground.position.y = 0;
 ground.rotation.y = Math.PI;
 // ground.rotation.z = 2 * Math.PI;
 
-const element = document.getElementById('some-element-you-want-to-animate');
+
 let start, previousTimeStamp;
 let done = false
 
@@ -107,6 +113,7 @@ function step(timestamp) {
     if (start === undefined) {
     start = timestamp;
     }
+    console.log("HITTING THIS???");
     const elapsed = timestamp - start;
 
     if (previousTimeStamp !== timestamp) {
@@ -114,16 +121,19 @@ function step(timestamp) {
     const count = Math.min(0.1 * elapsed, 200);
     // element.style.transform = 'translateX(' + count + 'px)';
     let currPitch = pitchChanged();
-    player.nextspeed.x = 0.0;
-    player.nextspeed.z = 0.00000;
-    player.rotation.y = 2 * Math.PI;
+    // player.nextspeed.x = 0.0;
+    // player.nextspeed.z = 0.00000;
+    // player.rotation.y = 2 * Math.PI;
     if(currPitch === "NaN"){
         player.position.z = 0;
     } else{
         console.log("GROUND HEIGHT: ", ground.height);
         console.log("PLAYER z ", player.position.z);
-        player.position.z = camera.position.y = currPitch - ground.height;
-      
+        player.position.z = camera.position.z = currPitch - ground.height;
+        playerY_Observable.add(()=>{
+            camera.position.z = player.position.z;
+        });
+        playerY_Observable.notifyObservers();
         async function setFollowCamera(){
             // This targets the camera to scene origin
             // camera.setTarget(BABYLON.Vector3.Zero());
@@ -151,7 +161,7 @@ function step(timestamp) {
     }
 }
     
-    window.requestAnimationFrame(step);
+    window.Module.requestAnimationFrame(step);
 
 
 
@@ -179,7 +189,8 @@ function step(timestamp) {
     let r = 98/255;
     let b = 176/255;
     let g = 155/255;
-    groundMaterial.emissiveColor = new BABYLON.Color3(r,b,g)
+    groundMaterial.emissiveColor = new BABYLON.Color3(r,b,g);
+    groundMaterial.disableLighting = true;
     ground.scaling.x = 1;
     ground.scaling.z = 1
 
@@ -247,14 +258,176 @@ scene.registerBeforeRender(function () {
 
 const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
 console.log("!!!!!!!!!BOUNDING INFO!!!@ ",game.scene.meshes[1]._width / 6);
-let boxSpawnX = - (game.scene.meshes[1]._width/3);
-let boxSpawnY = game.scene.meshes[1]._width / 2;
+let boxSpawnX = - (game.scene.meshes[1]._width/2);
+let boxSpawnY = 1;
+let boxSpawnZ = game.scene.meshes[1]._height / 2;
 box.position.x = boxSpawnX; 
 box.position.y = boxSpawnY;
+box.position.z = boxSpawnZ;
+box.scaling.z = 10/128;
+box.id = "noteBox_0";
+console.log("BOX!: ", box);
 let boxMaterial= new BABYLON.StandardMaterial(scene);
 box.material = boxMaterial;
 box.material.diffuseColor = new BABYLON.Color3.FromHexString("#DFFF3D");
 box.material.emissiveColor = new BABYLON.Color3.FromHexString("#FF30C2");
+game.boxBlueprint = game.boxBlueprint || {};
+game.boxBlueprint = box;
+// let boxInstances = [];
+// for(let x = 0; x< 64; x++){
+//     box.clone(`boxNote_instance-${x}`);
+// }
+
+game.createBoxRow = () => {
+    let boxInstances = [];
+    
+    let colorA = game.boxBlueprint.material.emissiveColor
+
+
+    let material0 = new BABYLON.StandardMaterial(scene);
+    let color0 = new BABYLON.Color3.FromHexString("#AF4AFF");
+
+    let material1 = new BABYLON.StandardMaterial(scene);
+    let color1 = new BABYLON.Color3.FromHexString("#7A4FE8");
+
+    let material2 = new BABYLON.StandardMaterial(scene);
+    let color2 = new BABYLON.Color3.FromHexString("#4C4AFF");
+
+    let material3 = new BABYLON.StandardMaterial(scene);
+    let color3 = new BABYLON.Color3.FromHexString("#4773F5");
+
+    let material4 = new BABYLON.StandardMaterial(scene);
+    let color4 = new BABYLON.Color3.FromHexString("#35C6DE");
+
+    let material5 = new BABYLON.StandardMaterial(scene);
+    let color5 = new BABYLON.Color3.FromHexString("#3CFA9B");
+
+    let material6 = new BABYLON.StandardMaterial(scene);
+    let color6 = new BABYLON.Color3.FromHexString("#2B98E3");
+
+    let material7 = new BABYLON.StandardMaterial(scene);
+    let color7 = new BABYLON.Color3.FromHexString("#E3B814");
+
+    let material8 = new BABYLON.StandardMaterial(scene);
+    let color8 = new BABYLON.Color3.FromHexString("#3643E3");
+
+    let material9 = new BABYLON.StandardMaterial(scene);
+    let color9 = new BABYLON.Color3.FromHexString("#E37242");
+
+    let material10 = new BABYLON.StandardMaterial(scene);
+    let color10 = new BABYLON.Color3.FromHexString("#2B99E3");
+
+    let material11 = new BABYLON.StandardMaterial(scene);
+    let color11 = new BABYLON.Color3.FromHexString("#E33836");
+
+    for(let x = 1; x< 128; x++){
+        // boxInstances[x] = BABYLON.MeshBuilder.CreateBox("noteBox_" + x, {}, scene);
+        boxInstances[x] = box.clone("noteBox_" + x);;
+        boxInstances[x].speed = 0.1
+        boxInstances[x].position.z = (game.scene.meshes[1]._height / 2) - (x * (10/128));
+        switch(x%11){
+            case 0:
+                boxInstances[x].material = material0;
+                boxInstances[x].material.emissiveColor = color0;
+                break;
+            case 1:
+                boxInstances[x].material = material1;
+                boxInstances[x].material.emissiveColor = color1;
+                break;
+            case 2:
+                boxInstances[x].material = material2;
+                boxInstances[x].material.emissiveColor = color2;
+                break;
+            case 3:
+                boxInstances[x].material = material3;
+                boxInstances[x].material.emissiveColor = color3;
+            case 4:
+                boxInstances[x].material = material4;
+                boxInstances[x].material.emissiveColor = color4;
+                break;
+            case 5:
+                boxInstances[x].material= material5;
+                boxInstances[x].material.emissiveColor = color5;
+                break;
+            case 6:
+                boxInstances[x].material= material6;
+                boxInstances[x].material.emissiveColor = color6;
+                break;
+            case 7:
+                boxInstances[x].material = material7;
+                boxInstances[x].material.emissiveColor = color7;
+                break;
+            case 8:
+                boxInstances[x].material = material8;
+                boxInstances[x].material.emissiveColor = color8;
+                break;
+            case 9:
+                boxInstances[x].material = material9;
+                boxInstances[x].material.emissiveColor = color9;
+                break;
+            case 10:
+                boxInstances[x].material = material10;
+                boxInstances[x].material.emissiveColor = color10;
+            case 11:
+                boxInstances[x].material = material11;
+                boxInstances[x].material.emissiveColor = color11;
+            default:
+                console.log("no box reading");
+        }
+      
+        // if(x%11 === 0){
+        //     boxInstances[x].material.emissiveColor = null;
+        //     boxInstances[x].material.emissiveColor = color0;
+        // }       if(x%11 === 1){
+        //     boxInstances[x].material.emissiveColor = null;
+        //     boxInstances[x].material.emissiveColor = color1;
+        // }  
+        // else {
+        //     console.log("IN ONE!!!");
+        //     boxInstances[x].material.emissiveColor = null;
+        //     boxInstances[x].material.emissiveColor = colorB;
+
+        // }
+
+
+        const frameRate = 20;
+
+        const xSlide = new BABYLON.Animation("xSlide", "position.x", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT);
+        const keyFrames = [];
+
+        keyFrames.push({
+            frame: 0,
+            value: (game.scene.meshes[1]._width/2),
+        });
+
+        keyFrames.push({
+            frame: ((game.bpm/30)/2) * frameRate,
+            value: 0,
+        });
+
+        keyFrames.push({
+            frame: (game.bpm/30) * frameRate,
+            value: -(game.scene.meshes[1]._width/2),
+        });
+
+        xSlide.setKeys(keyFrames);
+        boxInstances[x].animations.push(xSlide);
+        scene.beginAnimation(boxInstances[x], 0, (game.bpm/30) * frameRate, true);
+        // boxInstances[x].moveTo = function (targetPos, speed) {
+        //     var ease = new BABYLON.CubicEase();
+        //     targetPos = new BABYLON.Vector3(boxInstances[x].position.x,boxInstances[x].position.y,boxInstances[x].position.z);
+        //     ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+        //     BABYLON.Animation.CreateAndStartAnimation('at5', this, 'position', 10, 12, this.position, targetPos, 0, ease);
+        // }
+    }
+    game.user.boxInstances = boxInstances;
+  
+    return boxInstances;
+}
+
+
+
+
 
 playerMaterial.emissiveColor = new BABYLON.Color3.FromHexString("#DFFF3D");
 

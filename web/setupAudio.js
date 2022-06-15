@@ -99,6 +99,7 @@ async function getWebAudioMediaStream() {
 async function setupAudio(onPitchDetectedCallback) {
   if(!game.user.isPlaying){
     game.user.isPlaying = true;
+    game.user.startGameTime = window.__emscripten_date_now()
   }
   // Get the browser audio. Awaits user "allowing" it for the current tab.
   const mediaStream = await getWebAudioMediaStream();

@@ -14,6 +14,6 @@ def mingus_get_notes(data):
         noteToAnalyze = data['notesForAnalysis'][dic]['note']
         print(f"DIC!: {noteToAnalyze}")
         if(notes.is_valid_note(noteToAnalyze)):
-            return
+            return noteToAnalyze
         else:   
             print(f"THIS IS NOT A VALID NOTE!!!!!: {noteToAnalyze}")

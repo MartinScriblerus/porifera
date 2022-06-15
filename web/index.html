@@ -14,7 +14,7 @@
 
     <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
     <h1 id="siteTitle" class="opening-header">
-      Pitch Perfect
+      <!-- Pitch Perfect -->
     </h1>
     <div id="devicesBox" class="box from-js rust-to">
       <div class="btn-group dropright">
@@ -23,7 +23,11 @@
         </select>  
       </div>
       <input id="getUserAudio" type="button" class="btn btn-secondary" value = "Set Audio"> 
-      <input id="setUpAudio" type="button" class="btn btn-secondary" value = "Set Running"> 
+      <input id="setUpAudio" type="button" class="btn btn-secondary" value = "Set Running">
+      <form id="bpmFormInput">
+        <input id="bpmInput" type="text" class="form-check-input" value="120">
+        <label class="form-check-label" for="bpmInput">Select BPM</label>
+      </form> 
   </div>
   <div id="pitchBox">
     <h5 id="jsFromRustProof1">
@@ -33,6 +37,8 @@
       </div>
       <div class="inner-row box">
         <span id="pitchDisplay"></span>
+      </div>
+      <div id="bpmDisplay">
       </div>
     </h5>
 
@@ -296,22 +302,56 @@
           let fibunacciNumber = fib1.next();
           showCppWasm(fibunacciNumber);
           
-          
+          let i = window.Browser.mainLoop;
+          console.log("YOOOOOO ", i);
+          console.log("YOOOOOO!!! ", i.currentFrameNumber);
           game.user.timeStart = game.user.timeStart || undefined;
           game.user.timeNow = game.user.timeNow || undefined; 
           game.user.timeStart = window.__emscripten_date_now();
+          
+          
+          
+          
+          
+          
+          
           setInterval(()=>{
-            game.user.timeNow = window.__emscripten_date_now();
+
             game.user.timeElapsed = game.user.timeNow - game.user.timeStart;
-            console.log("yaya!!!: ", game.user.timeNow - game.user.timeStart);
-            if(game.user.timeElapsed > 8000){
-              document.getElementById("siteTitle").classList.add("displayNone");
-              if(!game.user.isPlaying){
-                let x = document.getElementById("devicesBox"); 
-                x.style.display = "flex";
+            // Main emscripten tic register
+
+
+            //document.getElementById("siteTitle").classList.add("displayNone");
+            if(!game.user.isPlaying){
+              let x = document.getElementById("devicesBox"); 
+              x.style.display = "flex";
+            } else {
+              if(game.user.startGameTick){
+                let timeToMove = (window.__emscripten_date_now() - game.user.startGameTick);
+                let timeMovementConverter = 1/10000;
+                if(game.user.boxInstances === []){
+                  createBoxRow();
+                }
+
+                game.user.boxInstances.forEach((box)=>{
+                  // if(box && box._position.x > 1){
+                  //   box.dispose();
+                  //   console.log("DISPOSED OF ", box)
+                  // }
+                  // this is actually more effective than long anim that locks up browser 
+                  // box.position.x += (timeToMove * timeMovementConverter)
+                  
+                  // box.position.x += (timeToMove * timeMovementConverter);
+
+                });
               }
             }
           }, 1000);
+        
+        
+        
+        
+        
         }
 
         function showCppWasm(val){

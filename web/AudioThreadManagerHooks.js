@@ -974,6 +974,12 @@ export function pitchConversion(latestPitch){
       latestOctaveNote = "";
   }
   console.log("MIDI::::::: ", (midiNoteNumber));
+  let halfStepToShrinkDOM = latestPitchNote.match(/[#]/g);
+  if(halfStepToShrinkDOM){
+    pitchLetterDisplayDOM.classList.add("shrinkNoteLetter");
+  } else {
+    pitchLetterDisplayDOM.classList.remove("shrinkNoteLetter");
+  }
   pitchLetterDisplayDOM.innerHTML = latestPitchNote;
   pitchOctaveDisplayDOM.innerHTML = latestOctaveNote;
   if (latestPitchNote.indexOf('&#x266f') !== -1){
@@ -1040,8 +1046,12 @@ x.addEventListener("click",function(){
 });
 y.addEventListener("click", async function(){
     //   setupAudio();
+    let selectedBPM = parseInt(document.getElementById("bpmInput").value);
+    game.bpm = (120/selectedBPM) * 120;
     setAudio(await setupAudio(setLatestPitch()));
     setRunning(true);
+    game.user.startGameTick = window.__emscripten_date_now();
+    game.createBoxRow();
     document.getElementById("pitchBox").display = "flex";
     
     x.style.display = "none";
