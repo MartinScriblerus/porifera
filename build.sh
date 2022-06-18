@@ -1,7 +1,7 @@
 rmdir build/
 mkdir build
 cd build
-em++ ../cpp/hello.cpp ../cpp/fib.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="[_new_fib, _next_val, _get_new_number, _do_math, _get_name, _main, _render]" -sEXPORTED_RUNTIME_METHODS=ccall,cwrap -o hello.js || exit 1
+em++ ../cpp/hello.cpp ../cpp/fib.cpp -s WASM=1 -s EXPORTED_FUNCTIONS="[_new_fib, _next_val, _get_new_number, _do_math, _get_name, _main, _render, _main_tick]" -sEXPORTED_RUNTIME_METHODS=ccall,cwrap -o hello.js || exit 1
 mv hello.js ../web/gen/
 mv hello.wasm ../web/gen/
 

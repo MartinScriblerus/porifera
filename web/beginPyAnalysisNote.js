@@ -1,11 +1,9 @@
 let initialTimestamp = window.__emscripten_date_now();
 import "./index.js"
 
-export function beginPyAnalysisNote(user,note,octave,keyNotePiano,keyNoteOrgan,midiNoteNumber,bpm){
-    console.log("note: ", note);
-    console.log("octave: ", octave);
+export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumber,bpm){
     if(!note){
-        note = '';
+        note = 'D';
     }
     if(!octave){
         octave = 0;
@@ -14,21 +12,36 @@ export function beginPyAnalysisNote(user,note,octave,keyNotePiano,keyNoteOrgan,m
         initialTimestamp = window.__emscripten_date_now();
     }
 
-    let timestampDiff = window.__emscripten_date_now() - initialTimestamp;
+    let timestampDiff = window.__emscripten_date_now() - game.room.id.startGameTick;
     console.log("WHAT IS TIMESTAMP EMSCRIPTEN????> ", window.__emscripten_date_now());
+
     // this creates 4 time buckets per second 
     let timeBucket = parseFloat(timestampDiff / 1000).toFixed(2) * 120/bpm;
+
     let noteData = {
         "user": game.user["000000"],
-        "initialTimestamp": game.user.timeRecordingStart,
-        "timestamp": Date.now(),
+        "initialTimestamp": game.room.id.startGameTick,
+        "timestamp": window.__emscripten_date_now(),
         "timestampDiff": timestampDiff,
         "timeBucket": timeBucket,
         "note": note,
         "octave": octave,
-        "keyNotePiano": keyNotePiano,
-        "keyNoteOrgan": keyNoteOrgan,
+        "mingusNumNote": mingusNumNote,
+        // "keyNotePiano": keyNotePiano,
+        // "keyNoteOrgan": keyNoteOrgan,
         "midiNoteNumber": midiNoteNumber
     }
-    noteDataToPy(noteData)
+    console.log("now m,inus last tick", window.__emscripten_date_now() - game.room.id.previousTick);
+
+
+    // if(((window.__emscripten_date_now() - game.room.id.startGameTick) % 250) === 0){
+  
+    //     console.log("SENDING NOOTE DATA TO PYTON FROM BEGIN ANALYSIS NOTE js");
+    console.log(">>>>> ", game.room.id.delta);
+    // if((game.room.id.delta < 100 || undefined)){
+        noteDataToPy(noteData);
+    // }
+
+
+    
 }

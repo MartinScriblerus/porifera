@@ -2,7 +2,7 @@ const spawn = require('child_process').spawn;
   
 // Initialise the data
 const data = {
-  array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  array: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 }
   
 // We need to stringify the data as 

@@ -86,13 +86,14 @@ last_val = {}
 def sum_of_array(): 
     data = request.get_json() 
     
+    # this is test (array 1-10)
     print(f"data(sum of array): {data}")
     
     # Data variable contains the 
     # data from the node server
     ls = data['array'] 
-    print(f"DATA FROM NODE {ls}")
-    result = sum(ls) # calculate the sum
+
+    result = sum(ls)/len(ls) # calculate the sum / length
     print(result)
     last_val = result
     if(result != last_val):
@@ -105,18 +106,35 @@ def sum_of_array():
 # ========================================================
 # SOCKETS ROUTE
 # ========================================================
-async def test_sockets(path):
+async def test_sockets(expected_notes, path):
+    
     async with connect(path) as websocket:
         now = datetime.now()
-        await websocket.send(f"Python sends now: {now}")
+        await websocket.send(f"Python sends now: {now} and {expected_notes}")
 
         test = await websocket.recv()
-        print(f'Python receives {test}')
+        print(f'Python receives {test} on path: {path}')
             
 # while True:        
-asyncio.run(test_sockets("ws://localhost:8081"))
+asyncio.run(test_sockets([],"ws://localhost:8081"))
 
 
+# ========================================================
+# SEND MINGUS SETUP DATA
+# ========================================================
+
+
+@app.route('/audio_selections', methods = ['POST'])
+def audioSelections():
+    dataAudioSelections = request.get_json()
+    if len(dataAudioSelections) < 1:
+        return
+    print(f"Audio Selections: {dataAudioSelections}")
+
+    exp_scale = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],dataAudioSelections['targetScale'])
+    print(f'EXPECTED SCALE IN APP PY: {exp_scale}')
+    asyncio.run(test_sockets(exp_scale, "ws://localhost:8081"))
+    return dataAudioSelections
 # ========================================================
 # (SEND TO) NODE INTEROP ROUTE
 # ========================================================
@@ -132,15 +150,18 @@ def toNode():
     
     array = data1
     # print(f'array is... {array}')
-
+    print(f'this is DATA1 len!!!! {len(array)}')
     # Data that we will send in post request.
     data = {'array':array}
-    # print(f"here's the data {data}")
-    mingus_calcs.mingus_calcs(data)
-    notesData.mingus_get_notes(array)
     
+    notesData.mingus_expect_notes(array)
+    mingus_calcs.mingus_calcs(data)
+    # notesData.mingus_get_notes(array)
+
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
+    array = []
+    data = {}
     # Convert response data to json
     returned_data = res.json() 
 

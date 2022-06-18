@@ -3,7 +3,7 @@ from subprocess import Popen, PIPE
 import json
   
 # Initialise the data
-array = [1,2,3,4,5,6,7,8,9,10]
+array = [1,1,1,1,1,1,1,1,1,10]
 data = {'array':array}
   
 # Stringify the data.

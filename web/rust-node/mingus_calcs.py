@@ -9,6 +9,7 @@ def mingus_calcs(data):
     global notesDf
     receivedData = list(data.values())
     notesDataFrame = notesData.notes_DataFrames(notesDf, receivedData[0]['notesForAnalysis'])
+    #THIS IS DATAFRAME TABLE
     print(tabulate(notesDataFrame, headers='keys', tablefmt='psql'))
     notesDf = notesDataFrame
     # mingus_get_notes(data)

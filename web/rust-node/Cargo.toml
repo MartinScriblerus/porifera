@@ -27,6 +27,7 @@ pitch-detection = "0.2.0"
 imp = "0.1.0"
 libloading = "0.7.3"
 getrandom = { version = "0.2", features = ["js"] }
+time = "0.3.9"
 
 object-pool = "0.5.3"
 rustfft = { version = "5.0.1", default-features = false }

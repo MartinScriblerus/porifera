@@ -14,35 +14,168 @@
 
     <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
     <h1 id="siteTitle" class="opening-header">
-      <!-- Pitch Perfect -->
+      Monkey Pox
     </h1>
-    <div id="devicesBox" class="box from-js rust-to">
-      <div class="btn-group dropright">
-        <select id = "selectedAudioDevice" value="" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
-          <option> ---Choose Device--- </option>  
-        </select>  
+    <div id="musicTheoryDiv">
+      <div class="inner-row box">
+        <span id="scaleDisplay"></span>
+        <label class="pitchDisplayLetter" for="scaleDisplay">Current Scale</label>
       </div>
+      <div class="inner-row box">
+        <span id="scalePositionDisplay"></span>
+        <label class="pitchDisplayLetter" for="scalePositionDisplay">Scale Position</label>
+      </div>
+      <div class="inner-row box">
+        <span id="bpmDisplay"></span>
+        <label class="pitchDisplayLetter" for="bpmDisplay">Current BPM</label>
+      </div>
+      <div class="inner-row box">
+        <span id="targetKeyDisplay"></span>
+        <label class="pitchDisplayLetter" for="targetKeyDisplay">Target Key</label>
+      </div>
+      <div class="inner-row box" >
+        <span id="targetOctaveDisplay"></span>
+        <label class="pitchDisplayLetter" for="targetOctaveDisplay">Target Octave</label>
+      </div>
+
+      <div class="inner-row box">
+        <span id="octaveRangeDisplay"></span>
+        <label class="pitchDisplayLetter" for="octaveRangeDisplay">Octave Range</label>
+      </div>
+
+      <div class="inner-row box" >
+        <span id="targetNoteDisplay"></span>
+        <label class="pitchDisplayLetter" for="targetNoteDisplay">Target Note</label>
+      </div>
+      <div class="inner-row box">
+        <span id="futureNotesDisplay"></span>
+        <label class="pitchDisplayLetter" for="futureNotesDisplay">Future Notes</label>
+      </div>
+    </div>
+    <div id="devicesBox" class="box from-js rust-to">
+
       <input id="getUserAudio" type="button" class="btn btn-secondary" value = "Set Audio"> 
       <input id="setUpAudio" type="button" class="btn btn-secondary" value = "Set Running">
-      <form id="bpmFormInput">
-        <input id="bpmInput" type="text" class="form-check-input" value="120">
-        <label class="form-check-label" for="bpmInput">Select BPM</label>
-      </form> 
-  </div>
-  <div id="pitchBox">
-    <h5 id="jsFromRustProof1">
-      <div class="inner-row box">
-        <span id="pitchDisplayLetter"></span>
-        <span id="pitchDisplayOctave"></span>
-      </div>
-      <div class="inner-row box">
-        <span id="pitchDisplay"></span>
-      </div>
-      <div id="bpmDisplay">
-      </div>
-    </h5>
+      <div id="gameAudioSetupDiv">
+        <div id="modeSetup">
+          <div id="modeDropdowns" class="btn-group dropright">
+            <select id = "selectedAudioDevice" value="" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+              <option> ---Choose Device--- </option>  
+            </select>
+            <label class="form-check-label" for="selectedAudioDevice">Select Audio Device</label>  
+            <select id = "selectedGameMode" value="Practice" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+              <option> ---Game Mode--- </option> 
+              <option value="Practice" class="game-mode-option"> Music Theory </option> 
+              <option value="Match" class="game-mode-option"> Song Match </option>  
+              <option value="Create" class="game-mode-option"> Song Create </option> 
+              <option value="Multi-Player" class="game-mode-option"> Multi-Player </option>
+            </select> 
+            <label class="form-check-label" for="selectedGameMode">Select Game Mode</label> 
+          </div>
+          <input id="setAudioParams" type="button" class="btn btn-secondary" value = "Save Settings">
+        </div>
+        <div id="octaveSetupDiv">
 
-  </div>
+          <div>
+            <div class="btn-group dropright">
+              <select id = "targetScale" value="harmonic_major" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+                <option> ---Select Scale--- </option>
+                <!-- TODO: is diatonic needed??? -->
+                <!-- <option value="diatonic" class="set-scale-option"> Diatonic </option>  -->
+                <option value="surprise_me" class="set-scale-option"> Surprise Me! </option>
+                <option value="major" class="set-scale-option"> Major </option>
+                <option value="harmonic_minor" class="set-scale-option"> Harmonic Major </option> 
+                <option value="natural_minor" class="set-scale-option"> Natural Minor </option>  
+                <option value="harmonic_minor" class="set-scale-option"> Harmonic Minor </option> 
+                <option value="melodic_minor" class="set-scale-option"> Melodic Minor </option>
+                <option value="bachian" class="set-scale-option"> Bachian </option>
+                <option value="minor_neapolitan" class="set-scale-option"> Minor Neapolitan </option> 
+                <option value="chromatic" class="set-scale-option"> Chromatic </option> 
+                <option value="whole_tone" class="set-scale-option"> Whole Tone </option>
+                <option value="octatonic" class="set-scale-option"> Octatonic </option> 
+                <option value="ionian" class="set-scale-option"> Ionian </option> 
+                <option value="dorian" class="set-scale-option"> Dorian </option>
+                <option value="phrygian" class="set-scale-option"> Phrygian </option>
+                <option value="lydian" class="set-scale-option"> Lydian </option> 
+                <option value="mixolydian" class="set-scale-option"> Mixolydian  </option>  
+                <option value="aeolian" class="set-scale-option"> Aeolian </option> 
+                <option value="locrian" class="set-scale-option"> Locrian </option>              
+              </select> 
+              <label class="form-check-label" for="rangeOctave">Select Octave Range</label> 
+            </div>
+    
+            <div class="btn-group dropright">
+              <select id = "targetKey" value="C" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+                <option> ---Target Key--- </option> 
+                <option value="C" class="set-key-option"> C </option> 
+                <option value="C#" class="set-key-option"> C# </option> 
+                <option value="D" class="set-key-option"> D </option> 
+                <option value="D#" class="set-key-option"> D# </option> 
+                <option value="E" class="set-key-option"> E </option> 
+                <option value="F" class="set-key-option"> F </option> 
+                <option value="F#" class="set-key-option"> F# </option> 
+                <option value="G" class="set-key-option"> G </option> 
+                <option value="G#" class="set-key-option"> G# </option> 
+                <option value="A" class="set-key-option"> A </option> 
+                <option value="A#" class="set-key-option"> A# </option>
+                <option value="B" class="set-key-option"> B </option>   
+              </select>  
+              <label class="form-check-label" for="targetKey">Select Key</label>
+            </div>
+          </div>
+          <div>
+            <div class="btn-group dropright">
+              <select id = "targetOctave" value="4" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+                <option> ---Target Octave--- </option>
+                <option value="0" class="set-octave-option"> 0 </option>
+                <option value="1" class="set-octave-option"> 1 </option>
+                <option value="2" class="set-octave-option"> 2 </option>
+                <option value="3" class="set-octave-option"> 3 </option>
+                <option value="4" class="set-octave-option"> 4 </option>
+                <option value="5" class="set-octave-option"> 5 </option>
+                <option value="6" class="set-octave-option"> 6 </option>
+                <option value="7" class="set-octave-option"> 7 </option>
+                <option value="8" class="set-octave-option"> 8 </option>
+                <option value="9" class="set-octave-option"> 9 </option>
+              </select>  
+              <label class="form-check-label" for="targetOctave">Select Target Octave</label>
+            </div>
+
+            <div class="btn-group dropright">
+              <select id = "rangeOctave" value="4" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+                <option> ---Octave Range--- </option>
+                <option value="0" class="set-octave-range-option"> 0 </option>  
+                <option value="1" class="set-octave-range-option"> 1 </option> 
+                <option value="2" class="set-octave-range-option"> 2 </option>
+                <option value="3" class="set-octave-range-option"> 3 </option>
+                <option value="4" class="set-octave-range-option"> 4 </option>      
+              </select> 
+              <label class="form-check-label" for="rangeOctave">Select Octave Range</label> 
+            </div>
+          </div>
+        
+          <div>
+            <form id="bpmFormInput">
+              <input id="bpmInput" type="text" class="form-check-input" value="120">
+              <label class="form-check-label" for="bpmInput">Select BPM</label>
+            </form> 
+          </div>
+            <input id="setUpOctave" type="button" class="btn btn-secondary" value = "Set Octaves">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pitchBox">
+      <h5 id="jsFromRustProof1">
+        <div class="inner-row box">
+          <span id="pitchDisplayLetter"></span>
+          <span id="pitchDisplayOctave"></span>
+        </div>
+        <div class="inner-row box">
+          <span id="pitchDisplay"></span>
+        </div>
+      </h5>
+    </div>
 
     
   <div style="display:none">
@@ -187,20 +320,7 @@
           let newFib = Module._next_val(_new_fib);
           showCppWasm(newFib);
           // return Module.onRuntimeInitialized();
-        }
-
-        
-        // // console.log("MAIN TICK: ", mainTick);
-        // function getTick(mainLoop){
-        //   console.log("Main loop: ", mainLoop);
-        // }
-        // function tryTick(){
-        //   let mainLoop = Module._render();
-        //   console.log("hit this@!! ", mainLoop);
-        //   getTick(mainLoop);
-        // }
-        
-  
+        }  
       </script>
 
       <script>
@@ -227,30 +347,49 @@
       </script>
 
       <script>
-        let doThisOnBackendSamplesArr  = []
-        function noteDataToPy(numForArray){
 
-          doThisOnBackendSamplesArr.push(numForArray);
-          let toPy = {notesForAnalysis: doThisOnBackendSamplesArr};
+        function noteDataToPy(numForArray){
+          console.log("receiving the update");
+          let timeNow = window.__emscripten_date_now();
+          // if((game.room.io.delta === 0 || undefined)){
+            console.log("delta hit 0 ", game.room.id.delta);
+            game.user.samplesArr.push(numForArray);
+          // }
+          if((timeNow - game.user.samplesArr[i].timestamp) > 1000){
+              game.user.samplesArr.splice(i,1);
+              console.log("removed some items from this samples array");
+            } 
+          game.user.id.toPy = {notesForAnalysis: game.user.samplesArr};
+         
+          for(let i = 0; game.user.samplesArr.length; i++){
+
+          }
           
+
+          let frameDiff = window.emscripten_date_now() - game.user.samplesArr[0].timestamp
+          if(frameDiff > 2000){
+            game.user.id.toPy = {};
+          }
           // TODO: add a switch for over limit of loop interval
-          if(doThisOnBackendSamplesArr.length > 12){
+          if(game.user.samplesArr.length > 128 ){
             try{
               fetch('http://localhost:8088/to_node', {
                 method: 'POST',
-                body: JSON.stringify(toPy),
+                body: JSON.stringify(game.user.id.toPy),
                 headers: {'Content-type': 'application/json; charset=UTF-8'
             }
               })
               .then(response => response.json())
               .then(json => console.log(json))
-              .then(doThisOnBackendSamplesArr = []);
+              .then(game.user.samplesArr = [])
+              .then(game.user.id.toPy={})
             } catch (e){
               console.log("error from python interop: ", e);
             }
           } else {
-            console.log("samples: ", doThisOnBackendSamplesArr);
+            // console.log("samples: ", doThisOnBackendSamplesArr);
           }
+          
         }
       </script>
  
@@ -284,16 +423,6 @@
           assert(isNumber(new Fib().next()));
         }
 
-        // console.log("MAIN TICK: ", mainTick);
-        function getTick(mainLoop){
-          console.log("Main loop: ", mainLoop);
-        }
-        function tryTick(){
-          let mainLoop = Module._render();
-          console.log("hit this@!! ", mainLoop);
-          getTick(mainLoop);
-          
-        }
 
         Module.onRuntimeInitialized = function() {
           let fib1 = new Fib();
@@ -301,57 +430,28 @@
           testNextValReturnsInt();
           let fibunacciNumber = fib1.next();
           showCppWasm(fibunacciNumber);
-          
+          window.updateFibunacci = showCppWasm(fibunacciNumber);
           let i = window.Browser.mainLoop;
-          console.log("YOOOOOO ", i);
-          console.log("YOOOOOO!!! ", i.currentFrameNumber);
+          // console.log("YOOOOOO ", i);
+          // console.log("YOOOOOO!!! ", i.currentFrameNumber);
+          //let c = window.requestAnimationFrame(()=>window.Browser.mainLoop);
+         // console.log("NNN ", c);
+ 
           game.user.timeStart = game.user.timeStart || undefined;
           game.user.timeNow = game.user.timeNow || undefined; 
           game.user.timeStart = window.__emscripten_date_now();
           
-          
-          
-          
-          
-          
-          
-          setInterval(()=>{
+          var number = 0;
 
-            game.user.timeElapsed = game.user.timeNow - game.user.timeStart;
-            // Main emscripten tic register
+         
 
 
-            //document.getElementById("siteTitle").classList.add("displayNone");
-            if(!game.user.isPlaying){
+            //game.user.timeElapsed = game.user.timeNow - game.user.timeStart;
+
+            if(!game.user.id.isPlaying){
               let x = document.getElementById("devicesBox"); 
               x.style.display = "flex";
-            } else {
-              if(game.user.startGameTick){
-                let timeToMove = (window.__emscripten_date_now() - game.user.startGameTick);
-                let timeMovementConverter = 1/10000;
-                if(game.user.boxInstances === []){
-                  createBoxRow();
-                }
-
-                game.user.boxInstances.forEach((box)=>{
-                  // if(box && box._position.x > 1){
-                  //   box.dispose();
-                  //   console.log("DISPOSED OF ", box)
-                  // }
-                  // this is actually more effective than long anim that locks up browser 
-                  // box.position.x += (timeToMove * timeMovementConverter)
-                  
-                  // box.position.x += (timeToMove * timeMovementConverter);
-
-                });
-              }
-            }
-          }, 1000);
-        
-        
-        
-        
-        
+            }         
         }
 
         function showCppWasm(val){
@@ -380,7 +480,7 @@
 
       // Connection opened
       socket.addEventListener('message', function (event) {
-          socket.send('Hello Server!');
+          socket.send('Hello Server frrom HTML!!!');
       });
 
       // Listen for messages
@@ -427,7 +527,9 @@
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
-      <script>console.log("MODULE: ", Module);</script>
+      <script>
+
+      console.log("MODULE: ", Module);</script>
 
 
 

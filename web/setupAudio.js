@@ -20,8 +20,8 @@ async function getWebAudioMediaStream() {
   navigator.mediaDevices.enumerateDevices()
   .then(function(devices) {
     devices.forEach(function(device) {
-      // console.log("D_E_V_I_C_E_S: ", device.kind + ": " + device.label +
-      //             " id = " + device.deviceId);
+      console.log("D_E_V_I_C_E_S: ", device.kind + ": " + device.label +
+                  " id = " + device.deviceId);
       
     });
   })
@@ -97,8 +97,8 @@ async function getWebAudioMediaStream() {
 }
 
 async function setupAudio(onPitchDetectedCallback) {
-  if(!game.user.isPlaying){
-    game.user.isPlaying = true;
+  if(!game.user.id.isPlaying){
+    game.user.id.isPlaying = true;
     game.user.startGameTime = window.__emscripten_date_now()
   }
   // Get the browser audio. Awaits user "allowing" it for the current tab.

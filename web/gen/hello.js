@@ -1666,7 +1666,7 @@ var ASM_CONSTS = {
   
 };
 function two_alerts(someName) { alert(UTF8ToString(someName)); document.getElementById("cppToJs").append(UTF8ToString(someName)); }
-function update_browser_tick(now,delta,seconds_elapsed) { return now; }
+function update_browser_tick(now,delta,seconds_elapsed) { console.log("Clock Now: ", now); console.log("Delta: ", delta); console.log("Seconds Elapsed: ", seconds_elapsed); return now; }
 
 
 
@@ -5703,6 +5703,9 @@ var _get_new_number = Module["_get_new_number"] = createExportWrapper("get_new_n
 
 /** @type {function(...*):?} */
 var _render = Module["_render"] = createExportWrapper("render");
+
+/** @type {function(...*):?} */
+var _main_tick = Module["_main_tick"] = createExportWrapper("main_tick");
 
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");

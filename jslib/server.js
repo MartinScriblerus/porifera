@@ -6,8 +6,6 @@ const http = require('http');
 var cors = require('cors');
 var fs = require('fs');
 
-var im = require('imagemagick');
-
 
 const factory = require('../web/gen/hello.js')
 console.log("What are factory keys? ", Object.keys(factory));
@@ -100,7 +98,7 @@ redisSubscriber.on('message', function (channel, message) {
 async function createRedisPublisher (msg) {
   const article = {
     id: '123456',
-    name: 'Using Redis Pub/Sub with Node.js',
+    name: 'Using Redissss Pub/Sub with Node.js',
     message: msg || 'that is right, motherfucker',
   };  
   console.log(article); // 'message'
@@ -202,8 +200,8 @@ async function arraysum(data) {
         result = parsedBody['result'];
         console.log("Result value (array sum) from Python: ", result);
         
-        console.log("send to python child process!! ");
-        child1.send(result); // Hello to you too :)
+        console.log("send to python child process!! ", result);
+        //child1.send("message", result); // Hello to you too :)
 
   
         wss.on('connection', function(ws) {
@@ -233,7 +231,7 @@ app.get('/', cors(corsOptions), (req, res) => {
   console.log("works: ", works);
   let x = works.get();
   let y = works.getNum();
-  let z = works.getHello();
+  let z = works.getHello(120);
   createRedisSubscriber();
   
   // let xx = works.timed();
@@ -267,7 +265,33 @@ app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
   });
 
   res.json({"received*in*node": req.body.arraysum});
-})
+});
+
+app.post("/expectedAudio", cors(corsOptions), (req, res) => {
+  // child1.send(req.body);
+  let data = req.body;
+  console.dir("THIS IS BODY OF EXPECTED AUDIO IN NODE SERVER: ", req.body);
+  createRedisPublisher(data);
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({message: data }));
+    }
+  });
+  ws.on('message', function(data) {
+    console.log('client received expected audio:', data);
+  });
+  
+  // wss.on('connection', function connection(ws) {
+  //   ws.on('message', function message(data) {
+  //     console.log('received: %s', data);
+  //   });
+  
+  //   data = [1, 1, 2]
+  
+  //   ws.send(JSON.stringify(data));
+  // });
+  res.json({ result: req.body });
+});
 
 app.post("/arraysum", cors(corsOptions), (req, res) => {
   child1.send(req.body);
@@ -280,7 +304,7 @@ app.post("/arraysum", cors(corsOptions), (req, res) => {
   // factory.ccall("get_new_number"); // using ccall etc. also work
 
 
-  var array = req.body.array;  
+  var array = req.body;  
   if(!array){
     console.log("array length undefined");
     res.json({ result: "no array provided" });

@@ -90,7 +90,9 @@ export default class PitchProcessor extends AudioWorkletProcessor {
     // Once our buffer has enough samples, pass them to the Wasm pitch detector.
     if (this.totalSamples >= this.numAudioSamplesPerAnalysis && this.detector) {
       let detector = this.detector;
-      
+     
+ 
+
       
       // THIS.Samples IS THE BYTE ARRAY OF AUDIO SAMPLES
         // Connection opened

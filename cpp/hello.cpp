@@ -31,6 +31,7 @@ extern "C" {
   int next_val(int fib_instance);
   int get_new_number();
   double render();
+  void main_tick();
   int do_math(uint32_t a, uint32_t b) { return a+b; }
   char *get_name(char *nom){
     std::cout << "I am stupid " << nom << std::endl;
@@ -102,9 +103,9 @@ int render_loop(){
 static int quit = 0;
 
 EM_JS(void, update_browser_tick, (clock_t now, clock_t delta, double seconds_elapsed), {
-  // console.log("Clock Now: ", now);
-  // console.log("Delta: ", delta);
-  // console.log("Seconds Elapsed: ", seconds_elapsed);
+  console.log("Clock Now: ", now);
+  console.log("Delta: ", delta);
+  console.log("Seconds Elapsed: ", seconds_elapsed);
 
   return now;
 });
@@ -120,12 +121,13 @@ double render()
   clock_t now = clock();
   clock_t delta = now - start;
   double seconds_elapsed = static_cast<double>(delta) / CLOCKS_PER_SEC;
-  update_browser_tick(now, delta, seconds_elapsed);
+  
   if(delta > 100000){
+ 
     // std::cout << "NOW from c++: " << start << std::endl;
     get_new_number();
     start = now;
-    update_browser_tick(now, delta, seconds_elapsed);
+    // update_browser_tick(now, delta, seconds_elapsed);
     return start;
   } else {
     // std::cout << 0 << std::endl;

@@ -12,6 +12,12 @@ body {
     background-color: "transparent";
 }
 
+.btn-group {
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
 .btn-secondary {
     margin-top: 4px;
     color: "#000000";
@@ -23,6 +29,10 @@ body {
 canvas {
     height: 100%;
     width: auto;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 h3 {
@@ -40,54 +50,96 @@ h3 {
     max-width: 180px;
     display:none;
 }
+#musicTheoryDiv {
+    position: absolute;
+    float: center;
+    top: 50px;
+    right: 0px;
+    font-size: 26px;
+    font-family: 'Jost', sans-serif;
+    max-width: 360px;
+    color: rgb(98, 176, 155); 
+}
 #devicesBox {
     position: absolute;
     float: left;
-    top: 40vh;
+    top: 0px;
+    left: 0px;
     z-index: 10;
     flex-direction: column;
-    max-width: 172px;
-    left: 40vw;
-    display: none;
+    width: 100vw;
+    height: 100vh;
+    /* display: none; */
+    backdrop-filter: blur(6px);
+    background: #051426;
+    align-items: center;
 }
-#siteTitle {
-    transition-property: transform, writing-mode, left, top, font-size;
-    transition-duration: 4s;
-    transition-delay: 0s;
+#modeSetup{
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    color: #FF30C2;
+    border: solid 1px #FF30C2;
+    border-radius: #FF30C2;
+}
+#gameAudioSetupDiv {
+    display:flex;
+    width: 40vw;
+    /* flex-direction: row;
+    width: 100vw; */
+}
+#gameAudioDiv {
+    /* transition-property: transform, writing-mode, left, top, font-size;
+    transition-duration: 1s;
+    transition-delay: 0s; */
     font-family: 'Jost', sans-serif;
     font-weight: 700;
     color: #FF30C2;
 
 }
+#siteTitle {
+    transition-property: transform, writing-mode, left;
+    transition-duration: 1s;
+    transition-delay: 0s;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    color: #FF30C2;
+}
 #siteTitle.opening-header {
     position: absolute;
     font-size: 128px;
-    top: 50vh;
-    left: 50vw;
+    top: 0vh;
+    left: 0vw;
+    z-index:20;
 }
 #siteTitle.row-title {
     writing-mode: vertical-rl;
     transform: rotate(-180deg);
-    font-size: 128px;
+    font-size: 48px;
     top: 50px;
     left: 0px;
     display: flex;
     position: absolute;
+    z-index: 20;
 }
 #siteTitle.displayNone {
-    display : none;
+    /* display : none; */
 }
-#setupAudio {
+#setupAudio, #modeSetup {
     display: none;
 }
-#selectedAudioDevice
+#selectedAudioDevice {
+    /* display: none; */
+}
 #border-box {
     box-sizing: border-box;
     width: 100%;
     height: auto;
     /* turn off / hide for now */
     visibility: hidden;
-    display: none;
+    /* display: none; */
 }
 
 .column {
@@ -106,7 +158,7 @@ h3 {
     background-color: "transparent";
     width: 100%;
     text-align: right;
-    color: #000000;
+    /* color: #000000; */
     font-size: 24px;
     font-family: 'Jost', sans-serif;
 }
@@ -172,7 +224,9 @@ h3 {
 .old-num-cpp {
     visibility: none;
 }
-
+#octaveSetupDiv, #modeSetup {
+    align-items: center;
+}
 #pitchDisplay, #pitchDisplayLetter, #pitchDisplayOctave {
     font-size: 64px;
     color:#FF30C2;
@@ -193,9 +247,35 @@ h3 {
 #pitchDisplayLetter.shrinkNoteLetter {
     font-size: 32px;
 }
-#bpmFormInput, #bpmInput {
+#bpmFormInput {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+#modeDropdowns {
+    display: flex;
+    flex-direction: column;
+}
+#bpmInput {
+    width: 76px;
+}
+#setAudioParams, #setupOctave {
+    margin-top: 24px;
+}
+#octaveSetupDiv {
+    display: none;
+    flex-direction: column;
+    width: 50vw;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    color: #FF30C2;
+    border: solid 1px #FF30C2;
+    border-radius: #FF30C2;
+}
+/* #bpmFormInput {
+    display: none;
+} */
 
 .box.inner-row > #pitchDisplayLetter {
     text-align: center;
