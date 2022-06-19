@@ -244,7 +244,7 @@ let boxSpawnZ = game.scene.meshes[1]._height / 2;
 box.position.x = boxSpawnX; 
 box.position.y = boxSpawnY;
 box.position.z = boxSpawnZ;
-box.scaling.z = 10/128;
+box.scaling.z = 1/11;
 box.id = "noteBox_0";
 console.log("BOX!: ", box);
 let boxMaterial= new BABYLON.StandardMaterial(scene);
@@ -393,60 +393,59 @@ game.createBoxRow = () => {
       
                
                
-                console.log("what is time elapsed? ", timeElapsed);
-                if(0 <= timeElapsed < 250){
+                // console.log("what is time elapsed? ", timeElapsed);
+                // if(0 <= timeElapsed < 250){
                 
-                    // mainTick(timeElapsed, "one");
-                    console.log("one");
-                } else if (250 <= timeElapsed < 500){
+                //     // mainTick(timeElapsed, "one");
+                //     // console.log("one");
+                // } else if (250 <= timeElapsed < 500){
                
-                    // mainTick(timeElapsed, "two");
-                    console.log("two");
-                } else if (500 <= timeElapsed < 750){
+                //     // mainTick(timeElapsed, "two");
+                //     console.log("two");
+                // } else if (500 <= timeElapsed < 750){
                     
-                    // mainTick(timeElapsed, "three");
-                    console.log("three");
-                } else if (750 <= timeElapsed < 1000){
+                //     // mainTick(timeElapsed, "three");
+                //     console.log("three");
+                // } else if (750 <= timeElapsed < 1000){
              
-                    // mainTick(timeElapsed, "four");
-                    console.log("four");
-                    game.previousTime = window.__emscripten_date_now();
-                    game.oneCount = game.twoCount = game.threeCount = game.fourCount = false;
-                }
-                else{
-                    console.log("TOOOOOOOOOCK!")
-                }
-              let timeAnalysisBucket = (timeElapsed) / 1000;
+                //     // mainTick(timeElapsed, "four");
+                //     console.log("four");
+                //     game.previousTime = window.__emscripten_date_now();
+                //     game.oneCount = game.twoCount = game.threeCount = game.fourCount = false;
+                // }
+                // else{
+                //     console.log("TOOOOOOOOOCK!")
+                // }
+                let timeAnalysisBucket = (timeElapsed) / 1000;
 
            
 
      
    
-              if((timeElapsed/1000) > game.room.id.analysisTimeBucket || (game.room.id.analysisTimeBucket === 0)){
-                console.log("Yeah!");
-                
-                game.room.id.analysisTimeBucket = timeAnalysisBucket;
-                let meshesToDestroy = game.scene.meshes;
-                let done = false;
-                function cleanMeshes(){
-                    for(let u= 5; u < meshesToDestroy.length; u++){
+                if(((game.room.id.bpm/30)/2)/16 * frameRate || (game.room.id.analysisTimeBucket === 0)){
+                    game.room.id.analysisTimeBucket = timeAnalysisBucket;
+                    let meshesToDestroy = game.scene.meshes;
+                    let done = false;
+                    function cleanMeshes(){
+                        for(let u= 5; u < meshesToDestroy.length; u++){
 
-                        meshesToDestroy[u].dispose();
-                        
-      
+                            meshesToDestroy[u].dispose();
+                            
+        
+                        }
                     }
-                }
-                async function remakeWall(){
-                    await cleanMeshes();
-                    // tktktktktk
-                    return game.createBoxRow(); 
-                }
-              } 
+                    async function remakeWall(){
+                        await cleanMeshes();
+                        // tktktktktk
+                        console.log("remaking wall");
+                        return game.createBoxRow(); 
+                    }
+                } 
               
-              return;
+                return;
             },
             true,
-          );
+        );
           // Attach your event to your animation
           xSlide.addEvent(assessAudio);
         
@@ -466,6 +465,13 @@ game.createBoxRow = () => {
             frame: (game.room.id.bpm/30) * frameRate,
             value: -(game.scene.meshes[1]._width/2),
         });
+
+        if(keyFrames[keyFrames.length -1].value === 0){
+            console.log("SENT ANALYSIS NOTE");
+            //beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctaveNote.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpm);
+            
+            // beginPyAnalysisNote()
+        }
 
         // console.log("kf ", keyFrames);
 
@@ -546,11 +552,17 @@ new InfiniteBackground(ground, scene);
 
 game.mainTick = () => {
     game.room.id.delta = window.__emscripten_date_now() - game.room.id.previousTick;
-    //console.log("GOT ITQQQQ ", window.__emscripten_date_now() );
+    
     if((game.room.id.delta) >= 250){
         game.room.id.previousTick = window.__emscripten_date_now();
-        console.log("Tick! ", game.room.id.delta);
+        // READS MAIN TICK DELTA!!!
+        // console.log("Tick! ", game.room.id.delta);
+       
         game.room.id.delta === 0;
+        if(game.user.id.isPlaying){
+            console.log("updating py");
+            beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctave.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpm);
+        }
     }
     let currPitch = pitchChanged();
     if(currPitch === "NaN"){
@@ -565,11 +577,9 @@ game.mainTick = () => {
         playerY_Observable.notifyObservers();
         async function setFollowCamera(){
             // This targets the camera to scene origin
-            // game.scene.camerasetTarget(BABYLON.Vector3.Zero());
             let targetMesh = await game.scene.meshes[0];
         
             game.scene.cameraspeed = 0;
-        //    // game.scene.cameralockedTarget = targetMesh; //version 2.5 onwards
             game.scene.cameraheightOffset = 8;
             game.scene.cameraradius = 1;
             game.scene.cameracameraAcceleration = 0.005;

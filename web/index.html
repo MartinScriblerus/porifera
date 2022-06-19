@@ -14,7 +14,7 @@
 
     <canvas id="renderCanvas" style="width:100%; height:100%"></canvas>
     <h1 id="siteTitle" class="opening-header">
-      Monkey Pox
+      Porifera
     </h1>
     <div id="musicTheoryDiv">
       <div class="inner-row box">
@@ -349,29 +349,27 @@
       <script>
 
         function noteDataToPy(numForArray){
-          console.log("receiving the update");
+
+          console.log("receiving the update ", numForArray);
           let timeNow = window.__emscripten_date_now();
-          // if((game.room.io.delta === 0 || undefined)){
-            console.log("delta hit 0 ", game.room.id.delta);
+          // if((game.room.id.delta < 20 || undefined)){
+           // console.log("delta hit 0 ", game.room.id.delta);
             game.user.samplesArr.push(numForArray);
           // }
-          if((timeNow - game.user.samplesArr[i].timestamp) > 1000){
-              game.user.samplesArr.splice(i,1);
-              console.log("removed some items from this samples array");
-            } 
+ console.log("############ ", game.user.samplesArr[game.user.samplesArr.length -1]);
+          // if((timeNow - game.user.samplesArr[game.user.samplesArr.length -1].timestamp) > 1000){
+          //     game.user.samplesArr.splice(i,1);
+          //     console.log("removed some items from this samples array");
+          //   } 
           game.user.id.toPy = {notesForAnalysis: game.user.samplesArr};
          
-          for(let i = 0; game.user.samplesArr.length; i++){
-
-          }
+      
           
 
-          let frameDiff = window.emscripten_date_now() - game.user.samplesArr[0].timestamp
-          if(frameDiff > 2000){
-            game.user.id.toPy = {};
-          }
+console.log("samp len", game.user.samplesArr.length)
           // TODO: add a switch for over limit of loop interval
-          if(game.user.samplesArr.length > 128 ){
+          // if(game.user.samplesArr.length > 128 ){
+            if(game.user.samplesArr.length > 4 ){
             try{
               fetch('http://localhost:8088/to_node', {
                 method: 'POST',
@@ -476,34 +474,70 @@
       <script>
             
       // Create WebSocket connection.
-      const socket = new WebSocket('ws://127.0.0.1:8081');
+      game.room.id.socket = new WebSocket('ws://127.0.0.1:8081');
 
       // Connection opened
-      socket.addEventListener('message', function (event) {
-          socket.send('Hello Server frrom HTML!!!');
+      game.room.id.socket.addEventListener('message', function (event) {
+        // SEND CURRENT HEIGHT / NOTE HERE >>>>>>
+        game.room.id.socket.send('pause');
+
+        game.room.id.socket.onmessage = (event) => {
+          console.log("logging an event: ", event);
+        }
+        game.room.id.socket.onerror = function(event){
+        console.log("SOCKET1 ERROR=> ", event.message);
+        game.room.id.socket.onclose = function(event){
+          console.log("SOCKET11 CLOSED=> ", event.message);
+          }
+        }
       });
 
       // Listen for messages
-      socket.addEventListener('message', function (event) {
-        console.log("EVENT: ", event);
+      game.room.id.socket.addEventListener('message', function (event) {
+          // console.log("EVENT: ", event);
+          
           document.getElementById("pyMsgs").innerText = "";
           document.getElementById("pyMsgs").append(event.data);
-
-          console.log('Message! from server ', JSON.stringify(event.data).array);
+          console.log('note we just played sent through python: ', event.data);
           // console.log("!!!!!!!!!!!!!!!!!!!! ", event.data.body);
           // TODO !!!! REFACTOR LINES BELOW TO BETTER PASS VARIABLES
           //game.scene.meshes[0].position.z = event.data.octave;
+          game.room.id.socket.onerror = function(event){
+          console.log("SOCKET 222 ERROR=> ", event.message);
+          game.room.id.socket.onclose = function(event){
+          console.log("SOCKET2 CLOSED=> ", event.message);
+        }
+        }
+      });
+
+      game.room.id.socket.addEventListener('message', function (event) {
+          game.room.id.socket.onmessage = function(event){
+            console.log("WHOOO OHOOO evt", event);
+            console.log("WHOOO OHOOO msg", event.message);
+          }
 
       });
 
-      socket.addEventListener('something', function (event) {
-          socket.onmessage = async function(event){
-            console.log("WHOOO OHOOO", event);
+      game.room.id.socket.addEventListener('something', function (event) {
+        game.room.id.socket.onmessage = function(event){
+            console.log("SDOMETHING HIT!!", event);
           }
-          console.log("eventt", event);
+          console.log("event!!!!!!?!?!?!>!EV:WE<>", event);
           console.log('Message!!! from server ', event.data);
       });
     
+      game.room.id.socket.addEventListener('message', function(event){
+        game.room.id.socket.onclose = function(event){
+          console.log("SOCKET CLOSED=> ", event);
+        }
+      })
+
+      game.room.id.socket.addEventListener('message', function(event){
+        game.room.id.socket.onerror = function(event){
+          console.log("SOCKET ERROR=> ", event);
+        }
+ 
+      })
 
       </script>
 

@@ -10,6 +10,8 @@ import asyncio
 from datetime import datetime
 import websockets 
 from websockets import connect
+import mingus.core.notes as notes
+from copy import deepcopy
 
 print(sys.path)
 
@@ -97,7 +99,7 @@ def sum_of_array():
     print(result)
     last_val = result
     if(result != last_val):
-        res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 
+        requests.post('http://127.0.0.1:3000/arraysum', json=data) 
     # Return data in json format 
     return json.dumps({"result":result})
 
@@ -126,15 +128,48 @@ asyncio.run(test_sockets([],"ws://localhost:8081"))
 
 @app.route('/audio_selections', methods = ['POST'])
 def audioSelections():
+    
+    #dataAudioSelections linkefd to Audio Thread Manager Hooks
     dataAudioSelections = request.get_json()
-    if len(dataAudioSelections) < 1:
-        return
+    print(f'is this what I think it is???? ', dataAudioSelections)
+    # if len(dataAudioSelections["result"]) < 1:
+    #     return
     print(f"Audio Selections: {dataAudioSelections}")
+    if len(dataAudioSelections) <2:
+        print(f'wjat are data selections {dataAudioSelections}')
+    exp_scale = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],dataAudioSelections['targetScale'],dataAudioSelections['scalePosition'])
+    
+    scal_expected1 = exp_scale.__str__()
+    print(f"test1: {scal_expected1}")
+    print(f"test2: {list(exp_scale)}")
+    asyncio.run(test_sockets(scal_expected1,"ws://localhost:8081"))
+    requests.post('http://127.0.0.1:3000/expectedAudio', json={'array':scal_expected1}) 
+    print(f"HHHHHHHI@U(U(UW(U(U(WU (UI@)IHHHHHHHH 77655%%%%%%%%%%%%%%%))))): {type(scal_expected1)}")
 
-    exp_scale = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],dataAudioSelections['targetScale'])
     print(f'EXPECTED SCALE IN APP PY: {exp_scale}')
-    asyncio.run(test_sockets(exp_scale, "ws://localhost:8081"))
-    return dataAudioSelections
+    # print(f'EXPECTED SCALE KEYS IN APP PY: {type(exp_scale)}')
+    
+    # json_exp_scale = {'ascending': exp_scale['Ascending'], 'descending':exp_scale['Descending']}
+    # print(f'EXPECTED SCALE TYPE IN APP PY: {json_exp_scale}')
+
+
+
+    # if len(exp_scale) >= 1:
+    # requests.post('http://127.0.0.1:3000/expectedAudio', exp_scale) 
+        # The POST request to our node server
+    
+    #res = requests.post('http://127.0.0.1:3000/expectedAudio', exp_scale) 
+    array = []
+    data = {}
+    # Convert response data to json
+    #returned_data = res.json() 
+
+    #result = returned_data['result'] 
+    # requests.post('http://127.0.0.1:3000/expectedAudio', json=json_exp_scale)  
+    
+    # return dataAudioSelections
+    return exp_scale
+
 # ========================================================
 # (SEND TO) NODE INTEROP ROUTE
 # ========================================================
@@ -143,7 +178,7 @@ def toNode():
     data1 = request.get_json() 
 
     # #TODO: MOVE TEST_SOCKETS TO AFTER DATA ANALYSIS
-    # asyncio.run(test_sockets("ws://localhost:8081"))
+    ##asyncio.run(test_sockets("ws://localhost:8081"))
 
     # Sample array
     # array = [4,5,6,7,8,9,10]
@@ -153,10 +188,18 @@ def toNode():
     print(f'this is DATA1 len!!!! {len(array)}')
     # Data that we will send in post request.
     data = {'array':array}
-    
+    #print(f'THIS PRINYS A BUNCH OF DATA>>> {array}')
     notesData.mingus_expect_notes(array)
     mingus_calcs.mingus_calcs(data)
-    # notesData.mingus_get_notes(array)
+  
+    # key, octave, octave_range, scale
+    
+    print(array.keys())
+    ## START BACK HERE...
+    ##notesData.mingus_get_scale(array["notesForAnalysis"]["targetKey"],array["notesForAnalysis"]["targetOctave"],array["notesForAnalysis"]["targetOctaveRange"],array["notesForAnalysis"]["scale"], array["notesForAnalysis"]["scalePosition"])
+    # notesData.mingus_get_scale(array)
+
+
 
     # The POST request to our node server
     res = requests.post('http://127.0.0.1:3000/arraysum', json=data) 

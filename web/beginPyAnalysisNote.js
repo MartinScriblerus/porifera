@@ -13,7 +13,7 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
     }
 
     let timestampDiff = window.__emscripten_date_now() - game.room.id.startGameTick;
-    console.log("WHAT IS TIMESTAMP EMSCRIPTEN????> ", window.__emscripten_date_now());
+    console.log("In beginpyanalysisnote... WHAT IS TIMESTAMP EMSCRIPTEN????> ", window.__emscripten_date_now());
 
     // this creates 4 time buckets per second 
     let timeBucket = parseFloat(timestampDiff / 1000).toFixed(2) * 120/bpm;
@@ -24,6 +24,12 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
         "timestamp": window.__emscripten_date_now(),
         "timestampDiff": timestampDiff,
         "timeBucket": timeBucket,
+        "targetKey": game.room.id.targetKey,
+        "targetOctave": game.room.id.targetOctave,
+        "targetOctaveRange": game.room.id.targetOctaveRange,
+        "scalePosition": game.room.id.scalePosition,
+        "scale": game.room.id.scale,
+        "nextNote": "",
         "note": note,
         "octave": octave,
         "mingusNumNote": mingusNumNote,

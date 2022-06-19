@@ -62,15 +62,29 @@ ws.on('message', function(data) {
   console.log('client received:', data);
 });
 
+
+
 wss.on('connection', function connection(ws) {
   ws.on('message', function message(data) {
     console.log('received: %s', data);
+    // console.log("data is ", data);
+    if(Object.keys(data).indexOf("Ascending") !== -1){
+      ws.send('something', function(data) {
+        console.log('server is sending...:', data);
+      });
+    }
+    // ws.emit(JSON.stringify(data));
+
+    return data;
   });
-
-  data = [1, 1, 2]
-
+  
+  if(!data){
+    data = [1, 1, 2]
+  }
   ws.send(JSON.stringify(data));
 });
+
+
 
 const redisPort = 6379
 const client = redis.createClient(redisPort);
@@ -99,7 +113,7 @@ async function createRedisPublisher (msg) {
   const article = {
     id: '123456',
     name: 'Using Redissss Pub/Sub with Node.js',
-    message: msg || 'that is right, motherfucker',
+    message: JSON.stringify(msg) || 'that is right, motherfucker',
   };  
   console.log(article); // 'message'
   await publisher.publish('article', JSON.stringify(article));
@@ -259,8 +273,11 @@ app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
   let wsMsg = req.body;
 
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+   
+    // if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === 1) {
       client.send(JSON.stringify({message: wsMsg }));
+      console.log("sent websocket message from server.js ");
     }
   });
 
@@ -268,11 +285,16 @@ app.post("/updateArraySum", cors(corsOptions), async (req, res) => {
 });
 
 app.post("/expectedAudio", cors(corsOptions), (req, res) => {
+  console.log("THIS IS REQQQQ IN NODE SERVER: ", req.body);
+  // console.log("THIS IS RESSSSS IN NODE SERVER: ", res);
+  // child1.send(req.body);
   // child1.send(req.body);
   let data = req.body;
-  console.dir("THIS IS BODY OF EXPECTED AUDIO IN NODE SERVER: ", req.body);
+  console.log("THIS IS BODY OF EXPECTED AUDIO IN NODE SERVER: ", req.body);
+
   createRedisPublisher(data);
   wss.clients.forEach((client) => {
+    console.log("ARE WE HITTING CLIENT>??? ", client)
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({message: data }));
     }
@@ -310,7 +332,7 @@ app.post("/arraysum", cors(corsOptions), (req, res) => {
     res.json({ result: "no array provided" });
     return;
   } else {
-    console.log("array from python: ", array);
+    console.log("array from python: ", JSON.stringify(array[0]));
   }
   
   // Calculate sum,5

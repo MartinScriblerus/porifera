@@ -8,7 +8,7 @@ import "./index.js";
 
 function gameStarted(){
   setScale(game.room.id.targetScale);
-  setScalePos('need mingus data before this even'); 
+  setScalePos(game.room.id.scalePosition); 
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
   game.room.id.setNextNotes(game.room.id.targetNote, ['M', 'A', 'T', 'T']);
@@ -203,17 +203,17 @@ export function pitchChanged(user, newPitch){
           oldNums[i].remove();
           delete oldNums[i];
         }
-        if(latestPitch() === "NaN"){
+        if(latestPitch() === "NaN" ){
           // document.getElementById("pitchBox").style.display = "none";
           // let notReadyMessage = "No readings";
-          pitchDisplayDOM.append(game.user.id.latestPitch + "Hz");
+          pitchDisplayDOM.append(game.user.id.latestPitch.noteHz + "Hz");
 
           // pitchDisplayDOM.append(notReadyMessage);
           game.orchestration.recording = false;
         } else {
           document.getElementById("pitchBox").style.display = "flex";
           pitchDisplayDOM.append(latestPitch() + " Hz");
-          game.user.id.latestPitch = latestPitch();
+          game.user.id.latestPitch.noteHz = latestPitch();
           game.orchestration.recording = true;
         }
         
@@ -227,8 +227,9 @@ export function pitchChanged(user, newPitch){
 
 
 export function pitchConversion(latestPitch){
-
-  game.user.latestPitch = latestPitch;
+  if(latestPitch !== undefined && latestPitch !== "NaN"){
+    game.user.id.latestPitch.noteHz = latestPitch + " ";
+  }
   let latestPitchNote;
   let latestOctaveNote;
   let mingusNumNote;
@@ -1315,22 +1316,38 @@ export function pitchConversion(latestPitch){
     let timeDiff = window.__emscripten_date_now() - game.room.id.previousTick;
     let msConvertedForBpm = 250;
     let convertedMsAdjuster = msConvertedForBpm * (120/game.room.id.bpm);
-    console.log("timeediff tick ", timeDiff);
-    console.log("adjuster ", convertedMsAdjuster);
+    // console.log("timeediff tick ", timeDiff);
+    // console.log("adjuster ", convertedMsAdjuster);
 
-    if(timeDiff > convertedMsAdjuster){
-      console.log("begin Py analysis tick");
+    // if(game.room.id.delta === 0 || undefined){
+      //console.log("begin Py analysis tick -- delta is ", game.room.id.delta);
       // beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, mingusNumNote, keyNotePiano, keyNoteOrgan, midiNoteNumber, bpm);
-      beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, mingusNumNote, keyNotePiano, keyNoteOrgan, midiNoteNumber, bpm);
-      timeDiff = 0;
-      return timeDiff;
-    }
+      // beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, mingusNumNote, keyNotePiano, keyNoteOrgan, midiNoteNumber, bpm);
+      game.user.id.latestPitch.noteLetter = latestPitchNote;
+      game.user.id.latestOctave.octave = latestOctaveNote;
+      game.user.id.latestMingusNumNote = mingusNumNote;
+      game.user.id.latestKeyNotePiano = keyNotePiano;
+      game.user.id.latestKeyNoteOrgan = keyNoteOrgan;
+      game.user.id.latestMidiNoteNumber = midiNoteNumber;
+      game.room.id.bpm = bpm;       
+
+    // }
     // THIS MOVES THE BALL!!! tktktktktktk
     // game.scene.meshes[0].position.z = -latestOctaveNote;
     if(game && game.scene && game.scene.meshes.length){
-      console.log("H E I G H T::::::: ", (game.scene.meshes[1]._height / 2));
+      // console.log("H E I G H T::::::: ", (game.scene.meshes[1]._height / 2));
 
-      console.log("MIDI NOTE::::::: ", (midiNoteNumber));
+      // // console.log("MIDI NOTE::::::: ", (midiNoteNumber));
+      // console.log("desired octave range: ", game.room.id.targetOctaveRange * 12);
+      // console.log("target key: ", game.room.id.targetKey);
+
+      game.room.id.socket.addEventListener('message', function (event) {
+        game.room.id.socket.onmessage = (event) => {
+          console.log("eventy!!! ", event.data);
+        }
+      });
+      // THIS IS WHERE WE CAN CONVERT SIZING & Y HEIGHT FOR PLAYER ON SCREEN (midi note # here will be # of moves up from lowest square)
+      // function below positions the player... tktktktktktk
       game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
     }
   }
@@ -1456,29 +1473,7 @@ setRunningBtn.addEventListener("click", async function(){
 
     // TO PYTHON HERE W AUDIO SELECTIONS
     //need to get this scale value from setup!
-    let audioSelections = {
-        "targetKey" : game.room.id.targetKey || "E",
-        "targetOctave": game.room.id.targetOctave,
-        "targetOctaveRange":game.room.id.targetOctaveRange,
-        "targetScale": game.room.id.targetScale
-      
-    }
-    console.log("what are audio selections? ", audioSelections)
-    if(JSON.stringify(audioSelections) !== []){
-      try{
-        fetch('http://localhost:8088/audio_selections', {
-          method: 'POST',
-          body: JSON.stringify(audioSelections),
-          headers: {'Content-type': 'application/json; charset=UTF-8'
-      }
-        })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .then(audioSelections = {});
-      } catch (e){
-        console.log("error from python interop: ", e);
-      }
-    }
+    game.room.id.triggerExpectedAudio();
     gameStarted();
 
     // Start rendering pitch data
@@ -1490,6 +1485,7 @@ setRunningBtn.addEventListener("click", async function(){
     if(game && game.createBoxRow()){
       try{
         game.createBoxRow();
+        game.room.id.triggerExpectedAudio();
       } catch(e){
 
       }
@@ -1500,3 +1496,29 @@ setRunningBtn.addEventListener("click", async function(){
     devicesBoxDiv.style.display = "none";
 });
 
+game.room.id.triggerExpectedAudio = () => {
+  let audioSelections = {
+    "targetKey" : game.room.id.targetKey || "E",
+    "targetOctave": game.room.id.targetOctave,
+    "targetOctaveRange":game.room.id.targetOctaveRange,
+    "targetScale": game.room.id.targetScale,
+    "scalePosition": game.room.id.scalePosition    
+  }
+  console.log("what are audio selections? ", JSON.stringify(audioSelections))
+  if(JSON.stringify(audioSelections) !== []){
+    try{
+      fetch('http://localhost:8088/audio_selections', {
+        method: 'POST',
+        body: JSON.stringify(audioSelections),
+        headers: {'Content-type': 'application/json; charset=UTF-8'
+    }
+      })
+      // .then(response => response.json())
+      .then(response => console.log("!!!!!#!@#@#$@#$ ", response.body))
+      // .then(json => console.log(json))
+      .then(audioSelections = {});
+    } catch (e){
+      console.log("error from python interop: ", e);
+    }
+  }
+}

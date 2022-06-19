@@ -3,85 +3,88 @@ import numpy as np
 import mingus.core.notes as notes
 from mingus.containers import Note
 import mingus.core.scales as scales
-
+import requests
 
 
 import json
 
-def mingus_get_scale(key, octave, octave_range, scale):
+def mingus_get_scale(key, octave, octave_range, scale, scale_position):
     global scal_expected
     print(f'whast is scale?? {scale}')
     print(f'whast is key?? {key}')
 
     if scale == "major":
         scal_expected = scales.Major(key)
-        print(scal_expected)
+        print(str(scal_expected))
         return scal_expected
-    if scale == "harmonic_major":
+    elif scale == "harmonic_major":
         scal_expected = scales.HarmonicMajor(key)
         print(scal_expected)
         return scal_expected
-    if scale == "natural_minor":
+    elif scale == "natural_minor":
         scal_expected = scales.NaturalMinor(key)
         print(scal_expected)
         return scal_expected
-    if scale == "harmonic_minor":
+    elif scale == "harmonic_minor":
         scal_expected = scales.HarmonicMinor(key)
         print(scal_expected)
         return scal_expected
-    if scale == "melodic_minor":
+    elif scale == "melodic_minor":
         scal_expected = scales.MelodicMinor(key)
-        print(scal_expected)
+        scal_expected = scal_expected.__str__()
+        print(f'this is scale expecyted: {scal_expected}')
+        print(f'jer is its type: {type(scal_expected)}')
+        
         return scal_expected
-    if scale == "bachian":
+    elif scale == "bachian":
         scal_expected = scales.Bachian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "minor_neapolitan":
+    elif scale == "minor_neapolitan":
         scal_expected = scales.MinorNeapolitan(key)
         print(scal_expected)
         return scal_expected
-    if scale == "mixolydian":
+    elif scale == "mixolydian":
         scal_expected = scales.Mixolydian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "chromatic":
+    elif scale == "chromatic":
         scal_expected = scales.Chromatic(key)
         print(scal_expected)
         return scal_expected
-    if scale == "whole_tone":
+    elif scale == "whole_tone":
         scal_expected = scales.WholeTone(key)
         print(scal_expected)
         return scal_expected
-    if scale == "octatonic":
+    elif scale == "octatonic":
         scal_expected = scales.Octatonic(key)
         print(scal_expected)
         return scal_expected
-    if scale == "ionian":
+    elif scale == "ionian":
         scal_expected = scales.Ionian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "dorian":
+    elif scale == "dorian":
         scal_expected = scales.Dorian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "phrygian":
+    elif scale == "phrygian":
         scal_expected = scales.Phrygian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "lydian":
+    elif scale == "lydian":
         scal_expected = scales.Lydian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "aeolian":
+    elif scale == "aeolian":
         scal_expected = scales.Aeolian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "locrian":
+    elif scale == "locrian":
         scal_expected = scales.Locrian(key)
         print(scal_expected)
         return scal_expected
-    if scale == "surprise_me":
+    elif scale == "surprise_me":
         scal_expected = "surprise_me"
         print("todo: set up random scales")   
         return scal_expected 
@@ -102,19 +105,21 @@ def mingus_get_scale(key, octave, octave_range, scale):
     #     # print(f"Harmonic Minor C: {scales.HarmonicMinor('C')}")
     #     # print(f"Natural Minor C: {scales.NaturalMinor('C')}")
     #     print(f"scale is undefined")
-       
+
         # return "Something's wrong with the internet"
     else:
         print(f"something's wrong with the internet")
-  
-    print(f"heyaaaa... we got this result: {scal_expected}")
     # if(result):
     #     requests.post('http://127.0.0.1:3000/expectedAudio', json=result) 
     # Return data in json format 
-    # return json.dumps({"result":scal_expected})
-    return scal_expected
+    print(f">>>>>>>>>>>> {scal_expected}")
+    requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+    return json.dumps(list(scal_expected))
+    # return scal_expected
 
 def expected_notes_Dataframes(expected_notesDf, expected_data):
+    test = scal_expected
+    print(f'here is the eeeeexxxxppppeeeccccttttteeeedddd scccccaaaaallllleeee {test}')
     df_expected = pd.DataFrame(expected_data, columns=["key", "octave", "octave_range", "scale"])
     expected_notesDf = pd.concat([expected_notesDf, df_expected])
     return expected_notesDf
@@ -130,10 +135,8 @@ def notes_DataFrames(notesDf, data):
 #         # print(data['notesForAnalysis'])
 #         # print(f"is this growing? {len(data)}")
 #         # this works ************ =>
-#         # for n in data['notesForAnalysis']:
-       
+#         # for n in data['notesForAnalysis']:       
 #             # print(f"THIS IS IS SISISIS {n['note']} and {n['octave']}")
-
 #             # print(f'Mingus Num Note in Python => {n["mingusNumNote"]}')
 #             # if(notes.is_valid_note(n['note'])):
 #             #     return noteToAnalyze
@@ -141,5 +144,6 @@ def notes_DataFrames(notesDf, data):
 #             #     print(f"THIS IS NOT A VALID NOTE IN MINGUS!!!!!: {noteToAnalyze}")
 
 def mingus_expect_notes(data):
-    print(f'expecyting this data!!@@ {data}')
+    # print(f'expecyting this data!!@@ {data}')
+    return
     
