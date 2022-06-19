@@ -148,7 +148,13 @@
                 <option value="1" class="set-octave-range-option"> 1 </option> 
                 <option value="2" class="set-octave-range-option"> 2 </option>
                 <option value="3" class="set-octave-range-option"> 3 </option>
-                <option value="4" class="set-octave-range-option"> 4 </option>      
+                <option value="4" class="set-octave-range-option"> 4 </option> 
+                <option value="5" class="set-octave-range-option"> 5 </option> 
+                <option value="6" class="set-octave-range-option"> 6 </option> 
+                <option value="7" class="set-octave-range-option"> 7 </option> 
+                <option value="8" class="set-octave-range-option"> 8 </option> 
+                <option value="9" class="set-octave-range-option"> 9 </option> 
+                <option value="10" class="set-octave-range-option"> 10 </option>      
               </select> 
               <label class="form-check-label" for="rangeOctave">Select Octave Range</label> 
             </div>
@@ -498,7 +504,7 @@ console.log("samp len", game.user.samplesArr.length)
           
           document.getElementById("pyMsgs").innerText = "";
           document.getElementById("pyMsgs").append(event.data);
-          console.log('note we just played sent through python: ', event.data);
+          console.log('note we just played sent through python: ', event.data.message);
           // console.log("!!!!!!!!!!!!!!!!!!!! ", event.data.body);
           // TODO !!!! REFACTOR LINES BELOW TO BETTER PASS VARIABLES
           //game.scene.meshes[0].position.z = event.data.octave;
@@ -512,8 +518,38 @@ console.log("samp len", game.user.samplesArr.length)
 
       game.room.id.socket.addEventListener('message', function (event) {
           game.room.id.socket.onmessage = function(event){
-            console.log("WHOOO OHOOO evt", event);
-            console.log("WHOOO OHOOO msg", event.message);
+            //console.log("WHOOO OHOOO evt", JSON.parse(event.data).message.array.split('\n'));
+            let recArr = [];
+            if(!JSON.parse(event.data).message.array){
+              console.log("what went wrong? ", JSON.parse(event.data));
+              return;
+            } else {
+              try{
+                recArr = JSON.parse(event.data).message.array.split('\n');
+                console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES");
+              } catch (e) {
+                console.log(e);
+                console.log("THIS MESSAGE CONTAINS NOTES FOR ANALYSIS ", JSON.parse(event.data).message.array);
+              }
+            }
+            
+            if(recArr.length > 0){
+              try{
+                let propertyAsc = recArr[0].split(' ');
+                let propertyDesc = recArr[1].split(' ');
+                console.log("Prop ascending ===== ", propertyAsc);
+                console.log("Prop descending ===== ", propertyDesc);
+                game.room.id.recommendationsScale = {
+                  timestamp: window.__emscripten_date_now(),
+                  "ascending": propertyAsc.slice(2),
+                  "descending": propertyDesc.slice(1)
+                }
+                console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
+              } catch(err){
+                console.log("the error is ", err.message);
+              }
+            }
+            
           }
 
       });

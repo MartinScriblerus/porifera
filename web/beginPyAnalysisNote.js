@@ -13,7 +13,7 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
     }
 
     let timestampDiff = window.__emscripten_date_now() - game.room.id.startGameTick;
-    console.log("In beginpyanalysisnote... WHAT IS TIMESTAMP EMSCRIPTEN????> ", window.__emscripten_date_now());
+    //console.log("In beginpyanalysisnote... WHAT IS TIMESTAMP EMSCRIPTEN????> ", window.__emscripten_date_now());
 
     // this creates 4 time buckets per second 
     let timeBucket = parseFloat(timestampDiff / 1000).toFixed(2) * 120/bpm;
@@ -37,13 +37,13 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
         // "keyNoteOrgan": keyNoteOrgan,
         "midiNoteNumber": midiNoteNumber
     }
-    console.log("now m,inus last tick", window.__emscripten_date_now() - game.room.id.previousTick);
+    //console.log("now m,inus last tick", window.__emscripten_date_now() - game.room.id.previousTick);
 
 
     // if(((window.__emscripten_date_now() - game.room.id.startGameTick) % 250) === 0){
   
     //     console.log("SENDING NOOTE DATA TO PYTON FROM BEGIN ANALYSIS NOTE js");
-    console.log(">>>>> ", game.room.id.delta);
+    console.log("GAME DELTA >>>>> ", game.room.id.delta);
     // if((game.room.id.delta < 100 || undefined)){
         noteDataToPy(noteData);
     // }

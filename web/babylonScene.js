@@ -3,6 +3,8 @@ import {pitchChanged} from "./AudioThreadManagerHooks.js";
 import * as BABYLON from "https://unpkg.com/@babylonjs/core@4.0.0-beta.1/index.js?module";
 import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
 
+game.user.id.boxesPerView = 12 * game.room.id.targetOctaveRange;
+
 const canvas = document.getElementsByTagName('canvas')[0]
 
 const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true })
@@ -121,7 +123,8 @@ switch(octavesNeeded){
         console.log("all good?? hit default")
 }
 
-player.scaling.x = player.scaling.y = player.scaling.z = 12/128;
+// player.scaling.x = player.scaling.y = player.scaling.z = 12/128;
+player.scaling.x = player.scaling.y = player.scaling.z = (12/128) * (10 / game.room.id.targetOctaveRange);
 
 const playerY_Observable = new BABYLON.Observable();
 
@@ -300,14 +303,18 @@ game.createBoxRow = () => {
     let material11 = new BABYLON.StandardMaterial(scene);
     let color11 = new BABYLON.Color3.FromHexString("#E33836");
 
-    for(let x = 1; x< 128; x++){
+    // this will replace 128 as # => 
+        // if octaveRange = 0 we need 11 boxes
+    let convertedRange = 128 * (game.room.id.targetOctaveRange / 10)
+    for(let x = 1; x< convertedRange; x++){
         // boxInstances[x] = BABYLON.MeshBuilder.CreateBox("noteBox_" + x, {}, scene);
         if(!x%11 || (x%11>11)){
             return;
         }
         boxInstances[x] = box.clone("noteBox_" + x);;
         boxInstances[x].speed = 0.1
-        boxInstances[x].position.z = (game.scene.meshes[1]._height / 2) - (x * (10/128));
+        // boxInstances[x].position.z = (game.scene.meshes[1]._height / 2) - (x * (10/128));
+        boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((10/128) * (10/game.room.id.targetOctaveRange)))); 
         switch(x%11){
             case 0:
                 boxInstances[x].material = material0;
@@ -555,12 +562,13 @@ game.mainTick = () => {
     
     if((game.room.id.delta) >= 250){
         game.room.id.previousTick = window.__emscripten_date_now();
+        game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending)
         // READS MAIN TICK DELTA!!!
         // console.log("Tick! ", game.room.id.delta);
        
         game.room.id.delta === 0;
         if(game.user.id.isPlaying){
-            console.log("updating py");
+            console.log("updating py with note we just played");
             beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctave.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpm);
         }
     }

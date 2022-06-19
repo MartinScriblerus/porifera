@@ -33,6 +33,9 @@ game.room.id.targetScale = game.room.id.targetScale|| "Major";
 game.room.id.scalePosition = game.room.id.scalePosition || 0;
 game.room.id.bpm = game.room.id.bpm || 120;
 
+game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
+game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];
+game.room.id.recommendationsScale.descending = game.room.id.recommendationsScale.descending || []; 
 // game.user.id.audioDevice = game.user.id.audioDevice || '';
 game.audioInputMode = game.audioInputMode || "midi";
 game.user.id.audioDevice = game.user.id.audioDevice || {};

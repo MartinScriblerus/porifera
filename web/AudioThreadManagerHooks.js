@@ -11,7 +11,7 @@ function gameStarted(){
   setScalePos(game.room.id.scalePosition); 
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
-  game.room.id.setNextNotes(game.room.id.targetNote, ['M', 'A', 'T', 'T']);
+  game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending);
   setOctaveRange(1);
   
   // let audioScreenDataToPython = {
@@ -47,9 +47,15 @@ function gameStarted(){
   
 } 
 
-game.room.id.setNextNotes = (targetNote, futureNotes) => {
-  setTargetNote(targetNote);
-  setFutureNotes(futureNotes);
+game.room.id.setNextNotes = (targetScale) => {
+  console.log("here is scale position: ", game.room.id.scalePosition);
+  console.log("rec scale object => ",  game.room.id.recommendationsScale);
+  console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
+  setTargetNote(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
+  game.room.id.updateTargetNoteDom();
+  console.log("here is ascending... ", game.room.id.recommendationsScale.ascending);
+  setFutureNotes(game.room.id.recommendationsScale.ascending);
+  game.room.id.updateFutureNotesDom();
 }
 
 game.room.id.updateTargetNoteDom = () => {
@@ -148,7 +154,7 @@ game.room.id.updateTargetOctaveRangeDom = () => {
 
 game.room.id.updateFutureNotesDom = () => {
   let futureNotesDOM = document.getElementById("futureNotesDisplay");
-
+  console.log("ascending sscale: ", game.room.id.recommendationsScale.ascending);
   if(futureNotesDOM){
     let oldNums = futureNotesDOM.childNodes;
 
@@ -160,7 +166,8 @@ game.room.id.updateFutureNotesDom = () => {
       futureNotesDOM.append(futureNotes());
     } else {
       futureNotesDOM.style.display = "flex";
-      futureNotesDOM.append(futureNotes());
+      // futureNotesDOM.append(futureNotes());
+      futureNotesDOM.append(game.room.id.recommendationsScale.ascending)
     }
   }
 }
@@ -1505,7 +1512,7 @@ game.room.id.triggerExpectedAudio = () => {
     "scalePosition": game.room.id.scalePosition    
   }
   console.log("what are audio selections? ", JSON.stringify(audioSelections))
-  if(JSON.stringify(audioSelections) !== []){
+  if(JSON.stringify(audioSelections) !== [] && JSON.stringify(audioSelections) !== undefined){
     try{
       fetch('http://localhost:8088/audio_selections', {
         method: 'POST',

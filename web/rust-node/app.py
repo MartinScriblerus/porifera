@@ -112,7 +112,8 @@ async def test_sockets(expected_notes, path):
     
     async with connect(path) as websocket:
         now = datetime.now()
-        await websocket.send(f"Python sends now: {now} and {expected_notes}")
+        # await websocket.send(f"Python sends now: {now} and {expected_notes}")
+        await websocket.send(json.dumps({"notes":expected_notes}))
 
         test = await websocket.recv()
         print(f'Python receives {test} on path: {path}')
@@ -140,11 +141,9 @@ def audioSelections():
     exp_scale = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],dataAudioSelections['targetScale'],dataAudioSelections['scalePosition'])
     
     scal_expected1 = exp_scale.__str__()
-    print(f"test1: {scal_expected1}")
-    print(f"test2: {list(exp_scale)}")
+
     asyncio.run(test_sockets(scal_expected1,"ws://localhost:8081"))
     requests.post('http://127.0.0.1:3000/expectedAudio', json={'array':scal_expected1}) 
-    print(f"HHHHHHHI@U(U(UW(U(U(WU (UI@)IHHHHHHHH 77655%%%%%%%%%%%%%%%))))): {type(scal_expected1)}")
 
     print(f'EXPECTED SCALE IN APP PY: {exp_scale}')
     # print(f'EXPECTED SCALE KEYS IN APP PY: {type(exp_scale)}')
