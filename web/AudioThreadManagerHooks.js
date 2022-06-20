@@ -14,46 +14,22 @@ function gameStarted(){
   game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending);
   setOctaveRange(1);
   
-  // let audioScreenDataToPython = {
-  //   "targetNote": game.room.id.targetNote,
-  //   "targetKey": game.room.id.targetKey,
-  //   "targetOctave": game.room.id.targetOctave,
-  //   "targetOctaveRange": game.room.id.octaveRange
-  // }
-
-  // try{
-  //   fetch('http://localhost:8088/to_node', {
-  //     method: 'POST',
-  //     body: JSON.stringify(toPy),
-  //     headers: {'Content-type': 'application/json; charset=UTF-8'
-  // }
-  //   })
-  //   .then(response => response.json())
-  //   .then(json => console.log(json))
-  //   .then(doThisOnBackendSamplesArr = [])
-  //   .then(toPy = {});
-  // } catch (e){
-  //   console.log("error from python interop: ", e);
-  // }
-
   game.room.id.updateTargetNoteDom();
   game.room.id.updateTargetKeyDom();
   game.room.id.updateTargetOctaveDom();
   game.room.id.updateTargetOctaveRangeDom();
   game.room.id.updateScalePositionDom();
   game.room.id.updateScaleDom();
-  game.room.id.updateFutureNotesDom();
-
-  
+  game.room.id.updateFutureNotesDom();  
 } 
 
 game.room.id.setNextNotes = (targetScale) => {
-  console.log("here is scale position: ", game.room.id.scalePosition);
-  console.log("rec scale object => ",  game.room.id.recommendationsScale);
-  console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
+  // console.log("here is scale position: ", game.room.id.scalePosition);
+  // console.log("rec scale object => ",  game.room.id.recommendationsScale);
+  // console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
   setTargetNote(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
   game.room.id.updateTargetNoteDom();
-  console.log("here is ascending... ", game.room.id.recommendationsScale.ascending);
+  // console.log("here is ascending... ", game.room.id.recommendationsScale.ascending);
   setFutureNotes(game.room.id.recommendationsScale.ascending);
   game.room.id.updateFutureNotesDom();
 }
@@ -154,7 +130,7 @@ game.room.id.updateTargetOctaveRangeDom = () => {
 
 game.room.id.updateFutureNotesDom = () => {
   let futureNotesDOM = document.getElementById("futureNotesDisplay");
-  console.log("ascending sscale: ", game.room.id.recommendationsScale.ascending);
+ // console.log("ascending sscale: ", game.room.id.recommendationsScale.ascending);
   if(futureNotesDOM){
     let oldNums = futureNotesDOM.childNodes;
 
@@ -1319,7 +1295,7 @@ export function pitchConversion(latestPitch){
   
   if(latestPitchNote && latestOctaveNote){
     
-    let bpm = game.room.id.bpm;
+  
     let timeDiff = window.__emscripten_date_now() - game.room.id.previousTick;
     let msConvertedForBpm = 250;
     let convertedMsAdjuster = msConvertedForBpm * (120/game.room.id.bpm);
@@ -1336,7 +1312,7 @@ export function pitchConversion(latestPitch){
       game.user.id.latestKeyNotePiano = keyNotePiano;
       game.user.id.latestKeyNoteOrgan = keyNoteOrgan;
       game.user.id.latestMidiNoteNumber = midiNoteNumber;
-      game.room.id.bpm = bpm;       
+        
 
     // }
     // THIS MOVES THE BALL!!! tktktktktktk
@@ -1489,9 +1465,9 @@ setRunningBtn.addEventListener("click", async function(){
     document.getElementById("pitchBox").display = "flex";
 
     // INITIAL BOX ROW (TODO: MOVE THIS OUT OF HERE // time it better)
-    if(game && game.createBoxRow()){
+    if(game){
       try{
-        game.createBoxRow();
+        // game.createBoxRow(true);
         game.room.id.triggerExpectedAudio();
       } catch(e){
 

@@ -7,7 +7,12 @@
     <title>Porifera</title>
     <script type="module" src="./setupAudio.js">
     </script>
-  
+    
+    <script src="./babylon.4.2.0.min.js"></script>
+    <script src="./babylon.gui.4.2.0.min.js">
+      console.log("??? ", BABYLON);
+    </script>
+    <script src="./babylon.loaders.4.2.0.min.js"></script>
 
   </head>  
   <body>
@@ -356,17 +361,11 @@
 
         function noteDataToPy(numForArray){
 
-          console.log("receiving the update ", numForArray);
+          //console.log("receiving the update ", numForArray);
           let timeNow = window.__emscripten_date_now();
-          // if((game.room.id.delta < 20 || undefined)){
-           // console.log("delta hit 0 ", game.room.id.delta);
-            game.user.samplesArr.push(numForArray);
-          // }
- console.log("############ ", game.user.samplesArr[game.user.samplesArr.length -1]);
-          // if((timeNow - game.user.samplesArr[game.user.samplesArr.length -1].timestamp) > 1000){
-          //     game.user.samplesArr.splice(i,1);
-          //     console.log("removed some items from this samples array");
-          //   } 
+
+          game.user.samplesArr.push(numForArray);
+
           game.user.id.toPy = {notesForAnalysis: game.user.samplesArr};
          
       
@@ -504,7 +503,7 @@ console.log("samp len", game.user.samplesArr.length)
           
           document.getElementById("pyMsgs").innerText = "";
           document.getElementById("pyMsgs").append(event.data);
-          console.log('note we just played sent through python: ', event.data.message);
+         // console.log('note we just played sent through python: ', event.data.message);
           // console.log("!!!!!!!!!!!!!!!!!!!! ", event.data.body);
           // TODO !!!! REFACTOR LINES BELOW TO BETTER PASS VARIABLES
           //game.scene.meshes[0].position.z = event.data.octave;
@@ -520,16 +519,19 @@ console.log("samp len", game.user.samplesArr.length)
           game.room.id.socket.onmessage = function(event){
             //console.log("WHOOO OHOOO evt", JSON.parse(event.data).message.array.split('\n'));
             let recArr = [];
+            if(!event.data || !JSON.parse(event.data).message){
+              return;
+            }  
             if(!JSON.parse(event.data).message.array){
               console.log("what went wrong? ", JSON.parse(event.data));
               return;
             } else {
               try{
                 recArr = JSON.parse(event.data).message.array.split('\n');
-                console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES");
+                // console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES");
               } catch (e) {
                 console.log(e);
-                console.log("THIS MESSAGE CONTAINS NOTES FOR ANALYSIS ", JSON.parse(event.data).message.array);
+                // console.log("THIS MESSAGE CONTAINS NOTES FOR ANALYSIS ", JSON.parse(event.data).message.array);
               }
             }
             
@@ -597,6 +599,7 @@ console.log("samp len", game.user.samplesArr.length)
       <!-- JavaScript Bundle with Popper -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/meshwriter@1.3.0/dist/meshwriter.min.js"></script>
       <script>
 
       console.log("MODULE: ", Module);</script>

@@ -11,6 +11,7 @@ game.user = game.user || {};
 game.user.samplesArr = game.user.samplesArr || [];
 
 game.room.id.delta = game.room.id.delta || 0;
+
 game.user.id.latestPitch = game.user.id.latestPitch || {};
 game.user.id.latestPitch.noteHz = game.user.id.latestPitch.noteHz || null;
 game.user.id.latestPitch.noteLetter = game.user.id.latestPitch.noteHz || null;
@@ -25,6 +26,9 @@ game.room.id.previousTick = game.room.id.previousTick || window.__emscripten_dat
 game.room.id.nextTick = game.room.id.delta + game.room.id.previousTick;
 game.room.id.startGameTick = game.room.id.startGameTick || null;
 
+game.room.id.intervalTickBoxes = game.room.id.intervalTickBoxes || [];
+game.room.id.timeGroup = game.room.id.timeGroup || 0;
+
 game.room.id.analysisTimeBucket = game.room.id.analysisTimeBucket || 0;
 game.room.id.targetOctaveRange = game.room.id.targetOctaveRange || 4;
 game.room.id.targetOctave = game.room.id.targetOctave || 4
@@ -32,6 +36,7 @@ game.room.id.targetKey = game.room.id.targetKey|| "C";
 game.room.id.targetScale = game.room.id.targetScale|| "Major";
 game.room.id.scalePosition = game.room.id.scalePosition || 0;
 game.room.id.bpm = game.room.id.bpm || 120;
+game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpm)) * 4000);
 
 game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
 game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];
@@ -47,10 +52,9 @@ game.user.id.timeRecordingStart = window.__emscripten_date_now();
 
 game.user.id.toPy = game.user.id.toPy || undefined;
 
-game.oneCount = game.oneCount || false;
-game.twoCount = game.twoCount || false;
-game.threeCount = game.threeCount || false;
-game.fourCount = game.fourCount || false;
+game.countNominator = game.countNominator || 4;
+game.countDenominator = game.countDenominator || 4;
+game.currentCount = game.currentCount || 0;
 
 window.onscroll = () => { window.scroll(0, 0); };
 console.log("we do hit index.js even though nothing is here **** ");

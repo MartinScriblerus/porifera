@@ -15,26 +15,28 @@ def mingus_get_scale(key, octave, octave_range, scale, scale_position):
 
     if scale == "major":
         scal_expected = scales.Major(key)
+        scal_expected = scal_expected.__str__()
         print(str(scal_expected))
         return scal_expected
     elif scale == "harmonic_major":
         scal_expected = scales.HarmonicMajor(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "natural_minor":
         scal_expected = scales.NaturalMinor(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "harmonic_minor":
         scal_expected = scales.HarmonicMinor(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "melodic_minor":
         scal_expected = scales.MelodicMinor(key)
-        scal_expected = scal_expected.__str__()
-        print(f'this is scale expecyted: {scal_expected}')
-        print(f'jer is its type: {type(scal_expected)}')
-        
+        scal_expected = scal_expected.__str__() 
+        scal_expected = scal_expected.__str__()       
         return scal_expected
     elif scale == "bachian":
         scal_expected = scales.Bachian(key)
@@ -42,50 +44,62 @@ def mingus_get_scale(key, octave, octave_range, scale, scale_position):
         return scal_expected
     elif scale == "minor_neapolitan":
         scal_expected = scales.MinorNeapolitan(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "mixolydian":
         scal_expected = scales.Mixolydian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "chromatic":
         scal_expected = scales.Chromatic(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "whole_tone":
         scal_expected = scales.WholeTone(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "octatonic":
         scal_expected = scales.Octatonic(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "ionian":
         scal_expected = scales.Ionian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "dorian":
         scal_expected = scales.Dorian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "phrygian":
         scal_expected = scales.Phrygian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "lydian":
         scal_expected = scales.Lydian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "aeolian":
         scal_expected = scales.Aeolian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "locrian":
         scal_expected = scales.Locrian(key)
+        scal_expected = scal_expected.__str__()
         print(scal_expected)
         return scal_expected
     elif scale == "surprise_me":
         scal_expected = "surprise_me"
+        scal_expected = scal_expected.__str__()
         print("todo: set up random scales")   
         return scal_expected 
     # # If an exact match is not confirmed, this last case will be used if provided
