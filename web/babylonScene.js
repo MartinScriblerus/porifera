@@ -5,9 +5,11 @@ import "./babylon.4.2.0.min.js";
 import "./babylon.gui.4.2.0.min.js";
 import "./babylon.loaders.4.2.0.min.js";
 import "./babylon-inspector.min.js";
+import "./meshwriter.min.js";
+
 import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
 
-console.log("??? BABYLOON ", BABYLON);
+
 
 game.user.id.boxesPerView = 12 * game.room.id.targetOctaveRange;
 
@@ -18,7 +20,7 @@ const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, s
 if(engine){
     document.getElementById("siteTitle").classList.remove("opening-header");
     document.getElementById("siteTitle").classList.add("row-title");
-
+   
 }
 
 game.scene = game.scene || undefined;
@@ -117,6 +119,7 @@ const playerY_Observable = new BABYLON.Observable();
 
 scene.onBeforeRenderObservable.add(function(){
     game.scene.camera.position.z = player.position.z;
+    
 });
 
 // Our built-in 'ground' shape.
@@ -260,8 +263,9 @@ game.createBoxRow = (isMeasured) => {
         }
 
         let checkExisting = game.scene.getMeshByID("noteBox_" + x);
+        let checkExistingTest = game.scene.getMeshByID("noteBox_" + x + "_" + game.room.id.timeGroup);
         let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
-        if(checkExisting || checkExistingTick){
+        if(checkExisting || checkExistingTick || checkExistingTest){
             return;
         } else {
             boxInstances[x] = box.clone("noteBox_" + x + "_" + game.room.id.timeGroup);
@@ -276,15 +280,20 @@ game.createBoxRow = (isMeasured) => {
                 boxInstances[x].position.z = 0; 
                 boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
             } else {
-                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((10/128) * (10/game.room.id.targetOctaveRange)))); 
+                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
                 switch(x%12){
                     case 1:
                         boxInstances[x].material = game.scene.material_C;
                         boxInstances[x].material.emissiveColor = game.scene.color_C;
+
                         break;
                     case 2:
                         boxInstances[x].material = game.scene.material_Cs;
-                        boxInstances[x].material.emissiveColor = game.scene.color_Cs;             
+                        boxInstances[x].material.emissiveColor = game.scene.color_Cs;  
+                        var myDynamicTexture = new BABYLON.DynamicTexture(name, {width:2,height:2}, scene);
+                        boxInstances[x].material.diffuseTexture = myDynamicTexture;   
+                        var font = "bold 44px monospace";
+                        myDynamicTexture.drawText("Grass", 75, 135, font, "green", "white", true, true);       
                         break;
                     case 3:
                         boxInstances[x].material = game.scene.material_D;
@@ -304,6 +313,8 @@ game.createBoxRow = (isMeasured) => {
                     case 7:
                         boxInstances[x].material= game.scene.material_Fs;
                         boxInstances[x].material.emissiveColor = game.scene.color_Fs;
+                        let test = game.room.id.createText("F#");
+                        test.parent = boxInstances[x];
                         break;
                     case 8:
                         boxInstances[x].material = game.scene.material_G;
@@ -348,7 +359,7 @@ game.createBoxRow = (isMeasured) => {
         game.previousTime = game.previousTime || game.room.id.startGameTick;
 
         var assessAudio = new BABYLON.AnimationEvent(
-            ((game.room.id.bpm/30)/2)/16 * frameRate,
+            ((game.room.id.bpmInverted/30)/2)/16 * frameRate,
             function () {
                 let timeNow = window.__emscripten_date_now();  
                 let startTime = game.previousTime;
@@ -358,7 +369,7 @@ game.createBoxRow = (isMeasured) => {
                
                 let timeAnalysisBucket = (timeElapsed) / 1000;
 
-   
+                console.log("CHECK!!!!");
                 return;
             },
             true,
@@ -374,12 +385,12 @@ game.createBoxRow = (isMeasured) => {
         });
 
         keyFrames.push({
-            frame: ((game.room.id.bpm/30)/2) * frameRate,
+            frame: ((game.room.id.bpmInverted/30)/2) * frameRate,
             value: 0,
         })
 
         keyFrames.push({
-            frame: (game.room.id.bpm/30) * frameRate,
+            frame: (game.room.id.bpmInverted/30) * frameRate,
             value: -(game.scene.meshes[1]._width/2),
         });
 
@@ -394,12 +405,35 @@ game.createBoxRow = (isMeasured) => {
 
         xSlide.setKeys(keyFrames);
         boxInstances[x].animations.push(xSlide);
-        scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpm/30) * frameRate, true);
+        scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
 
     }
     game.user.boxInstances = boxInstances;
-  
+    
     return boxInstances;
+};
+
+game.room.id.createText = (inputText) => {
+    //data reporter
+    console.log("IN CREATE TEXT!!!");
+	var outputplane = new BABYLON.Mesh.CreatePlane("outputplane", 25, scene, false);
+	outputplane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
+	outputplane.material = new BABYLON.StandardMaterial("outputplane", scene);
+	outputplane.position = new BABYLON.Vector3(0, 0, 0);
+	outputplane.scaling.y = 40;
+    
+
+	var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
+	outputplane.material.diffuseTexture = outputplaneTexture;
+	outputplane.material.specularColor = new BABYLON.Color3(0, 0, 0);
+	outputplane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+	outputplane.material.backFaceCulling = false;
+
+    //outputplaneTexture.getContext().clearRect(0, 140, 512, 512);
+	outputplaneTexture.drawText(inputText, null, 140, "bold 80px verdana", "white");
+
+    outputplaneTexture.hasAlpha = true;
+    return outputplaneTexture;
 };
 
 game.room.id.cleanMeshes = () => {
@@ -414,7 +448,7 @@ game.room.id.cleanMeshes = () => {
             meshesToDestroy[u].dispose();
             
         }
-        console.log("WTF ARE MRSHES???: ", game.scene.meshes)
+        // console.log("WTF ARE MRSHES???: ", game.scene.meshes)
     }
 };
 
@@ -487,24 +521,32 @@ new InfiniteBackground(ground, scene);
 
 
 game.mainTick = () => {
+
     game.room.id.delta = window.__emscripten_date_now() - game.room.id.previousTick;
     
-    if((game.room.id.delta) > ((game.room.id.boxAnimationAcrossScreen/2) /game.countNominator) * game.room.id.boxAnimationAcrossScreen%(game.currentCount+1)){
-
+    if((game.room.id.delta) > ((game.room.id.boxAnimationAcrossScreen) /game.countNominator) * (game.room.id.boxAnimationAcrossScreen)%(game.currentCount+1)){
+        
         if(game.countNominator > game.currentCount){
             game.currentCount += game.currentCount; 
-
-            game.createBoxRow(false);
-        } else {
-            game.currentCount = 0; 
+            if(game.user.id.isPlaying && (game.currentCount%8===0)){
+                
+                }
+                
         }    
     }
 
-    // if((game.room.id.delta) >= game.room.id.boxAnimationAcrossScreen){
-    //     game.createBoxRow(false);
-    // }
+    if(game.room.id.bpmInverted){
+        game.room.id.bpm = (120/game.room.id.bpmInverted) * 120;
+        let bpmDisplay = document.getElementById("bpmDisplay");
+        bpmDisplay.innerText = game.room.id.bpm;
+        game.room.id.delta = game.room.id.delta * (120/game.room.id.bpmInverted);
+    }
 
-    if((game.room.id.delta) >= game.room.id.boxAnimationAcrossScreen){
+    game.room.id.delta * (game.room.id.bpmInverted/120)
+
+
+    
+    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
         console.log("CLEAN THOSE MESHES!");
 
         game.room.id.previousTick = window.__emscripten_date_now();
@@ -516,13 +558,18 @@ game.mainTick = () => {
         if(game.user.id.isPlaying){
             game.createBoxRow(true);
             game.room.id.cleanMeshes();
+           
         }
         
-       
+       if(window.__emscripten_date_now() - game.room.id.timeTickMeasureStart > 0){
+            game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
+            game.createBoxRow(false);
+       }
+
         game.room.id.delta === 0;
         if(game.user.id.isPlaying){
             //console.log("updating py with note we just played");
-            beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctave.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpm);
+            beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctave.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpmInverted);
         }
         
     }
@@ -589,7 +636,9 @@ function tick(now) {
         then = now - (delta % interval);
     
         // ... Code for Ticking the Frame ...
-        game.mainTick();
+        if(!game.room.id.isPaused){
+            game.mainTick();
+        }
     }
 }
 

@@ -1435,9 +1435,9 @@ octaveSetupSaveBtn.addEventListener("click", function(){
   octaveSetupDiv.style.display = "none";
   document.getElementById("devicesBox").style.background = "transparent"; 
   let selectedBPM = parseInt(document.getElementById("bpmInput").value);
-  game.room.id.bpm = (120/selectedBPM) * 120;
+  game.room.id.bpmInverted = (120/selectedBPM) * 120;
   
-  document.getElementById("bpmDisplay").innerText = game.room.id.bpm;
+  document.getElementById("bpmDisplay").innerText = game.room.id.bpmInverted;
   
   console.log("custom should be hidden!!");
 

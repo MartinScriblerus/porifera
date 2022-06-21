@@ -12,6 +12,8 @@ game.user.samplesArr = game.user.samplesArr || [];
 
 game.room.id.delta = game.room.id.delta || 0;
 
+game.room.id.isPaused = game.room.id.isPaused || false;
+
 game.user.id.latestPitch = game.user.id.latestPitch || {};
 game.user.id.latestPitch.noteHz = game.user.id.latestPitch.noteHz || null;
 game.user.id.latestPitch.noteLetter = game.user.id.latestPitch.noteHz || null;
@@ -25,9 +27,20 @@ game.user.id.latestMidiNoteNumber = game.user.id.latestMidiNoteNumber || null;
 game.room.id.previousTick = game.room.id.previousTick || window.__emscripten_date_now();
 game.room.id.nextTick = game.room.id.delta + game.room.id.previousTick;
 game.room.id.startGameTick = game.room.id.startGameTick || null;
+game.room.id.expectedDelta = game.room.id.expectedDelta || 1000;
+game.room.id.lastDiff = game.room.id.lastDiff || 0;
+game.room.id.previousMeasureTick = game.room.id.previousMeasureTick || null;
+game.room.id.measure = game.room.id.measure || 0;
+game.room.id.measureBegin = game.room.id.measureBegin || null;
 
 game.room.id.intervalTickBoxes = game.room.id.intervalTickBoxes || [];
 game.room.id.timeGroup = game.room.id.timeGroup || 0;
+
+game.room.id.timeTickMeasureStart = game.room.id.timeTickMeasureStart || null;
+game.room.id.timeTickNext =  game.room.id.timeTickMeasureStart * (4 * (game.room.id.bpmInverted/120)) || game.room.id.expectedDelta/4;
+
+game.room.id.timeTick2 = game.room.id.timeTick2 || false;
+game.room.id.timeTick3 = game.room.id.timeTick3 || false;
 
 game.room.id.analysisTimeBucket = game.room.id.analysisTimeBucket || 0;
 game.room.id.targetOctaveRange = game.room.id.targetOctaveRange || 4;
@@ -35,8 +48,8 @@ game.room.id.targetOctave = game.room.id.targetOctave || 4
 game.room.id.targetKey = game.room.id.targetKey|| "C";
 game.room.id.targetScale = game.room.id.targetScale|| "Major";
 game.room.id.scalePosition = game.room.id.scalePosition || 0;
-game.room.id.bpm = game.room.id.bpm || 120;
-game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpm)) * 4000);
+game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
+game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 
 game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
 game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];

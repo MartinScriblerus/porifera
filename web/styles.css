@@ -268,8 +268,8 @@ h3 {
     font-family: 'Jost', sans-serif;
     font-weight: 300;
     color: #FF30C2;
-    border: solid 1px #FF30C2;
-    border-radius: #FF30C2;
+    /* border: solid 1px #FF30C2;
+    border-radius: #FF30C2; */
 }
 /* #bpmFormInput {
     display: none;
