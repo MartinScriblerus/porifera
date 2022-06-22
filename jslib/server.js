@@ -294,7 +294,7 @@ app.post("/expectedAudio", cors(corsOptions), (req, res) => {
 
   createRedisPublisher(data);
   wss.clients.forEach((client) => {
-    console.log("ARE WE HITTING CLIENT>??? ", client)
+    // console.log("ARE WE HITTING CLIENT>??? ", client)
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({message: data }));
     }

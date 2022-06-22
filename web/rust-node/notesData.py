@@ -11,97 +11,178 @@ import json
 def mingus_get_scale(key, octave, octave_range, scale, scale_position):
     global scal_expected
     print(f'whast is scale?? {scale}')
+    if scale[0:3]=="Asc":
+        print('in expected !!!!!!!!!!!!!!!!!!')
+        print(scale.split("\n"))
+        print('!!!!!!!!!!!!!!!!!!')
+    
     print(f'whast is key?? {key}')
+
+    print(f'whast is octave {octave}')
+    print(f'whast is octave range {octave_range}')
+
+
 
     if scale == "major":
         scal_expected = scales.Major(key)
+        print(f"???? {json.dumps(str(scal_expected))}")
+        for i in scal_expected:
+            i = notes.reduce_accidentals(i)
         scal_expected = scal_expected.__str__()
         print(str(scal_expected))
-        return scal_expected
+
+        # requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(scal_expected)
     elif scale == "harmonic_major":
         scal_expected = scales.HarmonicMajor(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "natural_minor":
+        # scal_expected = scales.NaturalMinor(key)
+        # scal_expected = scal_expected.__str__()
+        # print(json.dumps(scal_expected))
+        # requests.post('http://127.0.0.1:3000/expectedAudio', json=json.dumps(scal_expected)) 
+        # return json.dumps(list(scal_expected))
         scal_expected = scales.NaturalMinor(key)
         scal_expected = scal_expected.__str__()
-        print(scal_expected)
-        return scal_expected
+        scal_expected = scal_expected.split('\n')[0]
+        scal_expected = scal_expected.split('  ')[1]
+        scal_expected = list(scal_expected.split(' '))
+        print(f"here we go in nat minor: {scal_expected}")
+        note_holder1 = []
+        for i in scal_expected:
+            # i = json.dumps(list(i))
+            print(f"what is typeof i?? {type(i)}")
+            print(f"what is i  {i}")
+            # print(f"what is i to list {list(i)}")
+            # print(f"what is i to json.dumps {json.dumps(list(i))}")
+            i = notes.reduce_accidentals(i)
+        
+            note_holder1.append(i)
+   
+            # return scal_expected
+            # if len(note_holder) >= 13:
+        print(f"here is note holder: {note_holder1}")
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=note_holder1) 
+        return note_holder1 
     elif scale == "harmonic_minor":
         scal_expected = scales.HarmonicMinor(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "melodic_minor":
         scal_expected = scales.MelodicMinor(key)
         scal_expected = scal_expected.__str__() 
-        scal_expected = scal_expected.__str__()       
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "bachian":
         scal_expected = scales.Bachian(key)
+        scal_expected = scal_expected.__str__()  
         print(scal_expected)
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "minor_neapolitan":
         scal_expected = scales.MinorNeapolitan(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "mixolydian":
         scal_expected = scales.Mixolydian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "chromatic":
         scal_expected = scales.Chromatic(key)
         scal_expected = scal_expected.__str__()
-        print(scal_expected)
-        return scal_expected
+        scal_expected = scal_expected.split('\n')[0]
+        scal_expected = scal_expected.split('  ')[1]
+        scal_expected = list(scal_expected.split(' '))
+        print(f"here we go: {scal_expected}")
+        note_holder = []
+        for i in scal_expected:
+            # i = json.dumps(list(i))
+            print(f"what is typeof i?? {type(i)}")
+            print(f"what is i  {i}")
+            # print(f"what is i to list {list(i)}")
+            # print(f"what is i to json.dumps {json.dumps(list(i))}")
+            i = notes.reduce_accidentals(i)
+        
+            note_holder.append(i)
+            print(f"ARE WE FREE OF ACCIDENTALS? {note_holder}")
+
+
+            # return scal_expected
+            if len(note_holder) >= 13:
+                print(f"here is note holder: {note_holder}")
+                requests.post('http://127.0.0.1:3000/expectedAudio', json=note_holder) 
+                return note_holder
     elif scale == "whole_tone":
         scal_expected = scales.WholeTone(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "octatonic":
         scal_expected = scales.Octatonic(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "ionian":
         scal_expected = scales.Ionian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "dorian":
         scal_expected = scales.Dorian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "phrygian":
         scal_expected = scales.Phrygian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "lydian":
         scal_expected = scales.Lydian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "aeolian":
         scal_expected = scales.Aeolian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        # return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "locrian":
         scal_expected = scales.Locrian(key)
         scal_expected = scal_expected.__str__()
         print(scal_expected)
-        return scal_expected
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     elif scale == "surprise_me":
         scal_expected = "surprise_me"
         scal_expected = scal_expected.__str__()
         print("todo: set up random scales")   
-        return scal_expected 
+        requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+        return json.dumps(list(scal_expected))
     # # If an exact match is not confirmed, this last case will be used if provided
     # else:
     #     # print(f"HERE's what I'm seeing in audio select: {key}, {octave}, {octave_range}, {scale}")
@@ -126,9 +207,10 @@ def mingus_get_scale(key, octave, octave_range, scale, scale_position):
     # if(result):
     #     requests.post('http://127.0.0.1:3000/expectedAudio', json=result) 
     # Return data in json format 
-    print(f">>>>>>>>>>>> {scal_expected}")
-    requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
-    return json.dumps(list(scal_expected))
+
+    # print(f">>>>>>>>>>>> {scal_expected}")
+    # requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected) 
+    # return json.dumps(list(scal_expected))
     # return scal_expected
 
 def expected_notes_Dataframes(expected_notesDf, expected_data):

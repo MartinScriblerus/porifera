@@ -24,6 +24,7 @@ game.user.id.latestKeyNotePiano = game.user.id.latestKeyNotePiano || null;
 game.user.id.latestKeyNoteOrgan = game.user.id.latestKeyNoteOrgan || null;
 game.user.id.latestMidiNoteNumber = game.user.id.latestMidiNoteNumber || null;
 
+
 game.room.id.previousTick = game.room.id.previousTick || window.__emscripten_date_now();
 game.room.id.nextTick = game.room.id.delta + game.room.id.previousTick;
 game.room.id.startGameTick = game.room.id.startGameTick || null;
@@ -52,6 +53,8 @@ game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
 game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 
 game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
+game.room.id.recommendationsScale.basic_keys_ascending = game.room.id.recommendationsScale.basic_keys_ascending || {};
+game.room.id.recommendationsScale.basic_keys_ascending.basic_keys = game.room.id.recommendationsScale.basic_keys_ascending.basic_keys || []; 
 game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];
 game.room.id.recommendationsScale.descending = game.room.id.recommendationsScale.descending || []; 
 // game.user.id.audioDevice = game.user.id.audioDevice || '';
@@ -65,6 +68,8 @@ game.user.id.timeRecordingStart = window.__emscripten_date_now();
 
 game.user.id.toPy = game.user.id.toPy || undefined;
 
+
+game.room.id.boxInstances = game.room.id.boxInstances || [];
 game.countNominator = game.countNominator || 4;
 game.countDenominator = game.countDenominator || 4;
 game.currentCount = game.currentCount || 0;

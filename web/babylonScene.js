@@ -196,16 +196,10 @@ box.id = "noteBox_0";
 console.log("BOX!: ", box);
 let boxMaterial= new BABYLON.StandardMaterial(scene);
 box.material = boxMaterial;
-// box.material.diffuseColor = new BABYLON.Color3.FromHexString("#DFFF3D");
-// box.material.emissiveColor = new BABYLON.Color3.FromHexString("#FF30C2");
-
 
 game.boxBlueprint = game.boxBlueprint || {};
 game.boxBlueprint = box;
-// let boxInstances = [];
-// for(let x = 0; x< 64; x++){
-//     box.clone(`boxNote_instance-${x}`);
-// }
+
 
 game.scene.material_C = new BABYLON.StandardMaterial(scene);
 game.scene.color_C = new BABYLON.Color3.FromHexString("#E33836");
@@ -244,20 +238,244 @@ game.scene.color_As = new BABYLON.Color3.FromHexString("#E37242");
 game.scene.material_B = new BABYLON.StandardMaterial(scene);
 game.scene.color_B = new BABYLON.Color3.FromHexString("#2B99E3");
 
+game.getNoteColor = (note) => {
+    let response = {};
+    switch(note){
+        case "A":
+            response = game.scene.color_A;
+            return response;
+        case "A#":
+            response = game.scene.color_As;
+            return response;
+        case "Ab":
+            response = game.scene.color_Gs;
+            return response;
+        case "B":
+            response = game.scene.color_B;
+            return response;
+        case "B#":
+            response = game.scene.color_C;
+            return response;
+        case "Bb":
+            response = game.scene.color_As;
+            return response;
+        case "C":
+            response = game.scene.color_C;
+            return response;
+        case "C#":
+            response = game.scene.color_Cs;
+            return response;
+        case "Cb":
+            response = game.scene.color_B;
+            return response;
+        case "D":
+            response = game.scene.color_D;
+            return response;
+        case "D#":
+            response = game.scene.color_Ds;
+            return response;
+        case "Db":
+            response = game.scene.color_Cs;
+            return response;
+        case "E":
+            response = game.scene.color_E;
+            return response;
+        case "E#":
+            response = game.scene.color_F;
+            return response;
+        case "Eb":
+            response = game.scene.color_Ds;
+            return response;
+        case "F":
+            response = game.scene.color_F;
+            return response;
+        case "F#":
+            response = game.scene.color_Fs;
+            return response;
+        case "Fb":
+            response = game.scene.color_E;
+            return response;
+        case "G":
+            response = game.scene.color_G;
+            return response;
+        case "G#":
+            response = game.scene.color_Gs;
+            return response;
+        case "Gb":
+            response = game.scene.color_Fs;
+            return response;
+    }
+};
 
-game.createBoxRow = (isMeasured) => {
+game.getNoteMaterial = (note) => {
+    let response = {};
+    switch(note){
+        case "A":
+            response = game.scene.material_A;
+            return response;
+        case "A#":
+            response = game.scene.material_As;
+            return response;
+        case "Ab":
+            response = game.scene.material_Gs;
+            return response;
+        case "B":
+            response = game.scene.material_B;
+            return response;
+        case "B#":
+            response = game.scene.material_C;
+            return response;
+        case "Bb":
+            response = game.scene.material_As;
+            return response;
+        case "C":
+            response = game.scene.material_C;
+            return response;
+        case "C#":
+            response = game.scene.material_Cs;
+            return response;
+        case "Cb":
+            response = game.scene.material_B;
+            return response;
+        case "D":
+            response = game.scene.material_D;
+            return response;
+        case "D#":
+            response = game.scene.material_Ds;
+            return response;
+        case "Db":
+            response = game.scene.material_Cs;
+            return response;
+        case "E":
+            response = game.scene.material_E;
+            return response;
+        case "E#":
+            response = game.scene.material_F;
+            return response;
+        case "Eb":
+            response = game.scene.material_Ds;
+            return response;
+        case "F":
+            response = game.scene.material_F;
+            return response;
+        case "F#":
+            response = game.scene.material_Fs;
+            return response;
+        case "Fb":
+            response = game.scene.material_E;
+            return response;
+        case "G":
+            response = game.scene.material_G;
+            return response;
+        case "G#":
+            response = game.scene.material_Gs;
+            return response;
+        case "Gb":
+            response = game.scene.material_Fs;
+            return response;
+    }
+};
+
+game.createBoxRow = (isMeasured, keysToCreate) => {
     let boxInstances = [];
-    
+    if(keysToCreate){
+        console.log("HERE ARE OUR KEYS TO CREATE!!!!!: ", keysToCreate);
+
+    }
     game.room.id.timeGroup = game.room.id.timeGroup + 1;
 
+    // console.log("this is the keys up ==> ", game.room.id.recommendationsScale.basic_keys_ascending);
     // this will replace 128 as # => 
         // if octaveRange = 0 we need 11 boxes
-    let convertedRange = 128 * (game.room.id.targetOctaveRange / 10)
+    // let convertedRange = 128 * (game.room.id.targetOctaveRange / 10)
+    let convertedRange;
     if(!isMeasured){
         convertedRange = 2;
+    } else {
+        convertedRange = keysToCreate;
     }
+    // let convertedRange = 2;
     for(let x = 1; x< convertedRange; x++){
-        // boxInstances[x] = BABYLON.MeshBuilder.CreateBox("noteBox_" + x, {}, scene);
+        console.log("KEYS TO CREATE: ", keysToCreate);
+    // for(let x = 1; x< keysToCreate.length; x++){
+        
+        let boxInstances = [];
+       
+        if(isMeasured && 
+            game.room.id.recommendationsScale.basic_keys_ascending ){
+            //for(let bka = 0; bka < game.room.id.recommendationsScale.basic_keys_ascending.basic_keys.length; bka++){
+                boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
+                console.log("EEEEE HERE!!!");
+                boxInstances[x].speed = 0.1
+
+                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
+                boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);   
+                    
+                    switch(x%12){
+                        case 1:
+                            //alert(game.room.id.recommendationsScale.basic_keys_ascending[x-1])
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 2:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);           
+                            return boxInstances;
+                        case 3:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 4:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 5:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 6:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances
+                        case 7:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 8:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 9:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 10:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 11:
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances;
+                        case 12:
+                            //alert(game.room.id.recommendationsScale.basic_keys_ascending[x-1])
+                            boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]);
+                            boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys[x-1]); 
+                            return boxInstances[x];
+                        default:
+                            // game.createBoxRow();
+                            console.log("no box reading");
+                    }
+                // }
+            // }
+            // for(let bkd = 0; bkd < game.room.id.recommendationsScale.basic_keys_descending.length; bkd++){
+                
+            // }
+            console.log("BOX INSTYANCES: ", boxInstances);
+            return boxInstances;
+        }
+        
         if(!x%12 || (x%12>12 || x === 0)){
             return;
         }
@@ -267,91 +485,27 @@ game.createBoxRow = (isMeasured) => {
         let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
         if(checkExisting || checkExistingTick || checkExistingTest){
             return;
-        } else {
-            boxInstances[x] = box.clone("noteBox_" + x + "_" + game.room.id.timeGroup);
-            boxInstances[x].speed = 0.1
-            // boxInstances[x].position.z = (game.scene.meshes[1]._height / 2) - (x * (10/128));
-            
-            if(isMeasured === false){
-                boxInstances[x].position.z = 0;
-                boxInstances[x].scaling.z = 10;
-                boxInstances[x].scaling.x = 1/16;
-                boxInstances[x].timeGroup = game.room.id.timeGroup,
-                boxInstances[x].position.z = 0; 
-                boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
-            } else {
-                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
-                switch(x%12){
-                    case 1:
-                        boxInstances[x].material = game.scene.material_C;
-                        boxInstances[x].material.emissiveColor = game.scene.color_C;
+        } 
 
-                        break;
-                    case 2:
-                        boxInstances[x].material = game.scene.material_Cs;
-                        boxInstances[x].material.emissiveColor = game.scene.color_Cs;  
-                        var myDynamicTexture = new BABYLON.DynamicTexture(name, {width:2,height:2}, scene);
-                        boxInstances[x].material.diffuseTexture = myDynamicTexture;   
-                        var font = "bold 44px monospace";
-                        myDynamicTexture.drawText("Grass", 75, 135, font, "green", "white", true, true);       
-                        break;
-                    case 3:
-                        boxInstances[x].material = game.scene.material_D;
-                        boxInstances[x].material.emissiveColor = game.scene.color_D;
-                        break;
-                    case 4:
-                        boxInstances[x].material = game.scene.material_Ds;
-                        boxInstances[x].material.emissiveColor = game.scene.color_Ds;
-                    case 5:
-                        boxInstances[x].material = game.scene.material_E;
-                        boxInstances[x].material.emissiveColor = game.scene.color_E;
-                        break;
-                    case 6:
-                        boxInstances[x].material= game.scene.material_F;
-                        boxInstances[x].material.emissiveColor = game.scene.color_F;
-                        break;
-                    case 7:
-                        boxInstances[x].material= game.scene.material_Fs;
-                        boxInstances[x].material.emissiveColor = game.scene.color_Fs;
-                        let test = game.room.id.createText("F#");
-                        test.parent = boxInstances[x];
-                        break;
-                    case 8:
-                        boxInstances[x].material = game.scene.material_G;
-                        boxInstances[x].material.emissiveColor = game.scene.color_G;
-                        break;
-                    case 9:
-                        boxInstances[x].material = game.scene.material_Gs;
-                        boxInstances[x].material.emissiveColor = game.scene.color_Gs;
-                        break;
-                    case 10:
-                        boxInstances[x].material = game.scene.material_A;
-                        boxInstances[x].material.emissiveColor = game.scene.color_A;
-                        break;
-                    case 11:
-                        boxInstances[x].material = game.scene.material_As;
-                        boxInstances[x].material.emissiveColor = game.scene.color_As;
-                    case 12:
-                        boxInstances[x].material = game.scene.material_B;
-                        boxInstances[x].material.emissiveColor = game.scene.color_B;
-                    default:
-                        // game.createBoxRow();
-                        // console.log("no box reading");
-                }
-            }
-    
-    
-    
-            if(game.room.id.timeGroup > 4){
-                game.room.id.timeGroup = 0;
-            } 
-            // boxInstances[x].setParent(boxInstances[0])
+        if(isMeasured === false){
+            boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
+            boxInstances[x].speed = 0.1
+            boxInstances[x].position.z = 0;
+            boxInstances[x].scaling.z = 10;
+            boxInstances[x].scaling.x = 1/16;
+            boxInstances[x].timeGroup = game.room.id.timeGroup,
+            boxInstances[x].position.z = 0; 
+            boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
+        } 
+     
+        if(game.room.id.timeGroup > 4){
+            game.room.id.timeGroup = 0;
+        } 
+
+        if(boxInstances[x]){
             boxInstances[x].setParent(boxInstances[0])
             boxInstances[x].parent = boxInstances[0];
         }
-      
-       
-        //console.log("WHAT ARER BOX INSTANCES??? : ", boxInstances);
 
         const frameRate = game.animation.fps;
 
@@ -366,7 +520,6 @@ game.createBoxRow = (isMeasured) => {
               
                 let timeElapsed = (timeNow - startTime) % 10;  
       
-               
                 let timeAnalysisBucket = (timeElapsed) / 1000;
 
                 console.log("CHECK!!!!");
@@ -374,8 +527,8 @@ game.createBoxRow = (isMeasured) => {
             },
             true,
         );
-          // Attach your event to your animation
-          xSlide.addEvent(assessAudio);
+        // Attach your event to your animation
+        xSlide.addEvent(assessAudio);
         
         const keyFrames = [];
 
@@ -394,19 +547,19 @@ game.createBoxRow = (isMeasured) => {
             value: -(game.scene.meshes[1]._width/2),
         });
 
-        if(keyFrames[keyFrames.length -1].value === 0){
-            alert("now");
-            //beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctaveNote.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpm);
-            boxInstances.forEach((x)=>{x.dispose()});
-            console.log("WHAT ARE BOX INSSTAMCES!!!!>>> ", boxInstances);
-            // beginPyAnalysisNote()
+        console.log("ARE WE GETTING BOXINSTANCES??? ", boxInstances[x]);
+        xSlide.setKeys(keyFrames);
+        if(boxInstances[x]){
+            console.log("made it to here... her eare boxInstances => ", boxInstances[x]);
+            boxInstances[x].animations.push(xSlide);
+            if(game.room.id.recommendationsScale.basic_keys_ascending && game.room.id.scalePosition){
+                boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.basic_keys_ascending[game.room.id.scalePosition];
+                console.log("Gave the box a name...........");
+            }
+            scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
         }
 
-
-        xSlide.setKeys(keyFrames);
-        boxInstances[x].animations.push(xSlide);
-        scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
-
+        
     }
     game.user.boxInstances = boxInstances;
     
@@ -438,14 +591,26 @@ game.room.id.createText = (inputText) => {
 
 game.room.id.cleanMeshes = () => {
     console.log("hit clean meshes");
+    if(!game.scene.meshes){
+        return;
+    }
     let meshesToDestroy = game.scene.meshes;
+    let meshHolder = [];
     for(let u= 5; u < meshesToDestroy.length; u++){
         // if(meshesToDestroy[u].material){
         //     meshesToDestroy[u].material.dispose();
         // }
         if(meshesToDestroy[u]){
-            // meshesToDestroy[u] = null;
-            meshesToDestroy[u].dispose();
+            if(meshesToDestroy[u] && meshesToDestroy[u].name && meshesToDestroy[u].name.indexOf('activeNote_') === -1){
+                meshesToDestroy[u].dispose();
+            } else {
+                meshHolder.push(meshesToDestroy[u].name)
+                if(meshHolder.length > 1000){
+                    // meshesToDestroy[u].dispose();
+                    console.log("meshholder length: ", meshHolder.length)
+                }
+            }
+            
             
         }
         // console.log("WTF ARE MRSHES???: ", game.scene.meshes)
@@ -525,13 +690,19 @@ game.mainTick = () => {
     game.room.id.delta = window.__emscripten_date_now() - game.room.id.previousTick;
     
     if((game.room.id.delta) > ((game.room.id.boxAnimationAcrossScreen) /game.countNominator) * (game.room.id.boxAnimationAcrossScreen)%(game.currentCount+1)){
-        
         if(game.countNominator > game.currentCount){
             game.currentCount += game.currentCount; 
             if(game.user.id.isPlaying && (game.currentCount%8===0)){
-                
+                if(game.user.id.isPlaying && (Object.keys(game.room.id.recommendationsScale))){
+                    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
+                        game.room.id.scalePosition = game.room.id.scalePosition + 1;
+                        console.log("HUUUUUUUUUUUUUUGE=>=>=>: ", game.room.id.scalePosition);
+                        console.log("recommendations object!!! ", game.room.id.recommendationsScale.basic_keys_ascending);
+                        game.createBoxRow(true, game.room.id.recommendationsScale.basic_keys_ascending.basic_keys);
+                        game.room.id.setNextNotes(game.room.id.recommendationsScale.basic_keys_ascending.basic_keys)
+                    }
                 }
-                
+            }    
         }    
     }
 
@@ -546,17 +717,17 @@ game.mainTick = () => {
 
 
     
-    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
+    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
         console.log("CLEAN THOSE MESHES!");
 
         game.room.id.previousTick = window.__emscripten_date_now();
-        game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending)
+        // game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending)
        // game.room.id.cleanMeshes();
         // READS MAIN TICK DELTA!!!
         // console.log("Tick! ", game.room.id.delta);
      
-        if(game.user.id.isPlaying){
-            game.createBoxRow(true);
+        if(game.user.id.isPlaying ){
+            // game.createBoxRow(true);
             game.room.id.cleanMeshes();
            
         }

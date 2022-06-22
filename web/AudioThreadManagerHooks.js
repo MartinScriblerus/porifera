@@ -12,7 +12,8 @@ function gameStarted(){
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
   game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending);
-  setOctaveRange(1);
+  setOctaveRange(game.room.id.targetOctaveRange);
+
   
   game.room.id.updateTargetNoteDom();
   game.room.id.updateTargetKeyDom();
@@ -27,7 +28,10 @@ game.room.id.setNextNotes = (targetScale) => {
   // console.log("here is scale position: ", game.room.id.scalePosition);
   // console.log("rec scale object => ",  game.room.id.recommendationsScale);
   // console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
-  setTargetNote(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
+  
+  //let testForNow = game.room.id.scalePosition;
+  let testForNow = 0;
+  //setTargetNote(game.room.id.recommendationsScale.ascending[testForNow]);
   game.room.id.updateTargetNoteDom();
   // console.log("here is ascending... ", game.room.id.recommendationsScale.ascending);
   setFutureNotes(game.room.id.recommendationsScale.ascending);

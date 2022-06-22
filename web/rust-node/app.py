@@ -138,36 +138,28 @@ def audioSelections():
     print(f"Audio Selections: {dataAudioSelections}")
     if len(dataAudioSelections) <2:
         print(f'wjat are data selections {dataAudioSelections}')
+
+    basic_keys = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],'chromatic',dataAudioSelections['scalePosition'])
     exp_scale = notesData.mingus_get_scale(dataAudioSelections['targetKey'], dataAudioSelections['targetOctave'], dataAudioSelections['targetOctaveRange'],dataAudioSelections['targetScale'],dataAudioSelections['scalePosition'])
     
-    scal_expected1 = exp_scale.__str__()
-
-    asyncio.run(test_sockets(scal_expected1,"ws://localhost:8081"))
-    requests.post('http://127.0.0.1:3000/expectedAudio', json={'array':scal_expected1}) 
-
-    print(f'EXPECTED SCALE IN APP PY: {exp_scale}')
-    # print(f'EXPECTED SCALE KEYS IN APP PY: {type(exp_scale)}')
+   
+    print(f"basic keys are {basic_keys}")
+    print(f"scal_exp is {exp_scale}")
+    # print(f"scal_exp to str is {scal_expected1.__str__()}")
     
-    # json_exp_scale = {'ascending': exp_scale['Ascending'], 'descending':exp_scale['Descending']}
-    # print(f'EXPECTED SCALE TYPE IN APP PY: {json_exp_scale}')
-
-
-
-    # if len(exp_scale) >= 1:
-    # requests.post('http://127.0.0.1:3000/expectedAudio', exp_scale) 
-        # The POST request to our node server
+    keys = {
+        "basic_keys": basic_keys,
+        "expected_scale": exp_scale
+    }
     
-    #res = requests.post('http://127.0.0.1:3000/expectedAudio', exp_scale) 
-    array = []
-    data = {}
-    # Convert response data to json
-    #returned_data = res.json() 
+    # asyncio.run(test_sockets(scal_expected1,"ws://localhost:8081"))
+    # requests.post('http://127.0.0.1:3000/expectedAudio', json=scal_expected1) 
+    asyncio.run(test_sockets(keys,"ws://localhost:8081"))
+    requests.post('http://127.0.0.1:3000/expectedAudio', json=keys) 
+   
+    print(f'EXPECTED SCALE IN APP PY: {keys}')
 
-    #result = returned_data['result'] 
-    # requests.post('http://127.0.0.1:3000/expectedAudio', json=json_exp_scale)  
-    
-    # return dataAudioSelections
-    return exp_scale
+    return keys
 
 # ========================================================
 # (SEND TO) NODE INTEROP ROUTE
