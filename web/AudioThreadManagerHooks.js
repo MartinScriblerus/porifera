@@ -70,10 +70,15 @@ game.room.id.setNextNotes = () => {
     game.room.id.updateScalePositionDom();
     game.room.id.updateTargetNoteDom();
     // game.room.id.updateScaleDom();
+    //
+    //
+    //
+    // CODE SMELL +++ why two calls to update Future notes?============
     game.room.id.updateFutureNotesDom();  
   }
 
   game.room.id.updateFutureNotesDom();
+  // ============+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 game.room.id.updateTargetNoteDom = () => {

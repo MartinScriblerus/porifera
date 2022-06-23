@@ -398,16 +398,18 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
     if(!keysToCreate){
         convertedRange = 2;
     } else {
-       convertedRange = keysToCreate.length;
+       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange;
     }
+    // convertedRange = 13;
     for(let x = 1; x< convertedRange; x++){
         console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
         boxInstances[x] = {};
+        
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1 &&
-            !game.scene.getMeshByID("test")){
+            !game.scene.getMeshByID(`test${x}`)){
             //for(let bka = 0; bka < game.room.id.recommendationsScale.basic_keys_ascending.basic_keys.length; bka++){
                 console.log("GOT FUCKING DAMMIT WHAT IS BOX: ", box);
 
@@ -415,27 +417,27 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                 console.log("EEEEE HERE!!! " );
                 boxInstances[x].speed = 0.1
 
-                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
+                boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
                 //boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2)); 
                 // ====> sets height at double to give effect of tick
-                boxInstances[x].scaling.z = 2 * game.scene.meshes[1]._height;
-                boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[x-1]);
-                boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[x-1]);   
-                boxInstances[x].id = "test";
+                boxInstances[x].scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
+                boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);
+                boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);   
+                boxInstances[x].id = `test${x}`;
                 // return boxInstances[x]
         }
         
         // if(!x%12 || (x%12>12 || x === 0)){
         //     return;
         // }
-        console.log("DOES BOX INSTANCE X EXIST HERE?: ", boxInstances[x]);
-        let checkExisting = game.scene.getMeshByID("noteBox_" + x);
-        let checkExistingTest = game.scene.getMeshByID("noteBox_" + x + "_" + game.room.id.timeGroup);
-        let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
-        if(checkExisting || checkExistingTick || checkExistingTest){
-            return;
-        } 
-
+        // console.log("DOES BOX INSTANCE X EXIST HERE?: ", boxInstances[x]);
+        // let checkExisting = game.scene.getMeshByID("noteBox_" + x);
+        // let checkExistingTest = game.scene.getMeshByID("noteBox_" + x + "_" + game.room.id.timeGroup);
+        // let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
+        // if(checkExisting || checkExistingTick || checkExistingTest){
+        //     return;
+        // } 
+try{
         if(isMeasured === false){
             boxInstances[x] = box.clone("activeTicker_" + x + "_");
             boxInstances[x].speed = 0.1
@@ -457,7 +459,8 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
         if(game.room.id.timeGroup > (game.room.id.countNumerator * 4)){
             game.room.id.timeGroup = 0;
         } 
-
+    }
+    catch(e){console.log(e);}
         // if(boxInstances[x]){
         //     console.log("WHAT IS PARENT: ", boxInstances[0]);
         //     boxInstances[x].setParent(boxInstances[0]);
@@ -510,15 +513,15 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             console.log("made it to here... her eare boxInstances => ", boxInstances[x]);
             if(boxInstances[x] && boxInstances[x].animations){
                 boxInstances[x].animations.push(xSlide);
-                if(game.room.id.recommendationsScale.ascending && game.room.id.scalePosition){
-                    boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.ascending[x];
-                    console.log("Gave the box a name...........");
-                }
+                // if(game.room.id.recommendationsScale.ascending && game.room.id.scalePosition){
+                //     boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.ascending[x];
+                //     console.log("Gave the box a name...........");
+                // }
                 scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
             }
         }
 
-        return boxInstances[1];
+        // return boxInstances[x];
     }
 // }
     // catch(e){console.log("aaaaaaaaaaaaaaa ", e)}
@@ -550,11 +553,12 @@ game.room.id.createText = (inputText) => {
 };
 
 game.room.id.cleanMeshes = () => {
-    console.log("hit clean meshes");
+    
     if(!game.scene.meshes){
         return;
     }
     let meshesToDestroy = game.scene.meshes;
+    console.log("hit clean meshes / meshes: ", meshesToDestroy);
     let meshHolder = [];
     while(game.scene.meshes.length > 5){
         for(let u= 5; u < meshesToDestroy.length; u++){
