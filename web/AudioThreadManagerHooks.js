@@ -8,10 +8,14 @@ import "./index.js";
 
 function gameStarted(){
   setScale(game.room.id.targetScale);
-  setScalePos(game.room.id.scalePosition); 
+  console.log("what is scale position? ", game.room.id.scalePosition);
+  setScalePosition(game.room.id.scalePosition); 
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
-  game.room.id.setNextNotes(game.room.id.recommendationsScale.ascending);
+  // if(game.room.id.recommendationsScale.ascending){
+    game.room.id.setNextNotes();
+  // }
+  
   setOctaveRange(game.room.id.targetOctaveRange);
 
   
@@ -24,21 +28,48 @@ function gameStarted(){
   game.room.id.updateFutureNotesDom();  
 } 
 
-game.room.id.setNextNotes = (targetScale) => {
+game.room.id.setNextNotes = () => {
   // console.log("here is scale position: ", game.room.id.scalePosition);
   // console.log("rec scale object => ",  game.room.id.recommendationsScale);
   // console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
-  
-  //let testForNow = game.room.id.scalePosition;
-  let testForNow = 0;
-  //setTargetNote(game.room.id.recommendationsScale.ascending[testForNow]);
-  game.room.id.updateTargetNoteDom();
-  // console.log("here is ascending... ", game.room.id.recommendationsScale.ascending);
-  setFutureNotes(game.room.id.recommendationsScale.ascending);
+  setScalePosition(game.room.id.scalePosition);
+  game.room.id.updateScalePositionDom();
+  let targetScale = game.room.id.recommendationsScale.ascending;
+  if(game.room.id.scalePosition && targetScale && targetScale !== []){
+    setTargetNote(targetScale[game.room.id.scalePosition]);
+    // if(targetScale !== []){
+    //   setFutureNotes(targetScale);
+    // }
+    console.log("AHAHAHAHAHA WHAT IS TARGET SCALE? ", targetScale);
+    if(game.room.id.scalePosition > targetScale.length){
+      setScalePosition(0);
+      game.room.id.scalePosition = 0;
+      console.log("getting here!!!");
+    } else {
+      
+      if(game.user.id.isPlaying){
+        console.log("HITTING SCALE POSITION + 1 ",  game.room.id.scalePosition);
+        setScalePosition(game.room.id.scalePosition);
+        // console.log("getting here to else!!!");
+       // game.room.id.setNextNotes(game.room.id.targetScale);
+      }
+
+    }
+    // game.room.id.updateTargetNoteDom();
+    // game.room.id.updateTargetKeyDom();
+    // game.room.id.updateTargetOctaveDom();
+    // game.room.id.updateTargetOctaveRangeDom();
+    game.room.id.updateScalePositionDom();
+    game.room.id.updateTargetNoteDom();
+    // game.room.id.updateScaleDom();
+    // game.room.id.updateFutureNotesDom();  
+  }
+
   game.room.id.updateFutureNotesDom();
 }
 
 game.room.id.updateTargetNoteDom = () => {
+  console.log("what is scale position? ", game.room.id.scalePosition);
   let targetNoteDOM = document.getElementById("targetNoteDisplay");
   if(targetNoteDOM){
     let oldNums = targetNoteDOM.childNodes;
@@ -104,11 +135,15 @@ game.room.id.updateScalePositionDom = () => {
       oldNums[i].remove();
       delete oldNums[i];
     }
-    if(scalePos()){
-      scalePositionDisplayDOM.append(scalePos());
+    if(scalePosition()){
+      // scalePositionDisplayDOM.append(scalePosition());
+      scalePositionDisplayDOM.append(game.room.id.scalePosition);
+      
     } else {
       scalePositionDisplayDOM.style.display = "flex";
-      scalePositionDisplayDOM.append(scalePos());
+      // scalePositionDisplayDOM.append(scalePosition());
+            // scalePositionDisplayDOM.append(scalePosition());
+            scalePositionDisplayDOM.append(game.room.id.scalePosition);
     }
   }
 }
@@ -211,7 +246,6 @@ export function pitchChanged(user, newPitch){
     }
    return latestPitch();
 };
-
 
 export function pitchConversion(latestPitch){
   if(latestPitch !== undefined && latestPitch !== "NaN"){
@@ -1338,7 +1372,6 @@ export function pitchConversion(latestPitch){
       game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
     }
   }
-
 }
 
 export function audioChanged(newAudio){
@@ -1368,13 +1401,12 @@ function useState(initialValue) {
   var [audio, setAudio] = useState(undefined); // using array destructuring
   var [running, setRunning] = useState(false);
   var [latestPitch, setLatestPitch] = useState(undefined);
-
   var [scale, setScale] = useState('Major');
   var [targetKey, setTargetKey] = useState('C');
   var [targetOctave, setTargetOctave] = useState(4);
   var [targetNote, setTargetNote] = useState('');
   var [futureNotes, setFutureNotes] = useState([]);
-  var [scalePos, setScalePos] = useState(0);
+  var [scalePosition, setScalePosition] = useState(0);
   var [octaveRange, setOctaveRange] = useState(1);
 
 let getUserAudioBtn = document.getElementById("getUserAudio");
@@ -1434,7 +1466,6 @@ gameModeDrpdwn.addEventListener("change", function handleChange(event) {
   game.gameMode = gameModeDrpdwn.value;
 })
 
-
 octaveSetupSaveBtn.addEventListener("click", function(){
   octaveSetupDiv.style.display = "none";
   document.getElementById("devicesBox").style.background = "transparent"; 
@@ -1452,6 +1483,121 @@ targetScaleDrpdwn.addEventListener("change", function handleChange(event) {
   console.log(event.target.value);
   targetScaleDrpdwn.value = event.target.value;
   game.room.id.targetScale = targetScaleDrpdwn.value;
+  
+  let refreshDrpdwn = document.getElementsByClassName("set-key-option");
+  console.log("JFK ", refreshDrpdwn);
+  document.getElementById("drpA#").style.display = "flex";
+  document.getElementById("drpB#").style.display = "flex";
+  document.getElementById("drpD#").style.display = "flex";
+  document.getElementById("drpE#").style.display = "flex";
+  document.getElementById("drpG#").style.display = "flex";
+  document.getElementById("drpFb").style.display = "flex";
+  document.getElementById("drpGb").style.display = "flex";
+  document.getElementById("drpDb").style.display = "flex";
+  document.getElementById("drpCb").style.display = "flex";
+
+
+
+
+
+  if(game.room.id.targetScale === "major"){
+    document.getElementById("drpA#").style.display = "none";
+    document.getElementById("drpB#").style.display = "none";
+    document.getElementById("drpD#").style.display = "none";
+    document.getElementById("drpE#").style.display = "none";
+    document.getElementById("drpG#").style.display = "none";
+    document.getElementById("drpFb").style.display = "none";
+  } 
+  // else {
+  //   document.getElementById("drpA#").style.display = "flex";
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpD#").style.display = "flex";
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpG#").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  // }
+  
+  if(game.room.id.targetScale === "harmonic_major"){
+    document.getElementById("drpA#").style.display = "none";
+    document.getElementById("drpB#").style.display = "none";
+    document.getElementById("drpD#").style.display = "none";
+    document.getElementById("drpE#").style.display = "none";
+    document.getElementById("drpG#").style.display = "none";
+    document.getElementById("drpFb").style.display = "none";
+  } 
+  // else {
+  //   document.getElementById("drpA#").style.display = "flex";
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpD#").style.display = "flex";
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpG#").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  // }
+
+  if(game.room.id.targetScale === "natural_minor" || 
+    game.room.id.targetScale === "melodic_minor" || 
+    game.room.id.targetScale === "bachian" ||
+    game.room.id.targetScale === "minor_neapolitan"
+  ){  
+    document.getElementById("drpE#").style.display = "none";
+    document.getElementById("drpB#").style.display = "none";
+    document.getElementById("drpGb").style.display = "none";
+    document.getElementById("drpFb").style.display = "none";
+    document.getElementById("drpDb").style.display = "none";
+    document.getElementById("drpCb").style.display = "none";
+  } 
+  // else {
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpGb").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  //   document.getElementById("drpDb").style.display = "flex";
+  //   document.getElementById("drpCb").style.display = "flex";
+  // }
+
+  if(game.room.id.targetScale === "harmonic_minor"){
+    document.getElementById("drpB#").style.display = "none";
+    document.getElementById("drpDb").style.display = "none";
+    document.getElementById("drpE#").style.display = "none";
+    document.getElementById("drpG#").style.display = "none";
+    document.getElementById("drpFb").style.display = "none";
+    document.getElementById("drpCb").style.display = "none";
+  } 
+  // else {
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpDb").style.display = "flex";
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpG#").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  //   document.getElementById("drpCb").style.display = "flex";
+  // }
+
+  if(game.room.id.targetScale === "chromatic" || game.room.id.targetScale === "octatonic"){
+    document.getElementById("drpA#").style.display = "none";
+    document.getElementById("drpB#").style.display = "none";
+    document.getElementById("drpD#").style.display = "none";
+    document.getElementById("drpE#").style.display = "none";
+    document.getElementById("drpG#").style.display = "none";
+    document.getElementById("drpFb").style.display = "none";
+  } 
+  // else {
+  //   document.getElementById("drpA#").style.display = "flex";
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpD#").style.display = "flex";
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpG#").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  // }
+
+
+  // else {
+  //   document.getElementById("drpA#").style.display = "flex";
+  //   document.getElementById("drpB#").style.display = "flex";
+  //   document.getElementById("drpD#").style.display = "flex";
+  //   document.getElementById("drpE#").style.display = "flex";
+  //   document.getElementById("drpG#").style.display = "flex";
+  //   document.getElementById("drpFb").style.display = "flex";
+  // }
 })
 
 setRunningBtn.addEventListener("click", async function(){
@@ -1491,6 +1637,9 @@ game.room.id.triggerExpectedAudio = () => {
     "targetScale": game.room.id.targetScale,
     "scalePosition": game.room.id.scalePosition    
   }
+  console.log("!!<!<!<! ", game.room.id.recommendationsScale.ascending);
+  setFutureNotes(game.room.id.recommendationsScale.ascending);
+  game.room.id.updateFutureNotesDom();
   console.log("what are audio selections? ", JSON.stringify(audioSelections))
   if(JSON.stringify(audioSelections) !== [] && JSON.stringify(audioSelections) !== undefined){
     try{

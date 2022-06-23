@@ -48,6 +48,6 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
         noteDataToPy(noteData);
     // }
 
-
+    game.room.id.scalePosition = game.room.id.scalePosition + 1;
     
 }

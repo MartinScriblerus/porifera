@@ -37,8 +37,8 @@ game.room.id.measureBegin = game.room.id.measureBegin || null;
 game.room.id.intervalTickBoxes = game.room.id.intervalTickBoxes || [];
 game.room.id.timeGroup = game.room.id.timeGroup || 0;
 
-game.room.id.timeTickMeasureStart = game.room.id.timeTickMeasureStart || null;
-game.room.id.timeTickNext =  game.room.id.timeTickMeasureStart * (4 * (game.room.id.bpmInverted/120)) || game.room.id.expectedDelta/4;
+// game.room.id.timeTickMeasureStart = game.room.id.timeTickMeasureStart || null;
+// game.room.id.timeTickNext =  game.room.id.timeTickMeasureStart * (4 * (game.room.id.bpmInverted/120)) || game.room.id.expectedDelta/4;
 
 game.room.id.timeTick2 = game.room.id.timeTick2 || false;
 game.room.id.timeTick3 = game.room.id.timeTick3 || false;
@@ -53,10 +53,12 @@ game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
 game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 
 game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
-game.room.id.recommendationsScale.basic_keys_ascending = game.room.id.recommendationsScale.basic_keys_ascending || {};
-game.room.id.recommendationsScale.basic_keys_ascending.basic_keys = game.room.id.recommendationsScale.basic_keys_ascending.basic_keys || []; 
+// game.room.id.recommendationsScale.basic_keys_ascending = game.room.id.recommendationsScale.basic_keys_ascending || {};
+// game.room.id.recommendationsScale.basic_keys_ascending.basic_keys = game.room.id.recommendationsScale.basic_keys_ascending.basic_keys || []; 
 game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];
 game.room.id.recommendationsScale.descending = game.room.id.recommendationsScale.descending || []; 
+// game.room.id.recommendationsScale.ascending = game.room.id.recommendationsScale.ascending || [];
+// game.room.id.recommendationsScale.descending = game.room.id.recommendationsScale.descending || []; 
 // game.user.id.audioDevice = game.user.id.audioDevice || '';
 game.audioInputMode = game.audioInputMode || "midi";
 game.user.id.audioDevice = game.user.id.audioDevice || {};

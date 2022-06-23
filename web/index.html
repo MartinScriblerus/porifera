@@ -89,7 +89,7 @@
                 <!-- <option value="diatonic" class="set-scale-option"> Diatonic </option>  -->
                 <option value="surprise_me" class="set-scale-option"> Surprise Me! </option>
                 <option value="major" class="set-scale-option"> Major </option>
-                <option value="harmonic_minor" class="set-scale-option"> Harmonic Major </option> 
+                <option value="harmonic_major" class="set-scale-option"> Harmonic Major </option> 
                 <option value="natural_minor" class="set-scale-option"> Natural Minor </option>  
                 <option value="harmonic_minor" class="set-scale-option"> Harmonic Minor </option> 
                 <option value="melodic_minor" class="set-scale-option"> Melodic Minor </option>
@@ -112,18 +112,27 @@
             <div class="btn-group dropright">
               <select id = "targetKey" value="C" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
                 <option> ---Target Key--- </option> 
-                <option value="C" class="set-key-option"> C </option> 
-                <option value="C#" class="set-key-option"> C# </option> 
-                <option value="D" class="set-key-option"> D </option> 
-                <option value="D#" class="set-key-option"> D# </option> 
-                <option value="E" class="set-key-option"> E </option> 
-                <option value="F" class="set-key-option"> F </option> 
-                <option value="F#" class="set-key-option"> F# </option> 
-                <option value="G" class="set-key-option"> G </option> 
-                <option value="G#" class="set-key-option"> G# </option> 
-                <option value="A" class="set-key-option"> A </option> 
-                <option value="A#" class="set-key-option"> A# </option>
-                <option value="B" class="set-key-option"> B </option>   
+                <option value="C" id="drpC" class="set-key-option"> C </option> 
+                <option value="C#" id="drpC#" class="set-key-option"> C# </option> 
+                <option value="Cb" id="drpCb" class="set-key-option"> Cb </option> 
+                <option value="D" id="drpD" class="set-key-option"> D </option> 
+                <option value="D#" id="drpD#" class="set-key-option"> D# </option> 
+                <option value="Db" id="drpDb" class="set-key-option"> Db </option> 
+                <option value="E" id="drpE" class="set-key-option"> E </option> 
+                <option value="E#" id="drpE#" class="set-key-option"> E# </option> 
+                <option value="Eb" id="drpEb" class="set-key-option"> Eb </option> 
+                <option value="F" id="drpF" class="set-key-option"> F </option> 
+                <option value="F#" id="drpF#" class="set-key-option"> F# </option> 
+                <option value="Fb" id="drpFb" class="set-key-option"> Fb </option> 
+                <option value="G" id="drpG" class="set-key-option"> G </option> 
+                <option value="G#" id="drpG#" class="set-key-option"> G# </option> 
+                <option value="Gb" id="drpGb" class="set-key-option"> Gb </option> 
+                <option value="A" id="drpA" class="set-key-option"> A </option> 
+                <option value="A#" id="drpA#" class="set-key-option"> A# </option>
+                <option value="Ab" id="drpAb#" class="set-key-option"> Ab </option> 
+                <option value="B" id="drpB" class="set-key-option"> B </option> 
+                <option value="B#" id="drpB#" class="set-key-option"> B# </option>  
+                <option value="Bb" id="drpBb" class="set-key-option"> Bb </option>   
               </select>  
               <label class="form-check-label" for="targetKey">Select Key</label>
             </div>
@@ -526,70 +535,80 @@ console.log("samp len", game.user.samplesArr.length)
             if(JSON.parse(event.data).message && !JSON.parse(event.data).message.array){
               // console.log("what went wrong? ", JSON.parse(event.data).message);
               // return;
+              console.log("WTF!!!!!!!!!!!!!!!!!!!!!!!! ", JSON.parse(event.data).message);
               recArr = JSON.parse(event.data).message;
               console.log("NOTES TO CREATE: ", recArr);
-              if(recArr){
+
+              if(typeof recArr  && game.room.id.recommendationsScale.ascending){
+                //game.room.id.recommendationsScale.ascending = recArr.ascending;
                 console.log("REC REC REC ARR ", recArr);
               }
-              game.room.id.recommendationsScale.basic_keys_ascending = recArr;
-              // game.room.id.recommendationsScale.basic_keys_ascending = recArr;
-              
             } 
             if(JSON.parse(event.data).message) {
               try{
                 console.log("hoit recommending notes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", JSON.parse(event.data).message);
-                recArr = JSON.parse(event.data).message.array.split('\n');
-                console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES ", recArr);
-                try{
-                  // let propertyAsc = recArr[0].split(' ');
-                  // let propertyDesc = recArr[1].split(' ');
-                  // let basicKeysAsc = recArr[2].split(' ');
-                  // let basicKeysDesc = recArr[3].split(' ');
-                  // console.log("Recommended Scale ascending ===== ", propertyAsc);
-                  // console.log("Recommended Scale descending ===== ", propertyDesc);
-                  // console.log("Basic keys ascending ===== ", basicKeysAsc);
-                  // console.log("Basic keys descending ===== ", basicKeysDesc);
-                  // console.log("WTF IS RECARR?? ", recArr);
+                // try{
+                //   // if(JSON.parse(event.data).message.array.array.notesForAnalysis){
+                //   //   // THIS IS NOTES FOR ANALYSISS
+                //   //   console.log("hitting notes for analysis");
+                //   // }
+                // } catch(e){
+                //   console.log(e);
+                // }
+////// EEEEEERRRROOORRRSS BEEEEEEGGGGGINNNNNNN HHHHHHHHEEEEEEEEERRRRRRRREEEEEEE
+            
+                  if(recArr.expected_scale === undefined || recArr.expected_scale === []){
+                    return
+                  }
+                  console.log("GOddammitr what is recarr : ", recArr);
                   game.room.id.recommendationsScale = {
                     timestamp: window.__emscripten_date_now(),
-                    "test_tk": "test_tk"
-                      // "ascending": propertyAsc.slice(2),
-                      // "descending": propertyDesc.slice(1),
-                      // "basic_keys_ascending": basicKeysAsc.slice(2),
-                      // "basic_keys_descending": basicKeysDesc.slice(1)
+                    "ascending": recArr.expected_scale,
+                    "basicKeys": recArr.basic_keys
                   }
                   console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
-                } catch(err){
-                console.log("the error is ", err.message);
-                }
+           
+                  
+                  console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES ", recArr);
+                  // if(recArr.ascending !== undefined && recArr.ascending !== [] && recArr.basicNotes !== undefined && recArr.basicNotes !== []){
+                  //   game.room.id.recommendationsScale.ascending = recArr.ascending;
+                  // }
+                  
+
+          
+                
+ 
+
+                // } 
+      
               } catch (e) {
                 console.log(e);
                 // console.log("THIS MESSAGE CONTAINS NOTES FOR ANALYSIS ", JSON.parse(event.data).message.array);
               }
             }
-            
-            if(recArr.length < 3){
-              try{
-                let propertyAsc = recArr[0].split(' ');
-                let propertyDesc = recArr[1].split(' ');
-                let basicKeysAsc = recArr[2].split(' ');
-                let basicKeysDesc = recArr[3].split(' ');
-                console.log("Recommended Scale ascending ===== ", propertyAsc);
-                console.log("Recommended Scale descending ===== ", propertyDesc);
-                console.log("Basic keys ascending ===== ", basicKeysAsc);
-                console.log("Basic keys descending ===== ", basicKeysDesc);
-                game.room.id.recommendationsScale = {
-                  timestamp: window.__emscripten_date_now(),
-                  "ascending": propertyAsc.slice(2),
-                  "descending": propertyDesc.slice(1),
-                  // "basic_keys_ascending": basicKeysAsc.slice(2),
-                  // "basic_keys_descending": basicKeysDesc.slice(1)
-                }
-                console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
-              } catch(err){
-                console.log("the error is ", err.message);
-              }
-            }
+            console.log("WHAT IS REC ARRRRRRR?>?????? SHOULD WE BRING BACK STUFF BELOW??? ", recArr);
+            // if(recArr.length < 3){
+            //   try{
+            //     let propertyAsc = recArr[0].split(' ');
+            //     let propertyDesc = recArr[1].split(' ');
+            //     let basicKeysAsc = recArr[2].split(' ');
+            //     let basicKeysDesc = recArr[3].split(' ');
+            //     console.log("Recommended Scale ascending ===== ", propertyAsc);
+            //     console.log("Recommended Scale descending ===== ", propertyDesc);
+            //     console.log("Basic keys ascending ===== ", basicKeysAsc);
+            //     console.log("Basic keys descending ===== ", basicKeysDesc);
+            //     game.room.id.recommendationsScale = {
+            //       timestamp: window.__emscripten_date_now(),
+            //       "ascending": propertyAsc.slice(2),
+            //       "descending": propertyDesc.slice(1),
+            //       // "basic_keys_ascending": basicKeysAsc.slice(2),
+            //       // "basic_keys_descending": basicKeysDesc.slice(1)
+            //     }
+            //     console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
+            //   } catch(err){
+            //     console.log("the error is ", err.message);
+            //   }
+            // }
             
           }
 
