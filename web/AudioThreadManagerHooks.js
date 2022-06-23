@@ -33,9 +33,17 @@ game.room.id.setNextNotes = () => {
   // console.log("rec scale object => ",  game.room.id.recommendationsScale);
   // console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
   setScalePosition(game.room.id.scalePosition);
+  
+  game.room.id.updateFutureNotesDom(); 
   game.room.id.updateScalePositionDom();
   let targetScale = game.room.id.recommendationsScale.ascending;
+
   if(game.room.id.scalePosition && targetScale && targetScale !== []){
+    // if(game.room.id.recommendationsScale && game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.ascending !== []){
+    //   setFutureNote(game.room.id.recommendationsScale.ascending);
+    //   game.room.id.updateFutureNotesDom();
+    // }
+    
     setTargetNote(targetScale[game.room.id.scalePosition]);
     // if(targetScale !== []){
     //   setFutureNotes(targetScale);
@@ -62,7 +70,7 @@ game.room.id.setNextNotes = () => {
     game.room.id.updateScalePositionDom();
     game.room.id.updateTargetNoteDom();
     // game.room.id.updateScaleDom();
-    // game.room.id.updateFutureNotesDom();  
+    game.room.id.updateFutureNotesDom();  
   }
 
   game.room.id.updateFutureNotesDom();
@@ -70,7 +78,10 @@ game.room.id.setNextNotes = () => {
 
 game.room.id.updateTargetNoteDom = () => {
   console.log("what is scale position? ", game.room.id.scalePosition);
+  setFutureNotes(game.room.id.recommendationsScale.ascending);
+  game.createBoxRow(true, game.room.id.recommendationsScale.ascending)
   let targetNoteDOM = document.getElementById("targetNoteDisplay");
+  game.room.id.updateFutureNotesDom();
   if(targetNoteDOM){
     let oldNums = targetNoteDOM.childNodes;
 
@@ -1646,6 +1657,7 @@ game.room.id.triggerExpectedAudio = () => {
     "scalePosition": game.room.id.scalePosition    
   }
   console.log("!!<!<!<! ", game.room.id.recommendationsScale.ascending);
+  
   setFutureNotes(game.room.id.recommendationsScale.ascending);
   game.room.id.updateFutureNotesDom();
   console.log("what are audio selections? ", JSON.stringify(audioSelections))
