@@ -378,10 +378,16 @@ game.getNoteMaterial = (note) => {
 };
 
 game.createBoxRow = (isMeasured, keysToCreate) => {
-
+try{
+    
     if(!keysToCreate || keysToCreate === []){
        isMeasured = false
+    } else {
+        console.log("keys to create: ", keysToCreate);
     }
+
+    let boxInstances = []
+
     game.room.id.timeGroup = game.room.id.timeGroup + 1;
 
     // console.log("this is the keys up ==> ", game.room.id.recommendationsScale.basic_keys_ascending);
@@ -389,45 +395,36 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
         // if octaveRange = 0 we need 11 boxes
     // let convertedRange = 128 * (game.room.id.targetOctaveRange / 10)
     let convertedRange;
-    if(!isMeasured){
+    if(!keysToCreate){
         convertedRange = 2;
     } else {
-       // convertedRange = keysToCreate;
-       convertedRange = 12; 
+       convertedRange = keysToCreate.length;
     }
-    // let convertedRange = 2;
-    let boxInstances = [];
     for(let x = 1; x< convertedRange; x++){
-        console.log("KEYS TO CREATE: ", keysToCreate);
-    // for(let x = 1; x< keysToCreate.length; x++){
+        console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1){
             //for(let bka = 0; bka < game.room.id.recommendationsScale.basic_keys_ascending.basic_keys.length; bka++){
                 console.log("GOT FUCKING DAMMIT WHAT IS BOX: ", box);
-                console.log("GOT FUCKING DAMMIT WHAT IS BOX INSTANCES X: ", game.room.id.boxInstances);
-                
+
                 boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
                 console.log("EEEEE HERE!!! " );
                 boxInstances[x].speed = 0.1
 
-                game.room.id.boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
+                boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2) - (x * ((1/12) * (12/game.room.id.targetOctaveRange)))); 
                 //boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2)); 
               
                 boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[x-1]);
                 boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[x-1]);   
-                game.room.id.boxInstances.push(boxInstances[x]);
 
-
-            console.log("BOX INSTYANCES: ", game.room.id.boxInstances);
-            // return game.room.id.boxInstances;
         }
         
         // if(!x%12 || (x%12>12 || x === 0)){
         //     return;
         // }
-
+        console.log("DOES BOX INSTANCE X EXIST HERE?: ", boxInstance[x]);
         let checkExisting = game.scene.getMeshByID("noteBox_" + x);
         let checkExistingTest = game.scene.getMeshByID("noteBox_" + x + "_" + game.room.id.timeGroup);
         let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
@@ -436,23 +433,24 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
         } 
 
         if(isMeasured === false){
-            game.room.id.boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
-            game.room.id.boxInstances[x].speed = 0.1
-            game.room.id.boxInstances[x].position.z = 0;
-            game.room.id.boxInstances[x].scaling.z = 10;
-            game.room.id.boxInstances[x].scaling.x = 1/16;
-            game.room.id.boxInstances[x].timeGroup = game.room.id.timeGroup,
-            game.room.id.boxInstances[x].position.z = 0; 
-            game.room.id.boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
+            boxInstances[x] = box.clone("activeTicker_" + x + "_");
+            boxInstances[x].speed = 0.1
+            boxInstances[x].position.z = 0;
+            boxInstances[x].scaling.z = 10;
+            boxInstances[x].scaling.x = 1/16;
+            boxInstances[x].timeGroup = game.room.id.timeGroup,
+            boxInstances[x].position.z = 0; 
+            boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
         } 
      
-        if(game.room.id.timeGroup > 4){
+        if(game.room.id.timeGroup > (game.room.id.countNumerator * 4)){
             game.room.id.timeGroup = 0;
         } 
 
-        if(game.room.id.boxInstances[x]){
-            game.room.id.boxInstances[x].setParent(game.room.id.boxInstances[0])
-            game.room.id.boxInstances[x].parent = game.room.id.boxInstances[0];
+        if(boxInstances[x]){
+            console.log("WHAT IS PARENT: ", boxInstances[0]);
+            boxInstances[x].setParent(boxInstances[0]);
+            boxInstances[x].parent = boxInstances[0];
         }
 
         const frameRate = game.animation.fps;
@@ -495,23 +493,24 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             value: -(game.scene.meshes[1]._width/2),
         });
 
-        console.log("ARE WE GETTING game.room.id.boxInstances??? ", game.room.id.boxInstances[x]);
+        console.log("ARE WE GETTING boxInstances??? ", boxInstances[x]);
         xSlide.setKeys(keyFrames);
-        if(game.room.id.boxInstances[x]){
-            console.log("made it to here... her eare game.room.id.boxInstances => ", game.room.id.boxInstances[x]);
-            game.room.id.boxInstances[x].animations.push(xSlide);
+        if(boxInstances[x]){
+            console.log("made it to here... her eare boxInstances => ", boxInstances[x]);
+            boxInstances[x].animations.push(xSlide);
             if(game.room.id.recommendationsScale.ascending && game.room.id.scalePosition){
-                game.room.id.boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.ascending[x];
+                boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.ascending[x];
                 console.log("Gave the box a name...........");
             }
-            scene.beginAnimation(game.room.id.boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
+            scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
         }
 
-        
+        return boxInstances[1];
     }
-    //game.room.id.boxInstances = game.room.id.boxInstances;
+}
+    catch(e){console.log("aaaaaaaaaaaaaaa ", e)}
+    // 
     
-    return game.room.id.boxInstances;
 };
 
 game.room.id.createText = (inputText) => {
@@ -546,9 +545,6 @@ game.room.id.cleanMeshes = () => {
     let meshHolder = [];
     while(game.scene.meshes.length > 5){
         for(let u= 5; u < meshesToDestroy.length; u++){
-            // if(meshesToDestroy[u].material){
-            //     meshesToDestroy[u].material.dispose();
-            // }
             if(meshesToDestroy[u]){
                 if(meshesToDestroy[u] && meshesToDestroy[u].name && meshesToDestroy[u].name.indexOf('activeNote_') === -1){
                    
@@ -557,9 +553,11 @@ game.room.id.cleanMeshes = () => {
                     
                 } else {
                     meshHolder.push(meshesToDestroy[u])
-           
-                            meshHolder.forEach((mesh)=>{mesh.dispose()});
-                            console.log("meshholder length: ", meshHolder.length)
+                    if(meshHolder.length > 300){
+                        meshHolder.forEach((mesh)=>{mesh.dispose()});
+                    }
+                    
+                    console.log("meshholder length: ", meshHolder.length)
                 
                 
             
@@ -638,27 +636,9 @@ game.mainTick = () => {
 
     game.room.id.delta = window.__emscripten_date_now() - game.room.id.previousTick;
     
-    if((game.room.id.delta) > ((game.room.id.boxAnimationAcrossScreen) /game.countNominator) ){
-        if(game.countNominator > game.room.id.scalePosition){
-            // game.currentCount = game.currentCount; 
-            if(game.user.id.isPlaying){
-                // if(game.user.id.isPlaying && game.room.id.recommendationsScale){
-                //     if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
-
-                console.log("HUUUUUUUUUUUUUUGE=>=>=>: ", game.room.id.scalePosition);
-                console.log("recommendations object!!! ", game.room.id.recommendationsScale);
-                        if(game.room.id.recommendationsScale.ascending !== [] && 
-                            game.room.id.recommendationsScale.ascending === undefined && 
-                            game.room.id.recommendationsScale.ascending !==Array(0) ||
-                            game.room.id.recommendationsScale === {}){
-                                console.log("AHHHHHHH!!!!!!!! ", console.log("recommendations object!!! ", game.room.id.recommendationsScale));
-                                game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
-                                game.room.id.setNextNotes();
-                        }
-                        
-                //     }
-                // }
-            }    
+    if((game.room.id.delta) > ((game.room.id.boxAnimationAcrossScreen) /game.countNumerator) ){
+        if(game.countNumerator > game.room.id.scalePosition){
+       
         } else {
             // HANDLE CHANGE SCALE POSITION HERE!!!
         }   
@@ -670,23 +650,32 @@ game.mainTick = () => {
         bpmDisplay.innerText = game.room.id.bpm;
         game.room.id.delta = game.room.id.delta * (120/game.room.id.bpmInverted);
     }
-
-    game.room.id.delta * (game.room.id.bpmInverted/120)
-
-
     
     if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
         console.log("CLEAN THOSE MESHES!");
-
+        if(game.room.id.scalePosition){
+            if(game.room.id.scalePosition <= game.room.id.recommendationsScale.ascending.length - 1){
+                game.room.id.updateScalePositionDom();
+            } else {
+                game.room.id.scalePosition = 0;
+                game.room.id.updateScalePositionDom();
+            }
+        } 
+        if(game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.ascending){
+            game.room.id.targetNote = game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]
+            game.room.id.updateTargetNoteDom();
+        }
         game.room.id.previousTick = window.__emscripten_date_now();
 
         // READS MAIN TICK DELTA!!!
         // console.log("Tick! ", game.room.id.delta);
      
-        if(game.user.id.isPlaying ){
-            if(game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.basicKeys && game.room.id.recommendationsScale.basicKeys.length){
+        if((game.user.id.isPlaying) && (game.room.id.delta > ((game.room.id.boxAnimationAcrossScreen) /game.countNumerator) )){
+            if(game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.basicKeys && (game.room.id.recommendationsScale.basicKeys > game.room.id.scalePosition)){
                 //game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
-                game.room.id.cleanMeshes();
+                if(game.room.id.scalePosition%game.room,id.countNumerator ===0){
+                    game.room.id.cleanMeshes();
+                }
             } //game.room.id.cleanMeshes();
            
         }
@@ -696,13 +685,15 @@ game.mainTick = () => {
             game.createBoxRow(false, []);
        }
 
-       if(window.__emscripten_date_now() - game.room.id.timeTickMeasureStart > 0){
-        //game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
-        game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
-   }
+
 
         game.room.id.delta === 0;
         if(game.user.id.isPlaying){
+            if(game.room.id.delta === 0){
+                console.log("CREATING A ROW WITH THESE BASIC KEYS: ", game.room.id.recommendationsScale.basicKeys);
+                //game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
+                game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
+            }
             //console.log("updating py with note we just played");
             beginPyAnalysisNote(game.user, game.user.id.latestPitch.noteLetter, game.user.id.latestOctave.octave, game.user.id.latestMingusNumNote, game.user.id.latestKeyNotePiano, game.user.id.latestKeyNoteOrgan, game.user.id.latestMidiNoteNumber, game.room.id.bpmInverted);
         }

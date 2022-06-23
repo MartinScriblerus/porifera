@@ -47,6 +47,7 @@ game.room.id.analysisTimeBucket = game.room.id.analysisTimeBucket || 0;
 game.room.id.targetOctaveRange = game.room.id.targetOctaveRange || 4;
 game.room.id.targetOctave = game.room.id.targetOctave || 4
 game.room.id.targetKey = game.room.id.targetKey|| "C";
+game.room.id.targetNote = game.room.id.targetNote|| game.room.id.targetKey;
 game.room.id.targetScale = game.room.id.targetScale|| "Major";
 game.room.id.scalePosition = game.room.id.scalePosition || 0;
 game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
@@ -71,8 +72,7 @@ game.user.id.timeRecordingStart = window.__emscripten_date_now();
 game.user.id.toPy = game.user.id.toPy || undefined;
 
 
-game.room.id.boxInstances = game.room.id.boxInstances || [];
-game.countNominator = game.countNominator || 4;
+game.countNumerator = game.countNumerator || 4;
 game.countDenominator = game.countDenominator || 4;
 game.currentCount = game.currentCount || 0;
 

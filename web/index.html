@@ -547,6 +547,9 @@ console.log("samp len", game.user.samplesArr.length)
             if(JSON.parse(event.data).message) {
               try{
                 console.log("hoit recommending notes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", JSON.parse(event.data).message);
+                if(JSON.parse(event.data).message.array){
+                  return;                  
+                }
                 // try{
                 //   // if(JSON.parse(event.data).message.array.array.notesForAnalysis){
                 //   //   // THIS IS NOTES FOR ANALYSISS

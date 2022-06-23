@@ -79,10 +79,12 @@ game.room.id.updateTargetNoteDom = () => {
       delete oldNums[i];
     }
     if(targetNote()){
-      targetNoteDOM.append(targetNote());
+      // targetNoteDOM.append(targetNote());
+      targetNoteDOM.append(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
     } else {
       targetNoteDOM.style.display = "flex";
-      targetNoteDOM.append(targetNote());
+      // targetNoteDOM.append(targetNote());
+      targetNoteDOM.append(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
 
     }
   }
@@ -182,7 +184,8 @@ game.room.id.updateFutureNotesDom = () => {
     } else {
       futureNotesDOM.style.display = "flex";
       // futureNotesDOM.append(futureNotes());
-      futureNotesDOM.append(game.room.id.recommendationsScale.ascending)
+      futureNotesDOM.append(game.room.id.recommendationsScale.ascending);
+      //tk
     }
   }
 }
@@ -1486,6 +1489,8 @@ targetScaleDrpdwn.addEventListener("change", function handleChange(event) {
   
   let refreshDrpdwn = document.getElementsByClassName("set-key-option");
   console.log("JFK ", refreshDrpdwn);
+  
+  //reset list
   document.getElementById("drpA#").style.display = "flex";
   document.getElementById("drpB#").style.display = "flex";
   document.getElementById("drpD#").style.display = "flex";
@@ -1495,10 +1500,6 @@ targetScaleDrpdwn.addEventListener("change", function handleChange(event) {
   document.getElementById("drpGb").style.display = "flex";
   document.getElementById("drpDb").style.display = "flex";
   document.getElementById("drpCb").style.display = "flex";
-
-
-
-
 
   if(game.room.id.targetScale === "major"){
     document.getElementById("drpA#").style.display = "none";
@@ -1545,6 +1546,11 @@ targetScaleDrpdwn.addEventListener("change", function handleChange(event) {
     document.getElementById("drpFb").style.display = "none";
     document.getElementById("drpDb").style.display = "none";
     document.getElementById("drpCb").style.display = "none";
+
+    //these should work...
+    document.getElementById("drpD#").style.display = "none";
+    document.getElementById("drpCb").style.display = "none";
+    document.getElementById("drpA#").style.display = "none";
   } 
   // else {
   //   document.getElementById("drpE#").style.display = "flex";
@@ -1558,10 +1564,12 @@ targetScaleDrpdwn.addEventListener("change", function handleChange(event) {
   if(game.room.id.targetScale === "harmonic_minor"){
     document.getElementById("drpB#").style.display = "none";
     document.getElementById("drpDb").style.display = "none";
+    document.getElementById("drpD#").style.display = "none";
     document.getElementById("drpE#").style.display = "none";
     document.getElementById("drpG#").style.display = "none";
     document.getElementById("drpFb").style.display = "none";
     document.getElementById("drpCb").style.display = "none";
+    document.getElementById("drpA#").style.display = "none";
   } 
   // else {
   //   document.getElementById("drpB#").style.display = "flex";
