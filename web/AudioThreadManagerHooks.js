@@ -1388,7 +1388,28 @@ export function pitchConversion(latestPitch){
       });
       // THIS IS WHERE WE CAN CONVERT SIZING & Y HEIGHT FOR PLAYER ON SCREEN (midi note # here will be # of moves up from lowest square)
       // function below positions the player... tktktktktktk
-      game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      //game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      
+      let height = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      const frameRate = game.animation.fps;
+      var animationBox = new BABYLON.Animation("myAnimation", "position.z", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+      game.previousTime = game.previousTime || game.room.id.startGameTick;
+      const keyFrames = [];
+      keyFrames.push({
+        frame: 0,
+        value: game.user.id.player.position.z,
+      });
+      keyFrames.push({
+        frame: ((game.room.id.bpmInverted/30) * frameRate)/8,
+        value: height
+      });
+      animationBox.setKeys(keyFrames);
+      if(game.user.id.player && (keyFrames[keyFrames.length - 1].frame < (game.room.id.bpmInverted/30) * frameRate)/8){
+        game.user.id.player.animations.push(animationBox);
+        game.scene.beginAnimation(game.user.id.player, 0, (game.room.id.bpmInverted/30) * frameRate, true);
+      }
+
+
     }
   }
 }

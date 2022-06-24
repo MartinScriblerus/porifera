@@ -26,6 +26,8 @@ if(engine){
 game.scene = game.scene || undefined;
 game.canvas = game.canvas || undefined
 var scene = new BABYLON.Scene(engine);
+scene.collisionsEnabled = true;
+scene.actionManager = new BABYLON.ActionManager(scene);
 engine.getInputElement = () => canvas
 
 game.scene = scene;
@@ -101,6 +103,7 @@ light.intensity = 0.45;
 
 // Our built-in 'player' shape.
 var player = BABYLON.MeshBuilder.CreateSphere("player", {diameter: 2, segments: 32}, scene);
+
 player.position.x = 0;
 player.position.y = 1;
 player.position.z = 0; 
@@ -171,10 +174,9 @@ scene.registerBeforeRender(function () {
     if (player.position.x < -60.0) { player.position.x = -60.0; }
     if (player.position.z > 60.0) { player.position.z = 60.0; }
     if (player.position.z < -60.0) { player.position.z = -60.0; }
-    
+    game.user.id.player = player;
     //game.scene.cameratarget = BABYLON.Vector3.Lerp(game.scene.cameratarget, player.position.add(player.speed.scale(15.0)), 0.05);
     game.scene.cameraradius = game.scene.cameraradius * 0.95 + (25.0 + player.speed.length() * 25.0) * 0.05;
-
 });
 
 let box;
@@ -383,60 +385,80 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
     if(!keysToCreate || keysToCreate === []){
        isMeasured = false
     } else {
-        console.log("keys to create: ", keysToCreate);
+        // console.log("keys to create: ", keysToCreate);
     }
 
     let boxInstances = []
 
     game.room.id.timeGroup = game.room.id.timeGroup + 1;
 
-    // console.log("this is the keys up ==> ", game.room.id.recommendationsScale.basic_keys_ascending);
-    // this will replace 128 as # => 
-        // if octaveRange = 0 we need 11 boxes
-    // let convertedRange = 128 * (game.room.id.targetOctaveRange / 10)
     let convertedRange;
     if(!keysToCreate){
         convertedRange = 2;
     } else {
-       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange;
+       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange - 1;
     }
-    // convertedRange = 13;
+
     for(let x = 1; x< convertedRange; x++){
-        console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
+        // console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
         boxInstances[x] = {};
-        
+        let octavesDiff;
+        if(x>12){
+            octavesDiff = Math.floor(x/12)
+        }
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1 &&
             !game.scene.getMeshByID(`test${x}`)){
-            //for(let bka = 0; bka < game.room.id.recommendationsScale.basic_keys_ascending.basic_keys.length; bka++){
-                console.log("GOT FUCKING DAMMIT WHAT IS BOX: ", box);
-
+        
                 boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
-                console.log("EEEEE HERE!!! " );
                 boxInstances[x].speed = 0.1
 
                 boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
-                //boxInstances[x].position.z = ((game.scene.meshes[1]._height / 2)); 
                 // ====> sets height at double to give effect of tick
                 boxInstances[x].scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
                 boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);
                 boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);   
                 boxInstances[x].id = `test${x}`;
-                // return boxInstances[x]
-        }
+                boxInstances[x].checkCollisions = true;
+                boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
+                boxInstances[x].metadata = {
+                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + octavesDiff),
+                }
+                // MAKE THIS MUCH MORE DRAMATIC / PRECISE IN REFRESH....!!!!
+                // boxInstances[x].actionManager.registerAction(
+                //     new BABYLON.SetValueAction(
+                //         {
+                //             trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                //             parameter: { 
+                //                 mesh: game.scene.meshes[0], 
+                //                 usePreciseIntersection: true
+                //             }
+                //         }, 
+                //         boxInstances[x],
+                //         "scaling",
+                //         new BABYLON.Vector3(1.2, 1.2, 1.2),
+                //         new ExecuteCodeAction(         
+                //             game.scene.meshes[0],
+                //             function (){
+                //                 console.log("HIT ", boxInstance[x]);
+                //             })
+                //     )
+                // ).then(
+                //     new BABYLON.SetValueAction(
+                //         BABYLON.ActionManager.OnPickTrigger,
+                //         boxInstances[x],
+                //         "scaling",
+                //         new BABYLON.Vector3(1/1.2, 1/1/1.2, 1/1.2                                                               )
+                //     )
+                // ).then(
+      
+                //         console.log('HIT THISS ONE!!! ', boxInstances[x].metadata.pitch)
+                // )
+            }
         
-        // if(!x%12 || (x%12>12 || x === 0)){
-        //     return;
-        // }
-        // console.log("DOES BOX INSTANCE X EXIST HERE?: ", boxInstances[x]);
-        // let checkExisting = game.scene.getMeshByID("noteBox_" + x);
-        // let checkExistingTest = game.scene.getMeshByID("noteBox_" + x + "_" + game.room.id.timeGroup);
-        // let checkExistingTick = game.scene.getMeshByID(`tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`);
-        // if(checkExisting || checkExistingTick || checkExistingTest){
-        //     return;
-        // } 
+
 try{
         if(isMeasured === false){
             boxInstances[x] = box.clone("activeTicker_" + x + "_");
@@ -507,26 +529,14 @@ try{
             value: -(game.scene.meshes[1]._width/2),
         });
 
-        console.log("ARE WE GETTING boxInstances??? ", boxInstances[x]);
         xSlide.setKeys(keyFrames);
         if(boxInstances[x]){
-            console.log("made it to here... her eare boxInstances => ", boxInstances[x]);
             if(boxInstances[x] && boxInstances[x].animations){
                 boxInstances[x].animations.push(xSlide);
-                // if(game.room.id.recommendationsScale.ascending && game.room.id.scalePosition){
-                //     boxInstances[x].name = 'activeNote_' + game.room.id.recommendationsScale.ascending[x];
-                //     console.log("Gave the box a name...........");
-                // }
                 scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
             }
         }
-
-        // return boxInstances[x];
-    }
-// }
-    // catch(e){console.log("aaaaaaaaaaaaaaa ", e)}
-    // 
-    
+    }    
 };
 
 game.room.id.createText = (inputText) => {
@@ -719,12 +729,15 @@ game.mainTick = () => {
         }
         
     }
+
+
+
     let currPitch = pitchChanged();
+    
     if(currPitch === "NaN"){
         player.position.z = player.position.z || 0;
     } else{
-        console.log("GROUND HEIGHT: ", ground.height);
-        console.log("PLAYER z ", player.position.z);
+        
         player.position.z = game.scene.camera.position.z = currPitch - ground.height;
         playerY_Observable.add(()=>{
             game.scene.camera.position.z = player.position.z;
@@ -740,7 +753,7 @@ game.mainTick = () => {
             game.scene.cameracameraAcceleration = 0.005;
         //     game.scene.cameramaxCameraSpeed = 10;
             // game.scene.cameralockedTarget = targetMesh;
-            game.scene.camerasetTarget(targetMesh.position);
+            game.scene.camera.setTarget(targetMesh.position);
             // game.scene.cameraposition.y = game.scene.meshes[0].position.z;
         }
         setFollowCamera();

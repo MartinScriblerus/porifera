@@ -14,6 +14,8 @@ game.room.id.delta = game.room.id.delta || 0;
 
 game.room.id.isPaused = game.room.id.isPaused || false;
 
+game.user.id.player = game.user.id.player || {};
+
 game.user.id.latestPitch = game.user.id.latestPitch || {};
 game.user.id.latestPitch.noteHz = game.user.id.latestPitch.noteHz || null;
 game.user.id.latestPitch.noteLetter = game.user.id.latestPitch.noteHz || null;
