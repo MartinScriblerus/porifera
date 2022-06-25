@@ -545,9 +545,6 @@ console.log("samp len", game.user.samplesArr.length)
             }  
             console.log("USE THIS TO MAKE SOME BIG SOCKETS ROUTING DECISIONS ", JSON.parse(event.data));
             if(JSON.parse(event.data).message && !JSON.parse(event.data).message.array){
-              // console.log("what went wrong? ", JSON.parse(event.data).message);
-              // return;
-              console.log("WTF!!!!!!!!!!!!!!!!!!!!!!!! ", JSON.parse(event.data).message);
               recArr = JSON.parse(event.data).message;
               console.log("NOTES TO CREATE: ", recArr);
 
@@ -562,68 +559,20 @@ console.log("samp len", game.user.samplesArr.length)
                 if(JSON.parse(event.data).message.array){
                   return;                  
                 }
-                // try{
-                //   // if(JSON.parse(event.data).message.array.array.notesForAnalysis){
-                //   //   // THIS IS NOTES FOR ANALYSISS
-                //   //   console.log("hitting notes for analysis");
-                //   // }
-                // } catch(e){
-                //   console.log(e);
-                // }
-////// EEEEEERRRROOORRRSS BEEEEEEGGGGGINNNNNNN HHHHHHHHEEEEEEEEERRRRRRRREEEEEEE
-            
                   if(recArr.expected_scale === undefined || recArr.expected_scale === []){
                     return
                   }
-                  console.log("GOddammitr what is recarr : ", recArr);
                   game.room.id.recommendationsScale = {
                     timestamp: window.__emscripten_date_now(),
                     "ascending": recArr.expected_scale,
                     "basicKeys": recArr.basic_keys
                   }
                   console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
-           
-                  
-                  console.log("THIS MESSAGE CONTAINS RECOMMENDED NOTES ", recArr);
-                  // if(recArr.ascending !== undefined && recArr.ascending !== [] && recArr.basicNotes !== undefined && recArr.basicNotes !== []){
-                  //   game.room.id.recommendationsScale.ascending = recArr.ascending;
-                  // }
-                  
-
-          
-                
- 
-
-                // } 
-      
               } catch (e) {
                 console.log(e);
-                // console.log("THIS MESSAGE CONTAINS NOTES FOR ANALYSIS ", JSON.parse(event.data).message.array);
               }
             }
-            console.log("WHAT IS REC ARRRRRRR?>?????? SHOULD WE BRING BACK STUFF BELOW??? ", recArr);
-            // if(recArr.length < 3){
-            //   try{
-            //     let propertyAsc = recArr[0].split(' ');
-            //     let propertyDesc = recArr[1].split(' ');
-            //     let basicKeysAsc = recArr[2].split(' ');
-            //     let basicKeysDesc = recArr[3].split(' ');
-            //     console.log("Recommended Scale ascending ===== ", propertyAsc);
-            //     console.log("Recommended Scale descending ===== ", propertyDesc);
-            //     console.log("Basic keys ascending ===== ", basicKeysAsc);
-            //     console.log("Basic keys descending ===== ", basicKeysDesc);
-            //     game.room.id.recommendationsScale = {
-            //       timestamp: window.__emscripten_date_now(),
-            //       "ascending": propertyAsc.slice(2),
-            //       "descending": propertyDesc.slice(1),
-            //       // "basic_keys_ascending": basicKeysAsc.slice(2),
-            //       // "basic_keys_descending": basicKeysDesc.slice(1)
-            //     }
-            //     console.log("THIS IS A PROPER OBJECT!!! ", game.room.id.recommendationsScale);
-            //   } catch(err){
-            //     console.log("the error is ", err.message);
-            //   }
-            // }
+
             
           }
 

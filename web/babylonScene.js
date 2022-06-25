@@ -26,6 +26,7 @@ if(engine){
 game.scene = game.scene || undefined;
 game.canvas = game.canvas || undefined
 var scene = new BABYLON.Scene(engine);
+scene.useRightHandedSystem = true;
 scene.collisionsEnabled = true;
 scene.actionManager = new BABYLON.ActionManager(scene);
 engine.getInputElement = () => canvas
@@ -51,7 +52,7 @@ scene.getCameraByID("camera1").beta = 1.77290545417584;
 scene.activeCameras.push(game.scene.camera1);
 scene.activeCameras.push(game.scene.camera);
 
-game.scene.camera.viewport = new BABYLON.Viewport(0.6, 0.4, 0.6, 0.8);
+game.scene.camera.viewport = new BABYLON.Viewport(0, 0.4, 0.2, 0.8);
 game.scene.camera1.viewport = new BABYLON.Viewport(0, 0, 1.0, 1.0);
 
 
@@ -380,7 +381,7 @@ game.getNoteMaterial = (note) => {
 };
 
 game.createBoxRow = (isMeasured, keysToCreate) => {
-// try{
+// try{createBoxRow
     
     if(!keysToCreate || keysToCreate === []){
        isMeasured = false
@@ -396,7 +397,7 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
     if(!keysToCreate){
         convertedRange = 2;
     } else {
-       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange - 1;
+       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange - 2;
     }
 
     for(let x = 1; x< convertedRange; x++){
@@ -406,12 +407,15 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
         if(x>12){
             octavesDiff = Math.floor(x/12)
         }
+       
+
+        // }
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1 &&
             !game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)){
-        
+                game.room.id.initialNoteInScale = 
                 boxInstances[x] = box.clone(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`);
                 boxInstances[x].speed = 0.1
 
@@ -423,40 +427,73 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                 boxInstances[x].id = `activeNote_${x}_${game.room.id.lowestNoteOnScreen  + x - 1}`;
                 boxInstances[x].checkCollisions = true;
                 boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
+                boxInstances[x].rotation.z = Math.PI;
                 boxInstances[x].metadata = {
                     pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + octavesDiff),
                     noteValue: game.room.id.lowestNoteValue
                 }
-                // MAKE THIS MUCH MORE DRAMATIC / PRECISE IN REFRESH....!!!!
-                // boxInstances[x].actionManager.registerAction(
-                //     new BABYLON.SetValueAction(
-                //         {
-                //             trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
-                //             parameter: { 
-                //                 mesh: game.scene.meshes[0], 
-                //                 usePreciseIntersection: true
-                //             }
-                //         }, 
-                //         boxInstances[x],
-                //         "scaling",
-                //         new BABYLON.Vector3(1.2, 1.2, 1.2),
-                //         new ExecuteCodeAction(         
-                //             game.scene.meshes[0],
-                //             function (){
-                //                 console.log("HIT ", boxInstance[x]);
-                //             })
-                //     )
-                // ).then(
-                //     new BABYLON.SetValueAction(
-                //         BABYLON.ActionManager.OnPickTrigger,
-                //         boxInstances[x],
-                //         "scaling",
-                //         new BABYLON.Vector3(1/1.2, 1/1/1.2, 1/1.2                                                               )
-                //     )
-                // ).then(
-      
-                //         console.log('HIT THISS ONE!!! ', boxInstances[x].metadata.pitch)
-                // )
+                if(game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`).length > 1){
+                    game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)[1].dispose();
+                }
+
+                if((game.room.id.recommendationsScale.basicKeys[(x-1)%13]) === game.room.id.targetNote){
+                    if((x === 0) && (game.room.id.creatingFirstMesh !== true)){
+                        return;
+                    }
+                    game.room.id.creatingFirstMesh = true;
+                    let Writer;
+                    let nextNoteLetter = game.room.id.targetNote;
+                    // let oldLetter = game.scene.getMeshByID("noteLetterMesh");
+                    if(game.room.id.currentLetterMesh !== [] ){
+                        console.log("WHAT IS CURRENT MESH??? ", game.room.id.currentLetterMesh);
+                        // game.room.id.currentLetterMesh.getMesh().dispose();
+                        //console.log("WHAT IS THIS: ",  game.room.id.currentLetterMesh);
+                    }
+                    // if(game.scene.getMeshByID("noteLetterMesh")){
+                    //     game.scene.getMeshByID("noteLetterMesh").dispose();
+                    // }
+                    // if(game.scene.getMeshById("noteLetterMesh") === undefined){
+                    Writer = MeshWriter(game.scene, { scale: 1, defaultFont: "Arial" });
+                    game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote, {
+                        "font-family": "Arial",
+                        "letter-height": 1,
+                        "letter-thickness": 0.5,
+                        color: "#1C3870",
+                        anchor:boxInstances[x-1],
+                        id: "noteLetterMesh",
+                        colors: {
+                            diffuse: "#F0F0F0",
+                            specular: "#000000",
+                            ambient: "#F0F0F0",
+                            emissive: "#ff00f0",
+                        },
+                        
+                        position: new BABYLON.Vector3(boxInstances[x].position.x + 0.75, 1, boxInstances[x].position.z),
+                    });
+                    game.room.id.currentLetterMesh.getMesh()._rotation._z = 2 * Math.PI;
+                    game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x]);
+                    // if(game.room.id.currentLetterMesh.getLettersBoxes().length > 1){
+                    //     // let oldLetters = game.room.id.currentLetterMesh.getLettersBoxes();
+                    //     // for(let y = 0; y < oldLetters.length; y++){
+                    //     //     if(game.room.id.currentLetterMesh.getLettersBoxes()[0]){
+                            
+                    //     //     } else {
+                    //     //         game.room.id.currentLetterMesh.getLettersBoxes()[y].dispose();
+                    //     //     }
+                    //     // }
+                    //     game.room.id.currentLetterMesh.getMesh().dispose();
+
+                    // }
+                } else {
+                    boxInstances[x].dispose();
+
+                    let oldLetterMeshes = game.scene.getMeshByID("noteLetterMesh");
+                    
+                    if(oldLetterMeshes){
+                        game.scene.getMeshByID("noteLetterMesh").dispose();
+                    }
+                    console.log("WHAT ARE OLD LETTER MESHES??? ", oldLetterMeshes);
+                }
             }
         
 
@@ -484,12 +521,6 @@ try{
         } 
     }
     catch(e){console.log(e);}
-        // if(boxInstances[x]){
-        //     console.log("WHAT IS PARENT: ", boxInstances[0]);
-        //     boxInstances[x].setParent(boxInstances[0]);
-        //     boxInstances[x].parent = boxInstances[0];
-        // }
-
         const frameRate = game.animation.fps;
 
         const xSlide = new BABYLON.Animation("xSlide", "position.x", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT);
@@ -534,34 +565,10 @@ try{
         if(boxInstances[x]){
             if(boxInstances[x] && boxInstances[x].animations){
                 boxInstances[x].animations.push(xSlide);
-                console.log("HOW MANY ANIMATIONS ON XSLIDE? ", boxInstances[x].animations.length);
                 scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
             }
         }
     }    
-};
-
-game.room.id.createText = (inputText) => {
-    //data reporter
-    console.log("IN CREATE TEXT!!!");
-	var outputplane = new BABYLON.Mesh.CreatePlane("outputplane", 25, scene, false);
-	outputplane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
-	outputplane.material = new BABYLON.StandardMaterial("outputplane", scene);
-	outputplane.position = new BABYLON.Vector3(0, 0, 0);
-	outputplane.scaling.y = 40;
-    
-
-	var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
-	outputplane.material.diffuseTexture = outputplaneTexture;
-	outputplane.material.specularColor = new BABYLON.Color3(0, 0, 0);
-	outputplane.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
-	outputplane.material.backFaceCulling = false;
-
-    //outputplaneTexture.getContext().clearRect(0, 140, 512, 512);
-	outputplaneTexture.drawText(inputText, null, 140, "bold 80px verdana", "white");
-
-    outputplaneTexture.hasAlpha = true;
-    return outputplaneTexture;
 };
 
 game.room.id.cleanMeshes = () => {
@@ -578,12 +585,17 @@ game.room.id.cleanMeshes = () => {
                 if(meshesToDestroy[u] && meshesToDestroy[u].name.indexOf('activeNote_') === -1){
                     console.log("hit dispose 1!!! ");
                     meshesToDestroy[u].dispose();
-           
+                    let oldLetterMeshes = game.scene.getMeshByID("noteLetterMesh");
+                    
+                    if(oldLetterMeshes > 1){
+                        game.scene.getMeshByID("noteLetterMesh").dispose();
+                    }
                     
                 } else {
                     meshHolder.push(meshesToDestroy[u])
-                    if(meshHolder.length > 300){
+                    if(meshHolder.length > 15){
                         console.log("hit dispose 1!!! ");
+                        // game.scene.getMeshById("noteLetterMesh").dispose();
                         meshHolder.forEach((mesh)=>{mesh.dispose()});
                     }
                     
@@ -694,7 +706,7 @@ game.mainTick = () => {
             }
         } 
         if(game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.ascending){
-            game.room.id.targetNote = game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]
+            game.room.id.targetNote = game.room.id.recommendationsScale.ascending[game.room.id.scalePosition];
             game.room.id.updateTargetNoteDom();
         }
         game.room.id.previousTick = window.__emscripten_date_now();

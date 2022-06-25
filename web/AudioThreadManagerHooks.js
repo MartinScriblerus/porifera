@@ -1390,7 +1390,7 @@ export function pitchConversion(latestPitch){
         frame: ((game.room.id.bpmInverted/30) * frameRate)/8,
         value: height
       });
-      console.log("KEYFRAMES KEEP GROWING??? ", keyFrames);
+
       animationBox.setKeys(keyFrames);
       if(game.user.id.player && (keyFrames[keyFrames.length - 1].frame < (game.room.id.bpmInverted/30) * frameRate)/8){
         if(game.user.id.player.animations.length > 0){
@@ -1399,8 +1399,34 @@ export function pitchConversion(latestPitch){
           }
         }
       }
-      game.user.id.player.animations.push(animationBox);
-      console.log("HOW MANY ANIMATIONS ON ANIMATION BOX??? ", game.user.id.player.animations.length);
+      if(game.user.id.latestMidiNoteNumber > game.room.id.highestNoteOnScreen){
+        game.room.id.heightOffsetPlayerToBox = game.user.id.latestMidiNoteNumber - game.room.id.highestNoteOnScreen;
+        // game.user.id.player.animations.push(animationBox);
+        game.scene.meshes.forEach((mesh)=>{
+          try{
+            if(mesh.id.indexOf("activeNote_") && mesh.id.indexOf("activeNote_") !== -1){
+              mesh.position.z = mesh.position.z + (game.room.id.heightOffsetPlayerToBox);
+            }
+          } catch {
+            console.log("what mesh has no activeNote index? ", mesh);
+          }
+          
+          console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
+        })
+      } else {
+        game.scene.meshes.forEach((mesh)=>{
+          if(mesh.id.indexOf("activeNote_") !== -1){
+            // mesh.position.z = mesh.position.z - (game.room.id.heightOffsetPlayerToBox);
+            console.log("HIT THIS SCREEN SHIFT THING: ", game.room.id.heightOffsetPlayerToBox);
+            console.log("WHAT IS MESH POSITION Z?: ", mesh.position.z);
+          }
+          mesh.animations = [];
+          console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
+        })
+        game.user.id.player.animations.push(animationBox);
+      }
+      
+
       game.scene.beginAnimation(game.user.id.player, 0, (game.room.id.bpmInverted/30) * frameRate, true);
     }
 
