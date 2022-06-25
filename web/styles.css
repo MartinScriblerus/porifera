@@ -139,7 +139,19 @@ h3 {
     visibility: hidden;
     /* display: none; */
 }
-
+#scaleDisplayParent {
+    background: transparent;
+    width: 40%;
+    bottom: 60px;
+    right: 0px;
+    text-align: center;
+    /* color: #000000; */
+    font-size: 56px;
+    font-family: 'Jost', sans-serif;
+    color: #ffffff;
+    height: 100px;
+    position: absolute;
+}
 .column {
     background-color: white;
 
@@ -278,4 +290,40 @@ h3 {
 .box.inner-row > #pitchDisplayLetter {
     text-align: center;
     float:center;
+}
+
+.displayLabel {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    color: #FF30C2;
+    font-size: 20px;
+}
+
+#scaleDisplayParent #futureNotesParent {
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    text-align: center;
+    color: #ffffff;
+    height: 100px;
+    position: absolute;
+}
+
+#scaleDisplayParent {
+    width: 28%;
+    bottom: 40px;
+    right: 0px;
+    font-size: 48px;
+}
+
+#futureNotesParent {
+    bottom: 28px;
+    font-size: 48px;
+    color:rgb(98, 176, 155);
+    width: 100%;
+    /* background-color: rgb(98, 176, 155); */
+    background-color: "transparent";
+    text-align: center;
+    position: absolute;
 }

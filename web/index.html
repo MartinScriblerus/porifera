@@ -23,8 +23,8 @@
     </h1>
     <div id="musicTheoryDiv">
       <div class="inner-row box">
-        <span id="scaleDisplay"></span>
-        <label class="pitchDisplayLetter" for="scaleDisplay">Current Scale</label>
+        <!-- <span id="scaleDisplay"></span>
+        <label class="pitchDisplayLetter" for="scaleDisplay">Current Scale</label> -->
       </div>
       <div class="inner-row box">
         <span id="scalePositionDisplay"></span>
@@ -52,10 +52,10 @@
         <span id="targetNoteDisplay"></span>
         <label class="pitchDisplayLetter" for="targetNoteDisplay">Target Note</label>
       </div>
-      <div class="inner-row box">
+      <!-- <div class="inner-row box">
         <span id="futureNotesDisplay"></span>
         <label class="pitchDisplayLetter" for="futureNotesDisplay">Future Notes</label>
-      </div>
+      </div> -->
     </div>
     <div id="devicesBox" class="box from-js rust-to">
 
@@ -196,6 +196,18 @@
         </div>
       </h5>
     </div>
+    <div id="bottomContainer">
+      <div id="scaleDisplayParent">
+        <span id="scaleDisplay"></span>
+        <label class="displayLabel" for="scaleDisplay">Current Scale</label>
+      </div>
+      <div id="futureNotesParent">
+        <span id="futureNotesDisplay"></span>
+        <label class="displayLabel" for="futureNotesDisplay">Future Notes</label>
+      </div>
+    </div>
+
+
 
     
   <div style="display:none">

@@ -25,7 +25,8 @@ game.user.id.latestMingusNumNote = game.user.id.latestMingusNumNote || null;
 game.user.id.latestKeyNotePiano = game.user.id.latestKeyNotePiano || null;
 game.user.id.latestKeyNoteOrgan = game.user.id.latestKeyNoteOrgan || null;
 game.user.id.latestMidiNoteNumber = game.user.id.latestMidiNoteNumber || null;
-
+game.room.id.lowestNoteOnScreen = game.room.id.lowestNoteOnScreen || 0;
+game.room.id.highestNoteOnScreen = game.room.id.highestNoteOnScreen || 0;
 
 game.room.id.previousTick = game.room.id.previousTick || window.__emscripten_date_now();
 game.room.id.nextTick = game.room.id.delta + game.room.id.previousTick;

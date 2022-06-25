@@ -1,6 +1,7 @@
 import { getWebAudioMediaStream, setupAudio } from "./setupAudio.js";
 import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
 import "./index.js";
+import "./noteToNumberConverter.js"
 
 // ========================================
 // HOOKS IMPLEMENTATION
@@ -12,13 +13,10 @@ function gameStarted(){
   setScalePosition(game.room.id.scalePosition); 
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
-  // if(game.room.id.recommendationsScale.ascending){
-    game.room.id.setNextNotes();
-  // }
-  
   setOctaveRange(game.room.id.targetOctaveRange);
 
-  
+  game.room.id.setNextNotes();
+
   game.room.id.updateTargetNoteDom();
   game.room.id.updateTargetKeyDom();
   game.room.id.updateTargetOctaveDom();
@@ -29,9 +27,7 @@ function gameStarted(){
 } 
 
 game.room.id.setNextNotes = () => {
-  // console.log("here is scale position: ", game.room.id.scalePosition);
-  // console.log("rec scale object => ",  game.room.id.recommendationsScale);
-  // console.log("this is scale ascending... ", game.room.id.recommendationsScale.ascending);
+
   setScalePosition(game.room.id.scalePosition);
   
   game.room.id.updateFutureNotesDom(); 
@@ -39,46 +35,22 @@ game.room.id.setNextNotes = () => {
   let targetScale = game.room.id.recommendationsScale.ascending;
 
   if(game.room.id.scalePosition && targetScale && targetScale !== []){
-    // if(game.room.id.recommendationsScale && game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.ascending !== []){
-    //   setFutureNote(game.room.id.recommendationsScale.ascending);
-    //   game.room.id.updateFutureNotesDom();
-    // }
     
     setTargetNote(targetScale[game.room.id.scalePosition]);
-    // if(targetScale !== []){
-    //   setFutureNotes(targetScale);
-    // }
-    console.log("AHAHAHAHAHA WHAT IS TARGET SCALE? ", targetScale);
+
     if(game.room.id.scalePosition > targetScale.length){
       setScalePosition(0);
       game.room.id.scalePosition = 0;
       console.log("getting here!!!");
     } else {
-      
       if(game.user.id.isPlaying){
-        console.log("HITTING SCALE POSITION + 1 ",  game.room.id.scalePosition);
         setScalePosition(game.room.id.scalePosition);
-        // console.log("getting here to else!!!");
-       // game.room.id.setNextNotes(game.room.id.targetScale);
       }
-
     }
-    // game.room.id.updateTargetNoteDom();
-    // game.room.id.updateTargetKeyDom();
-    // game.room.id.updateTargetOctaveDom();
-    // game.room.id.updateTargetOctaveRangeDom();
     game.room.id.updateScalePositionDom();
     game.room.id.updateTargetNoteDom();
-    // game.room.id.updateScaleDom();
-    //
-    //
-    //
-    // CODE SMELL +++ why two calls to update Future notes?============
-    game.room.id.updateFutureNotesDom();  
   }
-
   game.room.id.updateFutureNotesDom();
-  // ============+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 game.room.id.updateTargetNoteDom = () => {
@@ -101,7 +73,6 @@ game.room.id.updateTargetNoteDom = () => {
       targetNoteDOM.style.display = "flex";
       // targetNoteDOM.append(targetNote());
       targetNoteDOM.append(game.room.id.recommendationsScale.ascending[game.room.id.scalePosition]);
-
     }
   }
 }
@@ -154,14 +125,11 @@ game.room.id.updateScalePositionDom = () => {
       delete oldNums[i];
     }
     if(scalePosition()){
-      // scalePositionDisplayDOM.append(scalePosition());
       scalePositionDisplayDOM.append(game.room.id.scalePosition);
       
     } else {
       scalePositionDisplayDOM.style.display = "flex";
-      // scalePositionDisplayDOM.append(scalePosition());
-            // scalePositionDisplayDOM.append(scalePosition());
-            scalePositionDisplayDOM.append(game.room.id.scalePosition);
+      scalePositionDisplayDOM.append(game.room.id.scalePosition);
     }
   }
 }
@@ -225,6 +193,9 @@ game.room.id.updateScaleDom = () => {
   }
 }
 
+// ==========================================================================
+//   PITCH CHANGED
+// ==========================================================================
 export function pitchChanged(user, newPitch){
     let newPitchTwoDecimals = parseFloat(newPitch).toFixed(2);
     if(newPitchTwoDecimals !== undefined){
@@ -233,8 +204,6 @@ export function pitchChanged(user, newPitch){
     // * THE PITCH SHOULD NOW BE CHANGED! *
     // DISPLAY IT! =>
     let pitchDisplayDOM = document.getElementById("pitchDisplay");
-
-
 
     if(pitchDisplayDOM){
         let oldNums = pitchDisplayDOM.childNodes;
@@ -257,11 +226,8 @@ export function pitchChanged(user, newPitch){
           game.user.id.latestPitch.noteHz = latestPitch();
           game.orchestration.recording = true;
         }
-        
-        // tktktktktktk => WHAT IS THIS?
+        // => turn hz to text note letter
         pitchConversion(latestPitch());
-
-
     }
    return latestPitch();
 };
@@ -278,6 +244,7 @@ export function pitchConversion(latestPitch){
   let midiNoteNumber;
   let pitchLetterDisplayDOM = document.getElementById("pitchDisplayLetter");
   let pitchOctaveDisplayDOM = document.getElementById("pitchDisplayOctave");
+  
   switch (true) {
     case 0.00 <= latestPitch && latestPitch < 8.18:
       latestPitchNote = "Too low";
@@ -286,7 +253,7 @@ export function pitchConversion(latestPitch){
       keyNotePiano = undefined;
       keyNoteOrgan = undefined;
       midiNoteNumber = undefined;
-      break;
+    break;
     case 8.18 <= latestPitch && latestPitch < 8.66:
       latestPitchNote = "Too low";
       latestOctaveNote = undefined;
@@ -383,8 +350,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 11;
       break;
-
-
     case 16.35 <= latestPitch && latestPitch < 17.32:
       latestPitchNote = "C";
       latestOctaveNote = 0;
@@ -441,7 +406,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 18;
       break;
-      case 24.50 <= latestPitch && latestPitch < 25.96:
+    case 24.50 <= latestPitch && latestPitch < 25.96:
       latestPitchNote = "G";
       latestOctaveNote = 0;
       mingusNumNote = 7;
@@ -538,7 +503,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 30;
       break;
-      case 49.00 <= latestPitch && latestPitch < 51.91:
+    case 49.00 <= latestPitch && latestPitch < 51.91:
       latestPitchNote = "G";
       latestOctaveNote = 1;
       mingusNumNote = 19;
@@ -578,7 +543,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 35;
       break;
-
     case 65.41 <= latestPitch && latestPitch < 69.30:
       latestPitchNote = "C";
       latestOctaveNote = 2;
@@ -675,7 +639,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 12;
       midiNoteNumber = 47;
       break;
-
     case 130.81 <= latestPitch && latestPitch < 138.59:
       latestPitchNote = "C";
       latestOctaveNote = 3;
@@ -733,13 +696,13 @@ export function pitchConversion(latestPitch){
       midiNoteNumber = 54;
       break;
     case 196.00 <= latestPitch && latestPitch < 207.65:
-    latestPitchNote = "G";
-    latestOctaveNote = 3;
-    mingusNumNote = 43;
-    keyNotePiano = 35;
-    keyNoteOrgan = 20;
-    midiNoteNumber = 55;
-    break;
+      latestPitchNote = "G";
+      latestOctaveNote = 3;
+      mingusNumNote = 43;
+      keyNotePiano = 35;
+      keyNoteOrgan = 20;
+      midiNoteNumber = 55;
+      break;
     case 207.65 <= latestPitch && latestPitch < 220.00:
       latestPitchNote = "G&#x266f/A&#x266d";
       latestOctaveNote = 3;
@@ -772,7 +735,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 24;
       midiNoteNumber = 59;
       break;
-
     case 261.63 <= latestPitch && latestPitch < 277.18:
       latestPitchNote = "C";
       latestOctaveNote = 4;
@@ -829,7 +791,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 31;
       midiNoteNumber = 66;
       break;
-      case 392.00 <= latestPitch && latestPitch < 415.30:
+    case 392.00 <= latestPitch && latestPitch < 415.30:
       latestPitchNote = "G";
       latestOctaveNote = 4;
       mingusNumNote = 55;
@@ -869,7 +831,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 36;
       midiNoteNumber = 71;
       break;
-
     case 523.25 <= latestPitch && latestPitch < 554.37:
       latestPitchNote = "C";
       latestOctaveNote = 5;
@@ -926,7 +887,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 43;
       midiNoteNumber = 78;
       break;
-      case 783.99 <= latestPitch && latestPitch < 830.61:
+    case 783.99 <= latestPitch && latestPitch < 830.61:
       latestPitchNote = "G";
       latestOctaveNote = 5;
       mingusNumNote = 67;
@@ -966,7 +927,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 48;
       midiNoteNumber = 83;
       break;
-
     case 1046.50 <= latestPitch && latestPitch < 1108.73:
       latestPitchNote = "C";
       latestOctaveNote = 6;
@@ -1023,7 +983,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 55;
       midiNoteNumber = 90;
       break;
-      case 1567.98 <= latestPitch && latestPitch < 1661.22:
+    case 1567.98 <= latestPitch && latestPitch < 1661.22:
       latestPitchNote = "G";
       latestOctaveNote = 6;
       mingusNumNote = 79;
@@ -1063,7 +1023,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = 60;
       midiNoteNumber = 95;
       break;
-
     case 2093.00 <= latestPitch && latestPitch < 2217.46:
       latestPitchNote = "C";
       latestOctaveNote = 7;
@@ -1120,7 +1079,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 102;
       break;
-      case 3135.96 <= latestPitch && latestPitch < 3322.44:
+    case 3135.96 <= latestPitch && latestPitch < 3322.44:
       latestPitchNote = "G";
       latestOctaveNote = 7;
       mingusNumNote = 91;
@@ -1160,7 +1119,6 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 107;
       break;
-
     case 4186.01 <= latestPitch && latestPitch < 4434.92:
       latestPitchNote = "C";
       latestOctaveNote = 8;
@@ -1259,13 +1217,12 @@ export function pitchConversion(latestPitch){
       break;
     case 8372.02 <= latestPitch && latestPitch < 8869.04:
       latestPitchNote = "C";
-      latestOctaveNote = 8;
+      latestOctaveNote = 9;
       mingusNumNote = 108;
       keyNotePiano = undefined;
       keyNoteOrgan = undefined;
       midiNoteNumber = 120;
       break; 
-      
     case 8869.04 <= latestPitch && latestPitch < 9397.27:
       latestPitchNote =  "C&#x266f/D&#x266d";
       latestOctaveNote = 9;
@@ -1322,7 +1279,7 @@ export function pitchConversion(latestPitch){
       keyNoteOrgan = undefined;
       midiNoteNumber = 127;
       break;
-      case 	13289.75 <= latestPitch && latestPitch < 3322.44:
+    case 	13289.75 <= latestPitch && latestPitch < 3322.44:
       latestPitchNote = "Too High";
       latestOctaveNote = undefined;
       mingusNumNote = undefined;
@@ -1349,20 +1306,11 @@ export function pitchConversion(latestPitch){
     latestPitchNote = latestPitchNote[0] + '#';
   }
 
-  
-  if(latestPitchNote && latestOctaveNote){
-    
-  
+  if(latestPitchNote && latestOctaveNote){  
     let timeDiff = window.__emscripten_date_now() - game.room.id.previousTick;
     let msConvertedForBpm = 250;
     let convertedMsAdjuster = msConvertedForBpm * (120/game.room.id.bpm);
-    // console.log("timeediff tick ", timeDiff);
-    // console.log("adjuster ", convertedMsAdjuster);
 
-    // if(game.room.id.delta === 0 || undefined){
-      //console.log("begin Py analysis tick -- delta is ", game.room.id.delta);
-      // beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, mingusNumNote, keyNotePiano, keyNoteOrgan, midiNoteNumber, bpm);
-      // beginPyAnalysisNote(game.user, latestPitchNote, latestOctaveNote, mingusNumNote, keyNotePiano, keyNoteOrgan, midiNoteNumber, bpm);
       game.user.id.latestPitch.noteLetter = latestPitchNote;
       game.user.id.latestOctave.octave = latestOctaveNote;
       game.user.id.latestMingusNumNote = mingusNumNote;
@@ -1386,11 +1334,50 @@ export function pitchConversion(latestPitch){
           console.log("eventy!!! ", event.data);
         }
       });
+
+     
+
       // THIS IS WHERE WE CAN CONVERT SIZING & Y HEIGHT FOR PLAYER ON SCREEN (midi note # here will be # of moves up from lowest square)
-      // function below positions the player... tktktktktktk
-      //game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      // function below positions the player...
+      // TEST NEW SETUP BEFORE ERASING... game.scene.meshes[0].position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      let lowNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + game.room.id.targetOctave);
+      game.room.id.lowestNoteOnScreen = lowNote.midiNoteNumber;
+      let octaveUp = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.targetOctaveRange);
+
+      if(game.room.id.targetKey.indexOf("b") !== -1){
+        switch(game.room.id.targetKey){
+          case "Ab":
+            game.room.id.targetKey = "G#";
+            break;
+          case "Bb":
+            game.room.id.targetKey = "A#";
+            break;
+          case "Cb":
+            game.room.id.targetKey = "B";
+            break;
+          case "Db":
+            game.room.id.targetKey = "C#";
+            break;
+          case "Eb":
+            game.room.id.targetKey = "D#";
+            break;
+          case "Fb":
+            game.room.id.targetKey = "E";
+            break;
+          case "Ab":
+            game.room.id.targetKey = "G#";
+            break;
+        }
+      }
+      let highNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + octaveUp); 
       
-      let height = (game.scene.meshes[1]._height / 2) - ((midiNoteNumber/127)*game.scene.meshes[1]._height);
+      game.room.id.highestNoteOnScreen = highNote.midiNoteNumber;
+      
+      let conversionVarPerBlock = (1/(game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen)) * (game.scene.meshes[1]._height)
+
+      let midiNoteDiff = midiNoteNumber - game.room.id.lowestNoteOnScreen;
+     
+      let height = (game.scene.meshes[1]._height / 2) - ((midiNoteDiff) * conversionVarPerBlock);
       const frameRate = game.animation.fps;
       var animationBox = new BABYLON.Animation("myAnimation", "position.z", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
       game.previousTime = game.previousTime || game.room.id.startGameTick;
@@ -1403,16 +1390,24 @@ export function pitchConversion(latestPitch){
         frame: ((game.room.id.bpmInverted/30) * frameRate)/8,
         value: height
       });
+      console.log("KEYFRAMES KEEP GROWING??? ", keyFrames);
       animationBox.setKeys(keyFrames);
       if(game.user.id.player && (keyFrames[keyFrames.length - 1].frame < (game.room.id.bpmInverted/30) * frameRate)/8){
-        game.user.id.player.animations.push(animationBox);
-        game.scene.beginAnimation(game.user.id.player, 0, (game.room.id.bpmInverted/30) * frameRate, true);
+        if(game.user.id.player.animations.length > 0){
+          for(let a = 0; a < game.user.id.player.animations.length; a++){
+            game.user.id.player.animations = [];
+          }
+        }
       }
-
-
+      game.user.id.player.animations.push(animationBox);
+      console.log("HOW MANY ANIMATIONS ON ANIMATION BOX??? ", game.user.id.player.animations.length);
+      game.scene.beginAnimation(game.user.id.player, 0, (game.room.id.bpmInverted/30) * frameRate, true);
     }
+
+
   }
 }
+
 
 export function audioChanged(newAudio){
     setAudio(newAudio);
@@ -1664,6 +1659,7 @@ setRunningBtn.addEventListener("click", async function(){
       try{
         // game.createBoxRow(true);
         game.room.id.triggerExpectedAudio();
+        
       } catch(e){
 
       }

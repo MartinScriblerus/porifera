@@ -36,7 +36,7 @@ console.log("Game Scene: ", game.scene);
 
 // var createScene = function () {
 
-
+game.animation.fps = 60;
 
 // This creates and positions a free camera (non-mesh)
 game.scene.camera = new BABYLON.FollowCamera("camera1", new BABYLON.Vector3(0, 3, 0), scene);
@@ -410,9 +410,9 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1 &&
-            !game.scene.getMeshByID(`test${x}`)){
+            !game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)){
         
-                boxInstances[x] = box.clone("activeNote_" + x + "_" + game.room.id.timeGroup);
+                boxInstances[x] = box.clone(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`);
                 boxInstances[x].speed = 0.1
 
                 boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
@@ -420,11 +420,12 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                 boxInstances[x].scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
                 boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);
                 boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);   
-                boxInstances[x].id = `test${x}`;
+                boxInstances[x].id = `activeNote_${x}_${game.room.id.lowestNoteOnScreen  + x - 1}`;
                 boxInstances[x].checkCollisions = true;
                 boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
                 boxInstances[x].metadata = {
                     pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + octavesDiff),
+                    noteValue: game.room.id.lowestNoteValue
                 }
                 // MAKE THIS MUCH MORE DRAMATIC / PRECISE IN REFRESH....!!!!
                 // boxInstances[x].actionManager.registerAction(
@@ -468,7 +469,7 @@ try{
             boxInstances[x].scaling.x = 1/16;
             boxInstances[x].timeGroup = game.room.id.timeGroup,
             boxInstances[x].position.z = 0; 
-            boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
+            //boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
             let boxSpawnX = - (game.scene.meshes[1]._width/2);
             let boxSpawnY = 1;
             let boxSpawnZ = game.scene.meshes[1]._height / 2;
@@ -533,6 +534,7 @@ try{
         if(boxInstances[x]){
             if(boxInstances[x] && boxInstances[x].animations){
                 boxInstances[x].animations.push(xSlide);
+                console.log("HOW MANY ANIMATIONS ON XSLIDE? ", boxInstances[x].animations.length);
                 scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
             }
         }
@@ -573,7 +575,7 @@ game.room.id.cleanMeshes = () => {
     while(game.scene.meshes.length > 5){
         for(let u= 5; u < meshesToDestroy.length; u++){
             if(meshesToDestroy[u]){
-                if(meshesToDestroy[u] && meshesToDestroy[u].name && meshesToDestroy[u].name.indexOf('activeNote_') === -1){
+                if(meshesToDestroy[u] && meshesToDestroy[u].name.indexOf('activeNote_') === -1){
                     console.log("hit dispose 1!!! ");
                     meshesToDestroy[u].dispose();
            
@@ -735,10 +737,11 @@ game.mainTick = () => {
     let currPitch = pitchChanged();
     
     if(currPitch === "NaN"){
-        player.position.z = player.position.z || 0;
+        player.position.z = player.position.z;
     } else{
         
         player.position.z = game.scene.camera.position.z = currPitch - ground.height;
+        console.log("are we ummm hitting this???? ", player.position.z);
         playerY_Observable.add(()=>{
             game.scene.camera.position.z = player.position.z;
         });
@@ -766,7 +769,7 @@ let start, previousTimeStamp;
 let done = false
 
 
-game.animation.fps = 60;
+// game.animation.fps = 60;
 var now;
 var then;
 var interval = 10000/game.animation.fps;
