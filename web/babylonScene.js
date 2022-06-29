@@ -7,6 +7,7 @@ import "./babylon.loaders.4.2.0.min.js";
 import "./babylon-inspector.min.js";
 import "./meshwriter.min.js";
 
+
 import { beginPyAnalysisNote } from "./beginPyAnalysisNote.js"
 
 
@@ -397,19 +398,21 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
     if(!keysToCreate){
         convertedRange = 2;
     } else {
-       convertedRange = keysToCreate.length * game.room.id.targetOctaveRange - 2;
+       convertedRange = 12 * game.room.id.targetOctaveRange;
     }
 
     for(let x = 1; x< convertedRange; x++){
         // console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
         boxInstances[x] = {};
-        console.log("HOW MANY BOXES DO WE HAVE? ", boxInstances[x].length);
+        // this is not growing 
+        //console.log("HOW MANY BOXES DO WE HAVE? ", boxInstances.length);
 
-        game.room.id.octavesDiff;
+        // game.room.id.octavesDiff;
         if(x>12){
             game.room.id.octavesDiff = Math.floor(x/12)
         }
-        console.log("OCTAVES DIFF: ", game.room.id.octavesDiff);
+        // this works =>
+        //console.log("OCTAVES DIFF: ", game.room.id.octavesDiff);
 
         // }
         if(isMeasured && 
@@ -418,7 +421,14 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             game.room.id.recommendationsScale.ascending.length > 1 &&
             !game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)){
                 // game.room.id.initialNoteInScale = 
+                // try{
+                   // game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen  + x - 1}`).dispose();
+                // } catch(e) {
+
+                // }
+
                 boxInstances[x] = box.clone(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`);
+                
                 boxInstances[x].speed = 0.1;
                 boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
                 // ====> sets height at double to give effect of tick
@@ -429,13 +439,12 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                 boxInstances[x].checkCollisions = true;
                 boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
                 boxInstances[x].rotation.z = Math.PI;
+                let octaveForNote = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
                 boxInstances[x].metadata = {
-                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + game.room.id.octavesDiff),
+                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (octaveForNote),
                     noteValue: game.room.id.lowestNoteValue
                 }
-                if(game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`).length > 1){
-                    game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)[1].dispose();
-                }
+
 
                 if(((game.room.id.recommendationsScale.basicKeys[(x-1)%13]) === game.room.id.targetNote)){
                     if((x === 1) && (game.room.id.creatingFirstMesh !== true)){
@@ -447,54 +456,88 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                     Writer = MeshWriter(game.scene, { scale: 1, defaultFont: "Arial" });
                     let lettersArr = [];
                     let boxesArr = [];
-                    let letters = game.scene.meshes.map((i)=>{
-                        if(i.id.indexOf("spstest") !== -1){
-                            lettersArr.push(i.id);
-                        }
-                        if(lettersArr.length > ((game.room.id.scalePosition + 1) * game.room.id.targetOctaveRange)){
-                            i.dispose();
-                        }
-                    });
 
-                    game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote, {
-                        "font-family": "Arial",
-                        "letter-height": 1,
-                        "letter-thickness": 0.5,
-                        color: "#1C3870",
-                        anchor:boxInstances[x-1],
-                        id: "noteLetterMesh",
-                        colors: {
-                            diffuse: "#F0F0F0",
-                            specular: "#000000",
-                            ambient: "#F0F0F0",
-                            emissive: "#ff00f0",
-                        },
-                        position: new BABYLON.Vector3(boxInstances[x].position.x + 0.75, 1, boxInstances[x].position.z),
-                    });
-                    if(game.room.id.targetNote === "F" || 
-                        game.room.id.targetNote === "G" || 
-                        game.room.id.targetNote === "A" || 
-                        game.room.id.targetNote === "Eb" || 
-                        game.room.id.targetNote === "Ab" ||  
-                        game.room.id.targetNote === "Bb" ||
-                        game.room.id.targetNote === "A#" ||
-                        game.room.id.targetNote === "F#" ||
-                        game.room.id.targetNote === "G#"
-                        ){
+ 
+                    let octaveNow = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
+                    if(game.room.id.octavesDiff){
+ 
+
+                          
+     
+
+let col = game.getNoteColor(game.room.id.targetNote);
+let red = col.r * 255;
+let green = col.g * 255;
+let blue = col.b * 255;
+
+function rgbToHex(r,g,b) {
+    r = r.toString(16);
+    g = g.toString(16);
+    b = b.toString(16);
+  
+    if (r.length == 1)
+      r = "0" + r;
+    if (g.length == 1)
+      g = "0" + g;
+    if (b.length == 1)
+      b = "0" + b;
+  
+    return "#" + r + g + b;
+  }
+
+                            game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote + " " + (octaveNow), {
+                                "font-family": "Arial",
+                                "letter-height": 0.75,
+                                "letter-thickness": 0.4,
+                                color: rgbToHex(red, green, blue),
+                                anchor:boxInstances[x-1],
+                                id: "noteLetterMesh_" + game.room.id.targetNote + "_" + (octaveNow),
+                                colors: {
+                                    // diffuse: "#F0F0F0",
+                                    // specular: "#000000",
+                                    // ambient: "#F0F0F0",
+                                    emissive: rgbToHex(red, green, blue),
+                                },
+                                position: new BABYLON.Vector3(boxInstances[x].position.x + 0.75, 1, boxInstances[x].position.z),
+                            });
+                        
+                    }
+                    
+                    // if(game.room.id.targetNote === "F" || 
+                    //     game.room.id.targetNote === "G" || 
+                    //     game.room.id.targetNote === "A" || 
+                    //     game.room.id.targetNote === "Eb" || 
+                    //     game.room.id.targetNote === "Ab" ||  
+                    //     game.room.id.targetNote === "Bb" ||
+                    //     game.room.id.targetNote === "A#" ||
+                    //     game.room.id.targetNote === "F#" ||
+                    //     game.room.id.targetNote === "G#" ||
+                    //     game.room.id.targetNote === "D#" ||
+                    //     game.room.id.targetNote === "C#" ||
+                    //     game.room.id.targetNote === "C" ||
+                    //     game.room.id.targetNote === "D" ||
+                    //     game.room.id.targetNote === "E"
+                    //     ){
                             game.room.id.currentLetterMesh.getMesh().rotation._y = game.room.id.currentLetterMesh.getMesh().rotation._y - 2* Math.PI;
                             game.room.id.currentLetterMesh.getMesh().rotation._x = game.room.id.currentLetterMesh.getMesh().rotation._x - Math.PI;
                             game.room.id.currentLetterMesh.getMesh().rotation._z = game.room.id.currentLetterMesh.getMesh().rotation._z - Math.PI; 
-                    }
+                    // }
+
+                    
                     game.room.id.currentLetterMesh.getMesh()._position._y = 2;
                     game.room.id.currentLetterMesh.getMesh()._rotation._z = 2 * Math.PI;
+                    // if(game.room.id.currentLetterMesh.getLettersBoxes().length > 1){
+                    //     game.room.id.currentLetterMesh.getLettersBoxes()[0] .dispose();
+                    // }
                     game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x]);
                 } else {
                     boxInstances[x].dispose();
 
-                    let oldLetterMeshes = game.scene.getMeshByID("noteLetterMesh");
+                    let oldLetterMeshes = game.scene.meshes.indexOf(game.scene.getMeshByID("noteLetterMesh_" + game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff)));
                     
-                    if(oldLetterMeshes){
-                        game.scene.getMeshByID("noteLetterMesh").dispose();
+                    if(oldLetterMeshes.length > 1){
+                        game.scene.getMeshByID(game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff))[1].dispose();
+                        console.log("JUST HIT THIS DISPOSAL");
                     }
                 }
             }
