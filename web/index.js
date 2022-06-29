@@ -72,6 +72,7 @@ game.gameMode = game.gameMode || "Practice";
 game.user.id.isPlaying = game.user.id.isPlaying || false;
 game.user.id.timeRecordingStart = game.user.id.timeRecordingStart || 0;
 game.user.id.timeRecordingStart = window.__emscripten_date_now(); 
+game.room.id.octavesDiff = game.room.id.octavesDiff || 0;
 
 game.user.id.toPy = game.user.id.toPy || undefined;
 game.room.id.noteLetterMeshes = game.room.id.noteLetterMeshes || [];

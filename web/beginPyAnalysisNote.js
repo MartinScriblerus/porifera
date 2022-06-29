@@ -37,17 +37,11 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
         // "keyNoteOrgan": keyNoteOrgan,
         "midiNoteNumber": midiNoteNumber
     }
-    //console.log("now m,inus last tick", window.__emscripten_date_now() - game.room.id.previousTick);
 
-
-    // if(((window.__emscripten_date_now() - game.room.id.startGameTick) % 250) === 0){
-  
-    //     console.log("SENDING NOOTE DATA TO PYTON FROM BEGIN ANALYSIS NOTE js");
+    //console.log("SENDING NOOTE DATA TO PYTON FROM BEGIN ANALYSIS NOTE js");
     console.log("GAME DELTA >>>>> ", game.room.id.delta);
     // if((game.room.id.delta < 100 || undefined)){
         noteDataToPy(noteData);
     // }
-
     game.room.id.scalePosition = game.room.id.scalePosition + 1;
-    
 }

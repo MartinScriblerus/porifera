@@ -14,6 +14,10 @@
                 "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/val.h}",
                 "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/html5.h}",
                 "-I${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/**}",
+                "-I${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/cache/sysroot/include/**}",
+                "${/usr/local/include/faust/dsp/libfaust.h}",
+                "-I${/usr/local/include/**}",
+                
 
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/*.cpp",

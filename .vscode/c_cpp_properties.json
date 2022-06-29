@@ -7,9 +7,12 @@
           "${../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h}",
           "${{workspaceFolder}/../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/html5.h}",
           "${{workspaceFolder}/../../../tmp/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/val.h}",
+          "${{workspaceFolder}/../../local/include/faust/dsp/libfaust.h}",
+          "${{workspaceFolder}/../../local/include/faust/dsp/llvm-dsp.h}",
+          "${{workspaceFolder}/../../local/include/faust/dsp/dsp.h}",
           "${../../../tmp/emsdk/upstream/emscripten/system/include/emscripten/val.h}",
           "${/Users/matthewreilly/tmp/emsdk/upstream/emscripten/system/lib/html5/**}",
-          "${/usr/local/include/faust/vst/**}"
+          "${{workspaceFolder}/../../local/include/faust/**}"
         ],
         "defines": [],
         "macFrameworkPath": [

@@ -382,13 +382,13 @@ game.getNoteMaterial = (note) => {
 
 game.createBoxRow = (isMeasured, keysToCreate) => {
 // try{createBoxRow
-    
+    console.log("HITTING THIS ONE! ", game.room.id.delta);
     if(!keysToCreate || keysToCreate === []){
        isMeasured = false
     } else {
         // console.log("keys to create: ", keysToCreate);
     }
-
+    console.log("WHAT ARE KEYS TO CREATE? ", keysToCreate);
     let boxInstances = []
 
     game.room.id.timeGroup = game.room.id.timeGroup + 1;
@@ -403,11 +403,13 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
     for(let x = 1; x< convertedRange; x++){
         // console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
         boxInstances[x] = {};
-        let octavesDiff;
+        console.log("HOW MANY BOXES DO WE HAVE? ", boxInstances[x].length);
+
+        game.room.id.octavesDiff;
         if(x>12){
-            octavesDiff = Math.floor(x/12)
+            game.room.id.octavesDiff = Math.floor(x/12)
         }
-       
+        console.log("OCTAVES DIFF: ", game.room.id.octavesDiff);
 
         // }
         if(isMeasured && 
@@ -428,7 +430,7 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                 boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
                 boxInstances[x].rotation.z = Math.PI;
                 boxInstances[x].metadata = {
-                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + octavesDiff),
+                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (game.room.id.targetOctave + game.room.id.octavesDiff),
                     noteValue: game.room.id.lowestNoteValue
                 }
                 if(game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`).length > 1){
@@ -498,30 +500,30 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             }
         
 
-try{
-        if(isMeasured === false){
-            boxInstances[x] = box.clone("activeTicker_" + x + "_");
-            boxInstances[x].speed = 0.1
-            boxInstances[x].position.z = 0;
-            boxInstances[x].scaling.z = 10;
-            boxInstances[x].scaling.x = 1/16;
-            boxInstances[x].timeGroup = game.room.id.timeGroup,
-            boxInstances[x].position.z = 0; 
-            //boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
-            let boxSpawnX = - (game.scene.meshes[1]._width/2);
-            let boxSpawnY = 1;
-            let boxSpawnZ = game.scene.meshes[1]._height / 2;
-            box.position.x = boxSpawnX; 
-            box.position.y = boxSpawnY;
-            box.position.z = boxSpawnZ;
-            box.scaling.z = 11;
-        } 
+// try{
+//         if(isMeasured === false){
+//             boxInstances[x] = box.clone("activeTicker_" + x + "_");
+//             boxInstances[x].speed = 0.1
+//             boxInstances[x].position.z = 0;
+//             boxInstances[x].scaling.z = 10;
+//             boxInstances[x].scaling.x = 1/16;
+//             boxInstances[x].timeGroup = game.room.id.timeGroup,
+//             boxInstances[x].position.z = 0; 
+//             //boxInstances[x].name = `tickbox_${game.room.id.timeGroup}_${game.room.id.currentCount}_${x}`;
+//             let boxSpawnX = - (game.scene.meshes[1]._width/2);
+//             let boxSpawnY = 1;
+//             let boxSpawnZ = game.scene.meshes[1]._height / 2;
+//             box.position.x = boxSpawnX; 
+//             box.position.y = boxSpawnY;
+//             box.position.z = boxSpawnZ;
+//             box.scaling.z = 11;
+//         } 
      
-        if(game.room.id.timeGroup > (game.room.id.countNumerator * 4)){
-            game.room.id.timeGroup = 0;
-        } 
-    }
-    catch(e){console.log(e);}
+//         if(game.room.id.timeGroup > (game.room.id.countNumerator * 4)){
+//             game.room.id.timeGroup = 0;
+//         } 
+//     }
+//     catch(e){console.log(e);}
         const frameRate = game.animation.fps;
 
         const xSlide = new BABYLON.Animation("xSlide", "position.x", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT);
@@ -694,8 +696,10 @@ game.mainTick = () => {
         game.room.id.delta = game.room.id.delta * (120/game.room.id.bpmInverted);
     }
     
-    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
-        console.log("CLEAN THOSE MESHES!");
+    // if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
+        //most recent edit...causes quicker updates to scale position... 
+        if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
+
         if(game.room.id.scalePosition){
             if(game.room.id.recommendationsScale && 
             game.room.id.recommendationsScale.ascending && 
@@ -720,21 +724,23 @@ game.mainTick = () => {
                 //game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
                 if(game.room.id.scalePosition%(game.room,id.countNumerator*4) ===0){
                     game.room.id.cleanMeshes();
+                    console.log("ARE WE HITTING THIS???");
                 }
-            } //game.room.id.cleanMeshes();
-           
+            } 
         }
         
-       if(window.__emscripten_date_now() - game.room.id.timeTickMeasureStart > 0){
-            game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
-            game.createBoxRow(false, []);
-       }
+        if(window.__emscripten_date_now() - game.room.id.timeTickMeasureStart > 0){
+                game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
+                game.createBoxRow(false, []);
+        }
 
-
-
-        game.room.id.delta === 0;
+        // game.room.id.delta === 0;
+        let firstKey; 
+        if(game.room.id.recommendationsScale.basicKeys && game.room.id.recommendationsScale.basicKeys.length > 0){
+            firstKey = game.scene.getMeshByID("activeNote_" + game.room.id.recommendationsScale.basicKeys[0]);
+        }
         if(game.user.id.isPlaying){
-            if(game.room.id.delta === 0){
+            if(game.room.id.delta === 0 || (game.room.id.scalePosition === 0 && !firstKey)){
                 console.log("CREATING A ROW WITH THESE BASIC KEYS: ", game.room.id.recommendationsScale.basicKeys);
                 //game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
                 game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
@@ -744,7 +750,6 @@ game.mainTick = () => {
         }
         
     }
-
 
 
     let currPitch = pitchChanged();
@@ -763,10 +768,10 @@ game.mainTick = () => {
             // This targets the camera to scene origin
             let targetMesh = await game.scene.meshes[0];
         
-            game.scene.cameraspeed = 0;
-            game.scene.cameraheightOffset = 8;
-            game.scene.cameraradius = 1;
-            game.scene.cameracameraAcceleration = 0.005;
+            game.scene.camera.speed = 0;
+            game.scene.camera.heightOffset = 8;
+            game.scene.camera.radius = 1;
+            game.scene.camera.cameraAcceleration = 0.005;
         //     game.scene.cameramaxCameraSpeed = 10;
             // game.scene.cameralockedTarget = targetMesh;
             game.scene.camera.setTarget(targetMesh.position);
@@ -794,7 +799,7 @@ function tick(now) {
     delta = now - then;
 
     if (delta > interval) {
-        // update time stuffs
+        // update time stuffsx
        
         // Just `then = now` is not enough.
         // Lets say we set fps at 10 which means

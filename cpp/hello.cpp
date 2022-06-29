@@ -3,6 +3,11 @@
 #include "emscripten/val.h"
 #include "emscripten/bind.h"
 #include "SDL.h"
+// #include "faust/dsp/llvm-dsp.h" 
+
+#include "faust/dsp/libfaust.h" 
+#include "faust/dsp/dsp.h"
+#include "faust/dsp/llvm-dsp.h"
 
 #include <iostream>
 #include "fib.h"
@@ -11,6 +16,8 @@
 #include <stdlib.h>
 
 using emscripten::val;
+
+
 
 
 
@@ -82,6 +89,11 @@ int do_math(int32_t a, int32_t b){
 EMSCRIPTEN_KEEPALIVE
 int get_new_number(){
   int fib1 = new_fib();
+
+////////////////////////////////////////////////////////
+  
+////////////////////////////////////////////////////////
+
   return next_val(fib1);
 }
 

@@ -1378,11 +1378,12 @@ export function pitchConversion(latestPitch){
       
       game.room.id.highestNoteOnScreen = highNote.midiNoteNumber;
       
-      let conversionVarPerBlock = (1/(game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen)) * (game.scene.meshes[1]._height)
+      let conversionVarPerBlock = (1/(game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen)) * (game.scene.meshes[1]._height);
 
       let midiNoteDiff = midiNoteNumber - game.room.id.lowestNoteOnScreen;
      
-      let height = (game.scene.meshes[1]._height / 2) - ((midiNoteDiff) * conversionVarPerBlock);
+      game.user.id.player.position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteDiff) * conversionVarPerBlock);
+      // let height =  conversionVarPerBlock * midiNoteDiff;
       const frameRate = game.animation.fps;
       var animationBox = new BABYLON.Animation("myAnimation", "position.z", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
       game.previousTime = game.previousTime || game.room.id.startGameTick;
@@ -1393,7 +1394,7 @@ export function pitchConversion(latestPitch){
       });
       keyFrames.push({
         frame: ((game.room.id.bpmInverted/30) * frameRate)/8,
-        value: height
+        value: game.user.id.player.position.z
       });
 
       animationBox.setKeys(keyFrames);
