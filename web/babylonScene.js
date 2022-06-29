@@ -415,10 +415,9 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
             game.room.id.recommendationsScale.ascending &&
             game.room.id.recommendationsScale.ascending.length > 1 &&
             !game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)){
-                game.room.id.initialNoteInScale = 
+                // game.room.id.initialNoteInScale = 
                 boxInstances[x] = box.clone(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`);
-                boxInstances[x].speed = 0.1
-
+                boxInstances[x].speed = 0.1;
                 boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
                 // ====> sets height at double to give effect of tick
                 boxInstances[x].scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
@@ -436,24 +435,25 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                     game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen + x - 1}`)[1].dispose();
                 }
 
-                if((game.room.id.recommendationsScale.basicKeys[(x-1)%13]) === game.room.id.targetNote){
-                    if((x === 0) && (game.room.id.creatingFirstMesh !== true)){
+                if(((game.room.id.recommendationsScale.basicKeys[(x-1)%13]) === game.room.id.targetNote)){
+                    if((x === 1) && (game.room.id.creatingFirstMesh !== true)){
                         return;
                     }
                     game.room.id.creatingFirstMesh = true;
                     let Writer;
-                    let nextNoteLetter = game.room.id.targetNote;
-                    // let oldLetter = game.scene.getMeshByID("noteLetterMesh");
-                    if(game.room.id.currentLetterMesh !== [] ){
-                        console.log("WHAT IS CURRENT MESH??? ", game.room.id.currentLetterMesh);
-                        // game.room.id.currentLetterMesh.getMesh().dispose();
-                        //console.log("WHAT IS THIS: ",  game.room.id.currentLetterMesh);
-                    }
-                    // if(game.scene.getMeshByID("noteLetterMesh")){
-                    //     game.scene.getMeshByID("noteLetterMesh").dispose();
-                    // }
-                    // if(game.scene.getMeshById("noteLetterMesh") === undefined){
+
                     Writer = MeshWriter(game.scene, { scale: 1, defaultFont: "Arial" });
+                    let lettersArr = [];
+                    let boxesArr = [];
+                    let letters = game.scene.meshes.map((i)=>{
+                        if(i.id.indexOf("spstest") !== -1){
+                            lettersArr.push(i.id);
+                        }
+                        if(lettersArr.length > ((game.room.id.scalePosition + 1) * game.room.id.targetOctaveRange)){
+                            i.dispose();
+                        }
+                    });
+
                     game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote, {
                         "font-family": "Arial",
                         "letter-height": 1,
@@ -467,23 +467,25 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                             ambient: "#F0F0F0",
                             emissive: "#ff00f0",
                         },
-                        
                         position: new BABYLON.Vector3(boxInstances[x].position.x + 0.75, 1, boxInstances[x].position.z),
                     });
+                    if(game.room.id.targetNote === "F" || 
+                        game.room.id.targetNote === "G" || 
+                        game.room.id.targetNote === "A" || 
+                        game.room.id.targetNote === "Eb" || 
+                        game.room.id.targetNote === "Ab" ||  
+                        game.room.id.targetNote === "Bb" ||
+                        game.room.id.targetNote === "A#" ||
+                        game.room.id.targetNote === "F#" ||
+                        game.room.id.targetNote === "G#"
+                        ){
+                            game.room.id.currentLetterMesh.getMesh().rotation._y = game.room.id.currentLetterMesh.getMesh().rotation._y - 2* Math.PI;
+                            game.room.id.currentLetterMesh.getMesh().rotation._x = game.room.id.currentLetterMesh.getMesh().rotation._x - Math.PI;
+                            game.room.id.currentLetterMesh.getMesh().rotation._z = game.room.id.currentLetterMesh.getMesh().rotation._z - Math.PI; 
+                    }
+                    game.room.id.currentLetterMesh.getMesh()._position._y = 2;
                     game.room.id.currentLetterMesh.getMesh()._rotation._z = 2 * Math.PI;
                     game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x]);
-                    // if(game.room.id.currentLetterMesh.getLettersBoxes().length > 1){
-                    //     // let oldLetters = game.room.id.currentLetterMesh.getLettersBoxes();
-                    //     // for(let y = 0; y < oldLetters.length; y++){
-                    //     //     if(game.room.id.currentLetterMesh.getLettersBoxes()[0]){
-                            
-                    //     //     } else {
-                    //     //         game.room.id.currentLetterMesh.getLettersBoxes()[y].dispose();
-                    //     //     }
-                    //     // }
-                    //     game.room.id.currentLetterMesh.getMesh().dispose();
-
-                    // }
                 } else {
                     boxInstances[x].dispose();
 
@@ -492,7 +494,6 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                     if(oldLetterMeshes){
                         game.scene.getMeshByID("noteLetterMesh").dispose();
                     }
-                    console.log("WHAT ARE OLD LETTER MESHES??? ", oldLetterMeshes);
                 }
             }
         

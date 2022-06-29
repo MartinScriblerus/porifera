@@ -161,7 +161,10 @@ game.room.id.updateFutureNotesDom = () => {
 
     for(let i = 0; i < oldNums.length; i++){
       oldNums[i].remove();
-      delete oldNums[i];
+      // delete oldNums[i];
+      if(game.user.id.isPlaying === true){
+        delete oldNums[i];
+      }
     }
     if(futureNotes()){
       futureNotesDOM.append(futureNotes());
@@ -182,7 +185,9 @@ game.room.id.updateScaleDom = () => {
 
     for(let i = 0; i < oldNums.length; i++){
       oldNums[i].remove();
-      delete oldNums[i];
+      if(game.user.is.isPlaying === true){
+        delete oldNums[i];
+      }
     }
     if(scale()){
       scaleDOM.append(scale());
@@ -1408,20 +1413,24 @@ export function pitchConversion(latestPitch){
               mesh.position.z = mesh.position.z + (game.room.id.heightOffsetPlayerToBox);
             }
           } catch {
-            console.log("what mesh has no activeNote index? ", mesh);
+            //console.log("what mesh has no activeNote index? ", mesh);
           }
-          
-          console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
         })
       } else {
+        let neededMeshes = 1 + game.room.id.scalePosition;
+        for(let v = 0; v < neededMeshes.length; v++){
+          game.scene.mesh[5 + v].dispose();
+        }
         game.scene.meshes.forEach((mesh)=>{
           if(mesh.id.indexOf("activeNote_") !== -1){
+            console.log("how many anims? ", mesh.animations.length);
+                     
             // mesh.position.z = mesh.position.z - (game.room.id.heightOffsetPlayerToBox);
-            console.log("HIT THIS SCREEN SHIFT THING: ", game.room.id.heightOffsetPlayerToBox);
-            console.log("WHAT IS MESH POSITION Z?: ", mesh.position.z);
+            // console.log("HIT THIS SCREEN SHIFT THING: ", game.room.id.heightOffsetPlayerToBox);
+            // console.log("WHAT IS MESH POSITION Z?: ", mesh.position.z);
           }
           mesh.animations = [];
-          console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
+          // console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
         })
         game.user.id.player.animations.push(animationBox);
       }
