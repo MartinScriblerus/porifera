@@ -12,6 +12,8 @@
       console.log("??? ", BABYLON);
     </script>
     <script src="./babylon.loaders.4.2.0.min.js"></script>
+    <script src="libfaust-wasm.js"></script>
+    <script src="webaudio-wasm-wrapper.js"></script>
 
   </head>  
   <body>
@@ -571,10 +573,12 @@ console.log("samp len", game.user.samplesArr.length)
             }  
             console.log("USE THIS TO MAKE SOME BIG SOCKETS ROUTING DECISIONS ", JSON.parse(event.data));
             if(JSON.parse(event.data).message && !JSON.parse(event.data).message.array){
-              recArr = JSON.parse(event.data).message;
+              recArr = JSON.parse(event.data).message;           
               console.log("NOTES TO CREATE: ", recArr);
 
-              if(typeof recArr  && game.room.id.recommendationsScale.ascending){
+              if(typeof recArr && recArr.ascending && game.room.id.recommendationsScale.ascending){
+                // remove the note resolution an octave up...
+                
                 //game.room.id.recommendationsScale.ascending = recArr.ascending;
                 console.log("REC REC REC ARR ", recArr);
               }
@@ -653,7 +657,52 @@ console.log("samp len", game.user.samplesArr.length)
       console.log("MODULE: ", Module);</script>
 
 
+        <script src="bubble.js">
+        </script>
 
+        <script>          // Create the Faust generated node
+          var pluginURL = ".";
+          game.audio_context = new AudioContext();
+          
+          var plugin = new window.Faustbubble(game.audio_context, pluginURL);
+          plugin.load().then(node => {
+            var paths = node.getParams();
+            console.log("PATHS: ", paths);
+            game.audio_context.paths = game.audio_context || paths;
+            console.log("NODE: ", node);
+            game.faustNodes.bubbleNode = node;
+            // console.log("bubble drop: ", node.getBubbleDrop());
+            // console.log("bubble freq: ", node.getBubbleBubbleFreq());
+            // //node.setParamValue("/bubble/drop/freq").setValueAtTime(200, 0);;
+            // var json = node.getJSON(); 
+            // console.log("NODE JSON: ", JSON.parse(json));
+            // let getBubbleDrop = node.getBubbleDrop();
+            // let getFreq = node.getBubbleBubbleFreq();
+            // console.log("GET FREQ: ", getFreq);
+            // console.log("BUBBLE CONTEXT: ", game.faustNodes.bubbleNode.context);
+            // console.log("BUBBLE PARAMETERS: ", game.faustNodes.bubbleNode.parameters);
+
+            game.faustNodes.bubbleNode.startBubbleNoise = () => {
+              console.log("here!!!");
+              let noise_dsp = node;
+              console.log("what is path heree? ", noise_dsp.getJSON());
+              // Print path to be used with 'setParamValue'
+              console.log("need to connect to output as audio mpde", noise_dsp.getParams());
+              // Connect it to output as a regular WebAudio node
+              noise_dsp.connect(game.audio_context.destination);
+              
+              // node.setBubbleBubbleFreq(200);
+              // noise_dsp.noteOn(0); 
+            }
+           window.addEventListener("load", game.faustNodes.bubbleNode.startBubbleNoise);
+
+  
+   
+            console.log("GAME AUDIO_CONTEXT: ", game.audio_context);
+      
+            console.log("audio_context listener: ", game.audio_context.listener );
+            });
+        </script>
 
 
       <script type="module" src="./babylonScene.js"></script>

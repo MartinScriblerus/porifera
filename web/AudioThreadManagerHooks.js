@@ -9,7 +9,6 @@ import "./noteToNumberConverter.js"
 
 function gameStarted(){
   setScale(game.room.id.targetScale);
-  console.log("what is scale position? ", game.room.id.scalePosition);
   setScalePosition(game.room.id.scalePosition); 
   setTargetKey(game.room.id.targetKey);
   setTargetOctave(game.room.id.targetOctave);
@@ -31,7 +30,7 @@ game.room.id.setNextNotes = () => {
 
   setScalePosition(game.room.id.scalePosition);
   
-  game.room.id.updateFutureNotesDom(); 
+  // game.room.id.updateFutureNotesDom(); 
   game.room.id.updateScalePositionDom();
   let targetScale = game.room.id.recommendationsScale.ascending;
 
@@ -46,30 +45,24 @@ game.room.id.setNextNotes = () => {
     } else {
       if(game.user.id.isPlaying){
         setScalePosition(game.room.id.scalePosition);
+        game.room.id.updateScalePositionDom();
       }
     }
-    game.room.id.updateScalePositionDom();
+    // game.room.id.updateScalePositionDom();
     game.room.id.updateTargetNoteDom();
   }
   game.room.id.updateFutureNotesDom();
 }
 
 game.room.id.updateTargetNoteDom = () => {
-  console.log("what is scale position? ", game.room.id.scalePosition);
-  
+
   for(let z = 0; z < game.room.id.recommendationsScale.ascending.length; z++){
-    if(game.room.id.recommendationsScale.ascending[z] === game.room.id.targetNote){
-      let check = document.getElementById("futureNotes_" + z);
-      console.log("CHEEEEECK@!!!!! ", check);
-      // game.room.id.recommendationsScale.ascending[z].style.color = "red";
-    }
     if(game.room.id.recommendationsScale.ascending[z].charAt(game.room.id.recommendationsScale.ascending[z].length -1) === "#"){
       game.room.id.recommendationsScale.ascending[z] = game.room.id.recommendationsScale.ascending[z].slice(0,-1) + "♯";
     }
     if(game.room.id.recommendationsScale.ascending[z].charAt(game.room.id.recommendationsScale.ascending[z].length -1) === "b"){
       game.room.id.recommendationsScale.ascending[z] = game.room.id.recommendationsScale.ascending[z].slice(0,-1) + "♭";
     }
-
   }
 
 
@@ -144,7 +137,7 @@ game.room.id.updateScalePositionDom = () => {
     }
     if(scalePosition()){
       scalePositionDisplayDOM.append(game.room.id.scalePosition);
-      
+    
     } else {
       scalePositionDisplayDOM.style.display = "flex";
       scalePositionDisplayDOM.append(game.room.id.scalePosition);
@@ -1445,7 +1438,7 @@ export function pitchConversion(latestPitch){
       let lowNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + game.room.id.targetOctave);
       game.room.id.lowestNoteOnScreen = lowNote.midiNoteNumber;
       let octaveUp = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.targetOctaveRange);
-
+console.log("what is octave up? ", octaveUp);
       if(game.room.id.targetKey.indexOf("b") !== -1){
         switch(game.room.id.targetKey){
           case "Ab":
@@ -1471,13 +1464,14 @@ export function pitchConversion(latestPitch){
             break;
         }
       }
+      console.log("whjat ioss target key?? ", game.room.id.targetKey);
       let highNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + octaveUp); 
       
       game.room.id.highestNoteOnScreen = highNote.midiNoteNumber;
       
-      let conversionVarPerBlock = (1/(game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen)) * (game.scene.meshes[1]._height);
-
       let midiNoteDiff = midiNoteNumber - game.room.id.lowestNoteOnScreen;
+      //let conversionVarPerBlock = (1/(game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen)) * (game.scene.meshes[1]._height);
+      let conversionVarPerBlock = ((midiNoteDiff / (game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen))) * game.scene.meshes[1]._height;
      
       game.user.id.player.position.z = (game.scene.meshes[1]._height / 2) - ((midiNoteDiff) * conversionVarPerBlock);
       // let height =  conversionVarPerBlock * midiNoteDiff;

@@ -39,15 +39,11 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
     }
 
     //console.log("SENDING NOOTE DATA TO PYTON FROM BEGIN ANALYSIS NOTE js");
-    console.log("GAME DELTA >>>>> ", game.room.id.delta);
+    //console.log("GAME DELTA >>>>> ", game.room.id.delta);
     // if((game.room.id.delta < 100 || undefined)){
         noteDataToPy(noteData);
     // }
-    if(game.room.id.scalePosition === null){
-        game.room.id.scalePosition = 0;
-    } else {
-        game.room.id.scalePosition = game.room.id.scalePosition + 1;
-    }
+
     
     let scaleNotes = document.getElementsByClassName("futureNote");
     for(let c = 0; c < scaleNotes.length; c++){
@@ -55,7 +51,15 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
             scaleNotes[c].classList.remove("scale-position-emphasis")
         }
     }
+    // if(game.room.id.scalePosition === null){
+    //     game.room.id.scalePosition = 0;
+    //     console.log("hittttttting this? ",game.room.id.scalePosition);
+    // } else {
+        document.getElementById("futureNotes_" + game.room.id.scalePosition).classList.add("scale-position-emphasis");
+        game.room.id.scalePosition = game.room.id.scalePosition + 1;
+    // }
 
 
-    document.getElementById("futureNotes_" + game.room.id.scalePosition).classList.add("scale-position-emphasis");
+
+    // document.getElementById("futureNotes_" + game.room.id.scalePosition).classList.add("scale-position-emphasis");
 }

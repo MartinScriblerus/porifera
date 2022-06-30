@@ -196,7 +196,7 @@ let boxSpawnZ = game.scene.meshes[1]._height / 2;
 box.position.x = boxSpawnX; 
 box.position.y = boxSpawnY;
 box.position.z = boxSpawnZ;
-box.scaling.z = 1/11;
+box.scaling.z = 1/(12*game.room.id.targetOctaveRange);
 box.id = "noteBox_0";
 console.log("BOX!: ", box);
 let boxMaterial= new BABYLON.StandardMaterial(scene);
@@ -383,84 +383,89 @@ game.getNoteMaterial = (note) => {
 
 game.createBoxRow = (isMeasured, keysToCreate) => {
 // try{createBoxRow
-    console.log("HITTING THIS ONE! ", game.room.id.delta);
+
     if(!keysToCreate || keysToCreate === []){
        isMeasured = false
     } else {
         // console.log("keys to create: ", keysToCreate);
     }
-    console.log("WHAT ARE KEYS TO CREATE? ", keysToCreate);
+
     let boxInstances = []
 
     game.room.id.timeGroup = game.room.id.timeGroup + 1;
 
     let convertedRange;
+
     if(!keysToCreate){
         convertedRange = 2;
     } else {
-       convertedRange = 12 * game.room.id.targetOctaveRange;
+    //    convertedRange = 12 * game.room.id.targetOctaveRange;
+    convertedRange = game.room.id.highestNoteOnScreen - game.room.id.lowestNoteOnScreen;
     }
-
+    // console.log("WHAT IS CONVERTED RANGE: ", convertedRange);
     for(let x = 1; x< convertedRange; x++){
         // console.log("KEYS TO CREATE INSIDE LOOP: ", keysToCreate); 
-        boxInstances[x] = {};
+        boxInstances[x-1] = {};
         // this is not growing 
         //console.log("HOW MANY BOXES DO WE HAVE? ", boxInstances.length);
 
         // game.room.id.octavesDiff;
         if(x>12){
-            game.room.id.octavesDiff = Math.floor(x/12)
+            game.room.id.octavesDiff = Math.floor(x/12);
         }
         // this works =>
         //console.log("OCTAVES DIFF: ", game.room.id.octavesDiff);
         game.room.id.currentOctave = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
         // }
+
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
-            game.room.id.recommendationsScale.ascending.length > 1 &&
-            !game.scene.getMeshByID(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%13]}_${game.room.id.currentOctave}`)){
+            // game.room.id.recommendationsScale.ascending.length > 1
+            // this line picks a single octave... tk
+            !game.scene.getMeshByID(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%12]}_${game.room.id.currentOctave}`)){
+
                 // game.room.id.initialNoteInScale = 
                 // try{
                    // game.scene.getMeshByID(`activeNote_${x}_${game.room.id.lowestNoteOnScreen  + x - 1}`).dispose();
                 // } catch(e) {
 
                 // }
+
+                boxInstances[x-1] = box.clone(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%12]}_${game.room.id.currentOctave}`);
                 
-                boxInstances[x] = box.clone(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%13]}_${game.room.id.currentOctave}`);
-                
-                boxInstances[x].speed = 0.1;
-                boxInstances[x].position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
+                boxInstances[x-1].speed = 0.1;
+                boxInstances[x-1]._position.z = ((((game.scene.meshes[1]._height / 2) - (x * (((1/convertedRange) * game.scene.meshes[1]._height))))) ); 
+
                 // ====> sets height at double to give effect of tick
-                boxInstances[x].scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
-                boxInstances[x].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);
-                console.log("YOYOYO: ", game.room.id.recommendationsScale.basicKeys[(x-1)%13]);
-                boxInstances[x].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[(x-1)%13]);   
-                boxInstances[x].id = `activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%13]}_${game.room.id.currentOctave}`;
-                boxInstances[x].checkCollisions = true;
-                boxInstances[x].actionManager = new BABYLON.ActionManager(scene);
-                boxInstances[x].rotation.z = Math.PI;
-                let octaveForNote = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
-                boxInstances[x].metadata = {
-                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%13] + (octaveForNote),
-                    noteValue: game.room.id.lowestNoteValue
+                boxInstances[x-1]._scaling.z = 2 * (game.scene.meshes[1]._height * (1/(game.room.id.targetOctaveRange * convertedRange)));
+                boxInstances[x-1].material = game.getNoteMaterial(game.room.id.recommendationsScale.basicKeys[(x-1)%12]);
+
+                boxInstances[x-1].material.emissiveColor = game.getNoteColor(game.room.id.recommendationsScale.basicKeys[(x-1)%12]);   
+                boxInstances[x-1].id = `activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%12]}_${game.room.id.currentOctave}`;
+                boxInstances[x-1].checkCollisions = true;
+                boxInstances[x-1].actionManager = new BABYLON.ActionManager(scene);
+                boxInstances[x-1]._rotation.z = Math.PI;
+               
+                boxInstances[x-1].metadata = {
+                    pitch: game.room.id.recommendationsScale.basicKeys[(x-1)%12] + (game.room.id.currentOctave),
+                    noteValue: game.room.id.lowestNoteOnScreen + x
                 }
 
-console.log("#!!!! ", (game.room.id.recommendationsScale.basicKeys[(x-1)%13]));
-console.log("# @@@@ ", game.room.id.targetNote);
-                if(((game.room.id.recommendationsScale.basicKeys[(x-1)%13]) === game.room.id.targetNote)){
-                    // if((x === 1) && (game.room.id.creatingFirstMesh !== true)){
-                    //     game.room.id.creatingFirstMesh = true;
-                    //     return;
-                    // }
-                    
+     
+                if(((game.room.id.recommendationsScale.basicKeys[(x-1)%12]) === game.room.id.targetNote)){
+                    console.log("WHAT WOULD THIS BE DOING WRONG ? ", game.room.id.targetNote);
+                    if((x === 1) && (game.room.id.creatingFirstMesh !== true)){
+                        return;
+                    }
+                    game.room.id.creatingFirstMesh = true;
                     let Writer;
 
                     Writer = MeshWriter(game.scene, { scale: 1, defaultFont: "Arial" });
                     let lettersArr = [];
                     let boxesArr = [];
  
-                    let octaveNow = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
+                    // let octaveNow = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
                     if(game.room.id.octavesDiff){
  
                         let col = game.getNoteColor(game.room.id.targetNote);
@@ -483,40 +488,47 @@ console.log("# @@@@ ", game.room.id.targetNote);
                             return "#" + r + g + b;
                         }
 
-                        game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote + " " + (octaveNow), {
+                        game.room.id.currentLetterMesh = new Writer(game.room.id.targetNote + " " + (game.room.id.currentOctave), {
                             "font-family": "Arial",
                             "letter-height": 0.75,
                             "letter-thickness": 0.4,
                             color: rgbToHex(red, green, blue),
                             anchor:boxInstances[x-1],
-                            id: "noteLetterMesh_" + game.room.id.targetNote + "_" + (octaveNow),
+                            id: "noteLetterMesh_" + game.room.id.targetNote + "_" + (game.room.id.currentOctave),
                             colors: {
                                 // diffuse: "#F0F0F0",
                                 // specular: "#000000",
                                 // ambient: "#F0F0F0",
                                 emissive: rgbToHex(red, green, blue),
                             },
-                            position: new BABYLON.Vector3(boxInstances[x].position.x + 0.75, 1, boxInstances[x].position.z),
+                            position: new BABYLON.Vector3(boxInstances[x-1]._position.x + 0.75, 1, boxInstances[x-1]._position.z),
                         });
-                    }
+                        if(game.room.id.currentLetterMesh && game.room.id.currentLetterMesh !== []){
+                            console.log("WTF IS THIS MESH? ", game.room.id.currentLetterMesh.getMesh());
+                        
+                        game.room.id.currentLetterMesh.getMesh().rotation._y = game.room.id.currentLetterMesh.getMesh().rotation._y - 2* Math.PI;
+                        game.room.id.currentLetterMesh.getMesh().rotation._x = game.room.id.currentLetterMesh.getMesh().rotation._x - Math.PI;
+                        game.room.id.currentLetterMesh.getMesh().rotation._z = game.room.id.currentLetterMesh.getMesh().rotation._z - Math.PI; 
+    
+                        game.room.id.currentLetterMesh.getMesh()._position._y = 2;
+                        game.room.id.currentLetterMesh.getMesh()._rotation._z = 2 * Math.PI;
+                        // if(game.room.id.currentLetterMesh.getLettersBoxes().length > 1){
+                        //     game.room.id.currentLetterMesh.getLettersBoxes()[0] .dispose();
+                        // }
+                        game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x-1]);
                     
-                    game.room.id.currentLetterMesh.getMesh().rotation._y = game.room.id.currentLetterMesh.getMesh().rotation._y - 2* Math.PI;
-                    game.room.id.currentLetterMesh.getMesh().rotation._x = game.room.id.currentLetterMesh.getMesh().rotation._x - Math.PI;
-                    game.room.id.currentLetterMesh.getMesh().rotation._z = game.room.id.currentLetterMesh.getMesh().rotation._z - Math.PI; 
-
-                    game.room.id.currentLetterMesh.getMesh()._position._y = 2;
-                    game.room.id.currentLetterMesh.getMesh()._rotation._z = 2 * Math.PI;
-                    // if(game.room.id.currentLetterMesh.getLettersBoxes().length > 1){
-                    //     game.room.id.currentLetterMesh.getLettersBoxes()[0] .dispose();
-                    // }
-                    game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x]);
+                    }
+              
+                }
+                    //game.game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
                 } else {
-                    boxInstances[x].dispose();
-                    console.log("HIT DISPOSE 513");
+                   
+                    boxInstances[x-1].dispose();
+                    // console.log("HIT DISPOSE 513");
                     let oldLetterMeshes = game.scene.meshes.indexOf(game.scene.getMeshByID("noteLetterMesh_" + game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff)));
                     
                     if(oldLetterMeshes.length > 1){
-                        game.scene.getMeshByID(game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff))[1].dispose();
+                        //game.scene.getMeshByID(game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff))[1].dispose();
                         console.log("JUST HIT THIS DISPOSAL");
                     }
                 }
@@ -588,10 +600,10 @@ console.log("# @@@@ ", game.room.id.targetNote);
         });
 
         xSlide.setKeys(keyFrames);
-        if(boxInstances[x]){
-            if(boxInstances[x] && boxInstances[x].animations){
-                boxInstances[x].animations.push(xSlide);
-                scene.beginAnimation(boxInstances[x], 0, (game.room.id.bpmInverted/30) * frameRate, true);
+        if(boxInstances[x-1]){
+            if(boxInstances[x-1] && boxInstances[x-1].animations){
+                boxInstances[x-1].animations.push(xSlide);
+                scene.beginAnimation(boxInstances[x-1], 0, (game.room.id.bpmInverted/30) * frameRate, true);
             }
         }
     }    
@@ -618,6 +630,7 @@ game.room.id.cleanMeshes = () => {
                 //         game.scene.getMeshByID("noteLetterMesh").dispose();
                 //     }
                 if(meshesToDestroy[u].id.indexOf("activeNote_" + game.room.id.targetNote) === -1){
+                    alert("hit3");
                     meshesToDestroy[u].dispose();
                 } else {
                     console.log("TARGET MESH FOUND: ", game.room.id.targetNote);
@@ -629,6 +642,7 @@ game.room.id.cleanMeshes = () => {
                 if(meshHolder.length > 15){
                     console.log("hit dispose 1!!! ");
                     // game.scene.getMeshById("noteLetterMesh").dispose();
+                    alert("hit1");
                     meshHolder.forEach((mesh)=>{mesh.dispose()});
                 }    
                 console.log("meshholder length: ", meshHolder.length);
@@ -722,7 +736,7 @@ game.mainTick = () => {
     
     // if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
         //most recent edit...causes quicker updates to scale position... 
-    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen)){
+    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen/8)){
         
         game.room.id.delta = 0;
         
@@ -731,7 +745,7 @@ game.mainTick = () => {
             game.room.id.recommendationsScale.ascending && 
             game.room.id.scalePosition <= game.room.id.recommendationsScale.ascending.length - 1){
                 game.room.id.updateScalePositionDom();
-                game.createBoxRow();
+                game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
             } else {
                 game.room.id.scalePosition = 0;
                 game.room.id.updateScalePositionDom();

@@ -32,6 +32,7 @@ export default class PitchNode extends AudioWorkletNode {
     };
   
     onmessage(event) {
+      console.log("what is this event in pitch node? ", event);
       if (event.type === 'wasm-module-loaded') {
         // The Wasm module was successfully sent to the PitchProcessor running on the
         // AudioWorklet thread and compiled. This is our cue to configure the pitch
