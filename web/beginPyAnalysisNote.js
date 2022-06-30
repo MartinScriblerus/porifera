@@ -43,5 +43,19 @@ export function beginPyAnalysisNote(user,note,octave,mingusNumNote, midiNoteNumb
     // if((game.room.id.delta < 100 || undefined)){
         noteDataToPy(noteData);
     // }
-    game.room.id.scalePosition = game.room.id.scalePosition + 1;
+    if(game.room.id.scalePosition === null){
+        game.room.id.scalePosition = 0;
+    } else {
+        game.room.id.scalePosition = game.room.id.scalePosition + 1;
+    }
+    
+    let scaleNotes = document.getElementsByClassName("futureNote");
+    for(let c = 0; c < scaleNotes.length; c++){
+        if(scaleNotes[c].classList.contains("scale-position-emphasis")){
+            scaleNotes[c].classList.remove("scale-position-emphasis")
+        }
+    }
+
+
+    document.getElementById("futureNotes_" + game.room.id.scalePosition).classList.add("scale-position-emphasis");
 }

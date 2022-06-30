@@ -25,10 +25,7 @@
         <!-- <span id="scaleDisplay"></span>
         <label class="pitchDisplayLetter" for="scaleDisplay">Current Scale</label> -->
       </div>
-      <div class="inner-row box">
-        <span id="scalePositionDisplay"></span>
-        <label class="pitchDisplayLetter" for="scalePositionDisplay">Scale Position</label>
-      </div>
+
       <div class="inner-row box">
         <span id="bpmDisplay"></span>
         <label class="pitchDisplayLetter" for="bpmDisplay">Current BPM</label>
@@ -37,24 +34,21 @@
         <span id="targetKeyDisplay"></span>
         <label class="pitchDisplayLetter" for="targetKeyDisplay">Target Key</label>
       </div>
-      <div class="inner-row box" >
-        <span id="targetOctaveDisplay"></span>
-        <label class="pitchDisplayLetter" for="targetOctaveDisplay">Target Octave</label>
-      </div>
 
-      <div class="inner-row box">
-        <span id="octaveRangeDisplay"></span>
-        <label class="pitchDisplayLetter" for="octaveRangeDisplay">Octave Range</label>
+      <!-- <div class="inner-row box">
+        <span id="scalePositionDisplay"></span>
+        <label class="pitchDisplayLetter" for="scalePositionDisplay">Scale Position</label>
+      </div>
+      <div class="inner-row box" >
+        <span id="currentIntervalDisplay"></span>
+        <label class="pitchDisplayLetter" for="currentIntervalDisplay">Current Interval</label>
       </div>
 
       <div class="inner-row box" >
         <span id="targetNoteDisplay"></span>
         <label class="pitchDisplayLetter" for="targetNoteDisplay">Target Note</label>
-      </div>
-      <!-- <div class="inner-row box">
-        <span id="futureNotesDisplay"></span>
-        <label class="pitchDisplayLetter" for="futureNotesDisplay">Future Notes</label>
       </div> -->
+
     </div>
     <div id="devicesBox" class="box from-js rust-to">
 
@@ -196,26 +190,46 @@
       </h5>
     </div>
     <div id="bottomContainer">
-      <div id="scaleDisplayParent">
-        <span id="scaleDisplay"></span>
-        <label class="displayLabel" for="scaleDisplay">Current Scale</label>
+      <div id="currentScaleInfoParent">
+        <div class="inner-row box" >
+          <span id="targetNoteDisplay"></span>
+          <label class="pitchDisplayLetter" for="targetNoteDisplay">Target Note</label>
+        </div>
+        <div class="inner-row box">
+          <span id="scalePositionDisplay"></span>
+          <label class="pitchDisplayLetter" for="scalePositionDisplay">Scale Position</label>
+        </div>
+        <div class="inner-row box" >
+          <span id="currentIntervalDisplay"></span>
+          <label class="pitchDisplayLetter" for="currentIntervalDisplay">Current Interval</label>
+        </div>
       </div>
+
       <div id="futureNotesParent">
+
+        <div id="scaleDisplayParent">
+          <span id="scaleDisplay"></span>
+          <!-- <label class="displayLabel" for="scaleDisplay">Current Scale</label> -->
+        </div>
+        <span id="futureNotes_0" class="futureNote"></span>
+        <span id="futureNotes_1" class="futureNote"></span>
+        <span id="futureNotes_2" class="futureNote"></span>
+        <span id="futureNotes_3" class="futureNote"></span>
+        <span id="futureNotes_4" class="futureNote"></span>
+        <span id="futureNotes_5" class="futureNote"></span>
+        <span id="futureNotes_6" class="futureNote"></span>
+        <span id="futureNotes_7" class="futureNote"></span>
+        <span id="futureNotes_8" class="futureNote"></span>
+        <span id="futureNotes_9" class="futureNote"></span>
+        <span id="futureNotes_10" class="futureNote"></span>
+        <span id="futureNotes_11" class="futureNote"></span>
         <span id="futureNotesDisplay">
-          <span id="futureNotes_0" class="futureNote"></span>
-          <span id="futureNotes_1" class="futureNote"></span>
-          <span id="futureNotes_2" class="futureNote"></span>
-          <span id="futureNotes_3" class="futureNote"></span>
-          <span id="futureNotes_4" class="futureNote"></span>
-          <span id="futureNotes_5" class="futureNote"></span>
-          <span id="futureNotes_6" class="futureNote"></span>
-          <span id="futureNotes_7" class="futureNote"></span>
-          <span id="futureNotes_8" class="futureNote"></span>
-          <span id="futureNotes_9" class="futureNote"></span>
-          <span id="futureNotes_10" class="futureNote"></span>
-          <span id="futureNotes_11" class="futureNote"></span>
+
+
+
+
         </span>
-        <label class="displayLabel" for="futureNotesDisplay">Future Notes</label>
+        <!-- <label class="displayLabel" for="futureNotesDisplay">Future Notes</label> -->
       </div>
     </div>
 

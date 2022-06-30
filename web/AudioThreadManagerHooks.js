@@ -19,8 +19,9 @@ function gameStarted(){
 
   game.room.id.updateTargetNoteDom();
   game.room.id.updateTargetKeyDom();
-  game.room.id.updateTargetOctaveDom();
-  game.room.id.updateTargetOctaveRangeDom();
+  game.room.id.updateCurrentIntervalDom();
+  // game.room.id.updateTargetOctaveDom();
+  // game.room.id.updateTargetOctaveRangeDom();
   game.room.id.updateScalePositionDom();
   game.room.id.updateScaleDom();
   game.room.id.updateFutureNotesDom();  
@@ -55,6 +56,23 @@ game.room.id.setNextNotes = () => {
 
 game.room.id.updateTargetNoteDom = () => {
   console.log("what is scale position? ", game.room.id.scalePosition);
+  
+  for(let z = 0; z < game.room.id.recommendationsScale.ascending.length; z++){
+    if(game.room.id.recommendationsScale.ascending[z] === game.room.id.targetNote){
+      let check = document.getElementById("futureNotes_" + z);
+      console.log("CHEEEEECK@!!!!! ", check);
+      // game.room.id.recommendationsScale.ascending[z].style.color = "red";
+    }
+    if(game.room.id.recommendationsScale.ascending[z].charAt(game.room.id.recommendationsScale.ascending[z].length -1) === "#"){
+      game.room.id.recommendationsScale.ascending[z] = game.room.id.recommendationsScale.ascending[z].slice(0,-1) + "♯";
+    }
+    if(game.room.id.recommendationsScale.ascending[z].charAt(game.room.id.recommendationsScale.ascending[z].length -1) === "b"){
+      game.room.id.recommendationsScale.ascending[z] = game.room.id.recommendationsScale.ascending[z].slice(0,-1) + "♭";
+    }
+
+  }
+
+
   setFutureNotes(game.room.id.recommendationsScale.ascending);
   game.createBoxRow(true, game.room.id.recommendationsScale.ascending)
   let targetNoteDOM = document.getElementById("targetNoteDisplay");
@@ -95,24 +113,24 @@ game.room.id.updateTargetKeyDom = () => {
   }
 }
 
-game.room.id.updateTargetOctaveDom = () => {
-  let targetOctaveDOM = document.getElementById("targetOctaveDisplay");
+// game.room.id.updateTargetOctaveDom = () => {
+//   let targetOctaveDOM = document.getElementById("targetOctaveDisplay");
   
-  if(targetOctaveDOM){
-    let oldNums = targetOctaveDOM.childNodes;
+//   if(targetOctaveDOM){
+//     let oldNums = targetOctaveDOM.childNodes;
 
-    for(let i = 0; i < oldNums.length; i++){
-      oldNums[i].remove();
-      delete oldNums[i];
-    }
-    if(targetOctave()){
-      targetOctaveDOM.append(targetOctave());
-    } else {
-      targetOctaveDOM.style.display = "flex";
-      targetOctaveDOM.append(game.room.id.targetOctave);
-    }
-  }
-}
+//     for(let i = 0; i < oldNums.length; i++){
+//       oldNums[i].remove();
+//       delete oldNums[i];
+//     }
+//     if(targetOctave()){
+//       targetOctaveDOM.append(targetOctave());
+//     } else {
+//       targetOctaveDOM.style.display = "flex";
+//       targetOctaveDOM.append(game.room.id.targetOctave);
+//     }
+//   }
+// }
 
 game.room.id.updateScalePositionDom = () => {
   let scalePositionDisplayDOM = document.getElementById("scalePositionDisplay");
@@ -134,27 +152,58 @@ game.room.id.updateScalePositionDom = () => {
   }
 }
 
-game.room.id.updateTargetOctaveRangeDom = () => {
-  let octaveRangeDOM = document.getElementById("octaveRangeDisplay");
+game.room.id.updateCurrentIntervalDom = () => {
+  let currentIntervalDOM = document.getElementById("currentIntervalDisplay");
   
-  if(octaveRangeDOM ){
-    let oldNums = octaveRangeDOM .childNodes;
+  if(currentIntervalDOM){
+    let oldNums = currentIntervalDOM.childNodes;
 
     for(let i = 0; i < oldNums.length; i++){
       oldNums[i].remove();
       delete oldNums[i];
     }
-    if(octaveRange()){
-      octaveRangeDOM.append(octaveRange());
+    if(game.room.id.intervalPosition){
+      currentIntervalDOM.append(game.room.id.intervalPosition);
     } else {
-      octaveRangeDOM.style.display = "flex";
-      octaveRangeDOM.append(octaveRange());
+      currentIntervalDOM.style.display = "flex";
+      currentIntervalDOM.append(game.room.id.intervalPosition);
     }
   }
 }
 
+// game.room.id.updateTargetOctaveRangeDom = () => {
+//   let octaveRangeDOM = document.getElementById("octaveRangeDisplay");
+  
+//   if(octaveRangeDOM ){
+//     let oldNums = octaveRangeDOM .childNodes;
+
+//     for(let i = 0; i < oldNums.length; i++){
+//       oldNums[i].remove();
+//       delete oldNums[i];
+//     }
+//     if(octaveRange()){
+//       octaveRangeDOM.append(octaveRange());
+//     } else {
+//       octaveRangeDOM.style.display = "flex";
+//       octaveRangeDOM.append(octaveRange());
+//     }
+//   }
+// }
+
 game.room.id.updateFutureNotesDom = () => {
   let futureNotesDOM = document.getElementById("futureNotesDisplay");
+  let futureNotes_0 = document.getElementById("futureNotes_0");
+  let futureNotes_1 = document.getElementById("futureNotes_1");
+  let futureNotes_2 = document.getElementById("futureNotes_2");
+  let futureNotes_3 = document.getElementById("futureNotes_3");
+  let futureNotes_4 = document.getElementById("futureNotes_4");
+  let futureNotes_5 = document.getElementById("futureNotes_5");
+  let futureNotes_6 = document.getElementById("futureNotes_6");
+  let futureNotes_7 = document.getElementById("futureNotes_7");
+  let futureNotes_8 = document.getElementById("futureNotes_8");
+  let futureNotes_9 = document.getElementById("futureNotes_9");
+  let futureNotes_10 = document.getElementById("futureNotes_10");
+  let futureNotes_11 = document.getElementById("futureNotes_11");
  // console.log("ascending sscale: ", game.room.id.recommendationsScale.ascending);
   if(futureNotesDOM){
     let oldNums = futureNotesDOM.childNodes;
@@ -167,7 +216,45 @@ game.room.id.updateFutureNotesDom = () => {
       }
     }
     if(futureNotes()){
-      futureNotesDOM.append(futureNotes());
+      // futureNotesDOM.append(futureNotes());
+      for(let f = 0; f < futureNotes().length; f++){
+        if(futureNotes()[0] && document.getElementById('futureNotes_0').innerHTML === ''){
+          futureNotes_0.append(futureNotes()[0]);
+        }
+        if(futureNotes()[1] && document.getElementById('futureNotes_1').innerHTML === ''){
+          futureNotes_1.append(futureNotes()[1]);
+        }
+        if(futureNotes()[2] && document.getElementById('futureNotes_2').innerHTML === ''){
+          futureNotes_2.append(futureNotes()[2]);
+        }
+        if(futureNotes()[3] && document.getElementById('futureNotes_3').innerHTML === ''){
+          futureNotes_3.append(futureNotes()[3]);
+        }
+        if(futureNotes()[4] && document.getElementById('futureNotes_4').innerHTML === ''){
+          futureNotes_4.append(futureNotes()[4]);
+        }
+        if(futureNotes()[5] && document.getElementById('futureNotes_5').innerHTML === ''){
+          futureNotes_5.append(futureNotes()[5]);
+        }
+        if(futureNotes()[6] && document.getElementById('futureNotes_6').innerHTML === ''){
+          futureNotes_6.append(futureNotes()[6]);
+        }
+        if(futureNotes()[7] && document.getElementById('futureNotes_7').innerHTML === ''){
+          futureNotes_7.append(futureNotes()[7]);
+        }
+        if(futureNotes()[8] && document.getElementById('futureNotes_8').innerHTML === ''){
+          futureNotes_8.append(futureNotes()[8]);
+        }
+        if(futureNotes()[9] && document.getElementById('futureNotes_9').innerHTML === ''){
+          futureNotes_9.append(futureNotes()[9]);
+        }
+        if(futureNotes()[10] && document.getElementById('futureNotes_10').innerHTML === ''){
+          futureNotes_10.append(futureNotes()[10]);
+        }
+        if(futureNotes()[11] && document.getElementById('futureNotes_11').innerHTML === ''){
+          futureNotes_11.append(futureNotes()[11]);
+        }
+      }
     } else {
       futureNotesDOM.style.display = "flex";
       // futureNotesDOM.append(futureNotes());
@@ -190,11 +277,21 @@ game.room.id.updateScaleDom = () => {
       }
     }
     if(scale()){
-      scaleDOM.append(scale());
-    } else {
-      scaleDOM.style.display = "flex";
-      scaleDOM.append(scale());
-    }
+      let targetKeyConverted;
+      if(game.room.id.targetKey.charAt(game.room.id.targetKey.length -1) === "#"){
+        // "C&#x266f/D&#x266d"
+      targetKeyConverted = game.room.id.targetKey.slice(0,-1) + "♯";
+        scaleDOM.append(scale() + " " + targetKeyConverted);
+      } else if(game.room.id.targetKey.charAt(game.room.id.targetKey.length -1) === "b"){
+        // "C&#x266f/D&#x266d"
+        targetKeyConverted = game.room.id.targetKey.slice(0,-1) + "♭";
+        scaleDOM.append(scale() + " " + targetKeyConverted);
+      } else {
+        // scaleDOM.style.display = "flex";
+        scaleDOM.append(scale() + " " + game.room.id.targetKey);
+      }
+      // scaleDOM.append(scale() + " " + targetKeyConverted);
+    } 
   }
 }
 
@@ -1423,20 +1520,10 @@ export function pitchConversion(latestPitch){
           game.scene.mesh[5 + v].dispose();
         }
         game.scene.meshes.forEach((mesh)=>{
-          if(mesh.id.indexOf("activeNote_") !== -1){
-            console.log("how many anims? ", mesh.animations.length);
-                     
-            // mesh.position.z = mesh.position.z - (game.room.id.heightOffsetPlayerToBox);
-            // console.log("HIT THIS SCREEN SHIFT THING: ", game.room.id.heightOffsetPlayerToBox);
-            // console.log("WHAT IS MESH POSITION Z?: ", mesh.position.z);
-          }
           mesh.animations = [];
-          // console.log("note position z is now.... ", game.room.id.heightOffsetPlayerToBox);
         })
         game.user.id.player.animations.push(animationBox);
       }
-      
-
       game.scene.beginAnimation(game.user.id.player, 0, (game.room.id.bpmInverted/30) * frameRate, true);
     }
 

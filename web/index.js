@@ -47,13 +47,15 @@ game.room.id.timeTick2 = game.room.id.timeTick2 || false;
 game.room.id.timeTick3 = game.room.id.timeTick3 || false;
 
 game.room.id.analysisTimeBucket = game.room.id.analysisTimeBucket || 0;
-game.room.id.targetOctaveRange = game.room.id.targetOctaveRange || 4;
+game.room.id.targetOctaveRange = game.room.id.targetOctaveRange || 10;
 game.room.id.targetOctave = game.room.id.targetOctave || 4
 game.room.id.targetKey = game.room.id.targetKey|| "C";
 game.room.id.targetNote = game.room.id.targetNote|| game.room.id.targetKey;
 game.room.id.targetScale = game.room.id.targetScale|| "Major";
-game.room.id.scalePosition = game.room.id.scalePosition || 0;
+game.room.id.scalePosition = game.room.id.scalePosition || null;
+game.room.id.intervalPosition = game.room.id.intervalPosition || 0;
 game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
+game.room.id.deltaBPMAdjusted = game.room.id.deltaBPMAdjusted || game.room.id.bpmInverted;
 game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 game.room.id.currentLetterMesh = game.room.id.currentLetterMesh || [];
 
@@ -73,6 +75,8 @@ game.user.id.isPlaying = game.user.id.isPlaying || false;
 game.user.id.timeRecordingStart = game.user.id.timeRecordingStart || 0;
 game.user.id.timeRecordingStart = window.__emscripten_date_now(); 
 game.room.id.octavesDiff = game.room.id.octavesDiff || 0;
+game.room.id.currentOctave = game.room.id.currentOctave || game.room.id.targetOctave;
+
 
 game.user.id.toPy = game.user.id.toPy || undefined;
 game.room.id.noteLetterMeshes = game.room.id.noteLetterMeshes || [];
