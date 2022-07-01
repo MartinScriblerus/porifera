@@ -56,6 +56,7 @@ game.room.id.scalePosition = game.room.id.scalePosition || 0;
 game.room.id.intervalPosition = game.room.id.intervalPosition || 0;
 game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
 game.room.id.deltaBPMAdjusted = game.room.id.deltaBPMAdjusted || game.room.id.bpmInverted;
+// game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
 game.room.id.currentLetterMesh = game.room.id.currentLetterMesh || [];
 
@@ -70,7 +71,7 @@ game.room.id.recommendationsScale.descending = game.room.id.recommendationsScale
 game.audioInputMode = game.audioInputMode || "midi";
 game.user.id.audioDevice = game.user.id.audioDevice || {};
 game.gameMode = game.gameMode || "Practice";
-
+game.audio_context = game.audio_context || {};
 game.user.id.isPlaying = game.user.id.isPlaying || false;
 game.user.id.timeRecordingStart = game.user.id.timeRecordingStart || 0;
 game.user.id.timeRecordingStart = window.__emscripten_date_now(); 

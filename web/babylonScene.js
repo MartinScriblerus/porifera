@@ -417,13 +417,26 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
         //console.log("OCTAVES DIFF: ", game.room.id.octavesDiff);
         game.room.id.currentOctave = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.octavesDiff);
         // }
-
+        if(!game.scene){
+            return;
+        }
+        let allMeshes = game.scene.meshes;
+        let exists = false;
+        for(let u = 0; u < allMeshes.length; u++){
+            if(x!== 1 && allMeshes[u].id.indexOf(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%13]}_${game.room.id.currentOctave}`) !== -1){
+                exists = true;
+            }
+        } 
+        let noDupes = allMeshes.find(element => element.id === `activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%12]}_${game.room.id.currentOctave}`);
         if(isMeasured && 
             game.room.id.recommendationsScale &&
             game.room.id.recommendationsScale.ascending &&
             // game.room.id.recommendationsScale.ascending.length > 1
             // this line picks a single octave... tk
-            !game.scene.getMeshByID(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%12]}_${game.room.id.currentOctave}`)){
+            // !game.scene.getMeshByID(`activeNote_${game.room.id.recommendationsScale.basicKeys[(x-1)%13]}_${game.room.id.currentOctave}`)){
+            (!exists || x==1) &&
+            (noDupes === undefined)
+            ){
 
                 // game.room.id.initialNoteInScale = 
                 // try{
@@ -452,7 +465,7 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                     noteValue: game.room.id.lowestNoteOnScreen + x
                 }
 
-     
+                let oldMeshes = [];
                 if(((game.room.id.recommendationsScale.basicKeys[(x-1)%12]) === game.room.id.targetNote)){
                     console.log("WHAT WOULD THIS BE DOING WRONG ? ", game.room.id.targetNote);
                     if((x === 1) && (game.room.id.creatingFirstMesh !== true)){
@@ -503,7 +516,7 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                             },
                             position: new BABYLON.Vector3(boxInstances[x-1]._position.x + 0.75, 1, boxInstances[x-1]._position.z),
                         });
-                        if(game.room.id.currentLetterMesh && game.room.id.currentLetterMesh !== []){
+                        if(game.room.id.currentLetterMesh ){
                             console.log("WTF IS THIS MESH? ", game.room.id.currentLetterMesh.getMesh());
                         
                         game.room.id.currentLetterMesh.getMesh().rotation._y = game.room.id.currentLetterMesh.getMesh().rotation._y - 2* Math.PI;
@@ -516,21 +529,29 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
                         //     game.room.id.currentLetterMesh.getLettersBoxes()[0] .dispose();
                         // }
                         game.room.id.currentLetterMesh.getMesh().setParent(boxInstances[x-1]);
+                        
                     
                     }
               
                 }
-                    //game.game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
+                
                 } else {
-                   
-                    boxInstances[x-1].dispose();
-                    // console.log("HIT DISPOSE 513");
-                    let oldLetterMeshes = game.scene.meshes.indexOf(game.scene.getMeshByID("noteLetterMesh_" + game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff)));
                     
-                    if(oldLetterMeshes.length > 1){
-                        //game.scene.getMeshByID(game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff))[1].dispose();
-                        console.log("JUST HIT THIS DISPOSAL");
+                    boxInstances[x-1].dispose();
+                    if(game.room.id.delta === 0){
+                        console.log("Box instances: ", boxInstances);
+                        
+                        
+
                     }
+                    // // console.log("HIT DISPOSE 513");
+                    // game.scene.meshes.indexOf(game.scene.getMeshByID("noteLetterMesh_" + game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff)));
+                    
+                    // oldMeshes.push(boxInstances[x-1])
+                    // if(oldMeshes.length > 1){
+                    //     //game.scene.getMeshByID(game.room.id.targetNote + "_" + (game.room.id.targetOctave + game.room.id.octavesDiff))[1].dispose();
+                    //     console.log("JUST HIT THIS... ready for DISPOSAL ", oldMeshes);
+                    // }
                 }
             }
         
@@ -559,6 +580,9 @@ game.createBoxRow = (isMeasured, keysToCreate) => {
 //         } 
 //     }
 //     catch(e){console.log(e);}
+
+
+
         const frameRate = game.animation.fps;
 
         const xSlide = new BABYLON.Animation("xSlide", "position.x", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT);
@@ -630,8 +654,8 @@ game.room.id.cleanMeshes = () => {
                 //         game.scene.getMeshByID("noteLetterMesh").dispose();
                 //     }
                 if(meshesToDestroy[u].id.indexOf("activeNote_" + game.room.id.targetNote) === -1){
-                    alert("hit3");
                     meshesToDestroy[u].dispose();
+                    
                 } else {
                     console.log("TARGET MESH FOUND: ", game.room.id.targetNote);
                 }      
@@ -736,7 +760,8 @@ game.mainTick = () => {
     
     // if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen) * 4){
         //most recent edit...causes quicker updates to scale position... 
-    if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen/8)){
+    // if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen/8)){
+        if((game.room.id.delta) >= (game.room.id.boxAnimationAcrossScreen/8)){
         
         game.room.id.delta = 0;
         
@@ -765,7 +790,7 @@ game.mainTick = () => {
      
         if((game.user.id.isPlaying) && (game.room.id.delta > ((game.room.id.boxAnimationAcrossScreen) /game.countNumerator) )){
             if(game.room.id.recommendationsScale.ascending && game.room.id.recommendationsScale.basicKeys && (game.room.id.recommendationsScale.basicKeys > game.room.id.scalePosition)){
-                //game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
+
                 if(game.room.id.scalePosition%(game.room.id.countNumerator) ===0){
                    // game.room.id.cleanMeshes();
                     console.log("ARE WE HITTING THIS???");
@@ -786,7 +811,8 @@ game.mainTick = () => {
         // }
         if(game.user.id.isPlaying){
             if(game.room.id.delta === 0 || (game.room.id.scalePosition === 0)){
-                console.log("CREATING A ROW WITH THESE BASIC KEYS: ", game.room.id.recommendationsScale.basicKeys);
+                // THIS ONE IS LEGIT =>
+                //console.log("CREATING A ROW WITH THESE BASIC KEYS: ", game.room.id.recommendationsScale.basicKeys);
                 //game.room.id.timeTickMeasureStart = window.__emscripten_date_now() + 125;
                 game.createBoxRow(true, game.room.id.recommendationsScale.basicKeys);
             }

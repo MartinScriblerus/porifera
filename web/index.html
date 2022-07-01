@@ -233,6 +233,11 @@
         </span>
         <!-- <label class="displayLabel" for="futureNotesDisplay">Future Notes</label> -->
       </div>
+
+      <div id="beatCountParent">
+        <span id="beatCount"></span>
+        <label class="displayLabel" for="beatCount">Beat Count</label>
+      </div>
     </div>
 
 
@@ -421,9 +426,12 @@
           
 
 console.log("samp len", game.user.samplesArr.length)
+          
+          document.getElementById("beatCount").innerText = game.user.samplesArr.length;
           // TODO: add a switch for over limit of loop interval
           // if(game.user.samplesArr.length > 128 ){
-            if(game.user.samplesArr.length > 4 ){
+            // if(game.user.samplesArr.length > 4 ){
+          if(game.user.samplesArr.length > (game.countNumerator - 1)){
             try{
               fetch('http://localhost:8088/to_node', {
                 method: 'POST',
@@ -657,13 +665,35 @@ console.log("samp len", game.user.samplesArr.length)
       console.log("MODULE: ", Module);</script>
 
 
-        <script src="bubble.js">
+        <script src="./bubble.js">
         </script>
 
+
+
         <script>          // Create the Faust generated node
-          var pluginURL = ".";
-          game.audio_context = new AudioContext();
           
+
+          
+          var pluginURL = ".";
+         
+
+          game.audio_context = new AudioContext();
+      //     async function getWasm(){
+      //       const response = await (await window.fetch("bubble.wasm"));
+      //       console.log("WHAT IS THE WASM MODULE? ", response);
+      //       const processorUrl = "bubble.js";
+      //       try {
+      //         await context.audioWorklet.addModule(processorUrl);
+      //         console.log("HAS THE WORKLET CHANGED>? ", context);
+      //       } catch(e){
+      //         throw new Error(
+      //   `Failed to load bubble worklet at url: ${processorUrl}. Further info: ${e.message}`
+      // );
+      //       }
+      //     }
+      //     getWasm();
+          
+
           var plugin = new window.Faustbubble(game.audio_context, pluginURL);
           plugin.load().then(node => {
             var paths = node.getParams();
@@ -671,36 +701,27 @@ console.log("samp len", game.user.samplesArr.length)
             game.audio_context.paths = game.audio_context || paths;
             console.log("NODE: ", node);
             game.faustNodes.bubbleNode = node;
+            
+
+            node.connect(game.audio_context.destination);
+
+
+            
             // console.log("bubble drop: ", node.getBubbleDrop());
             // console.log("bubble freq: ", node.getBubbleBubbleFreq());
             // //node.setParamValue("/bubble/drop/freq").setValueAtTime(200, 0);;
-            // var json = node.getJSON(); 
-            // console.log("NODE JSON: ", JSON.parse(json));
+            var json = node.getJSON(); 
+            console.log("NODE JSON: ", JSON.parse(json));
             // let getBubbleDrop = node.getBubbleDrop();
             // let getFreq = node.getBubbleBubbleFreq();
             // console.log("GET FREQ: ", getFreq);
             // console.log("BUBBLE CONTEXT: ", game.faustNodes.bubbleNode.context);
             // console.log("BUBBLE PARAMETERS: ", game.faustNodes.bubbleNode.parameters);
 
-            game.faustNodes.bubbleNode.startBubbleNoise = () => {
-              console.log("here!!!");
-              let noise_dsp = node;
-              console.log("what is path heree? ", noise_dsp.getJSON());
-              // Print path to be used with 'setParamValue'
-              console.log("need to connect to output as audio mpde", noise_dsp.getParams());
-              // Connect it to output as a regular WebAudio node
-              noise_dsp.connect(game.audio_context.destination);
-              
-              // node.setBubbleBubbleFreq(200);
-              // noise_dsp.noteOn(0); 
-            }
-           window.addEventListener("load", game.faustNodes.bubbleNode.startBubbleNoise);
-
-  
    
-            console.log("GAME AUDIO_CONTEXT: ", game.audio_context);
+            console.log("Faust CONTEXT: ", game.audio_context);
       
-            console.log("audio_context listener: ", game.audio_context.listener );
+
             });
         </script>
 

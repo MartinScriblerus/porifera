@@ -169,6 +169,22 @@ h3 {
     max-width: 20%;
 }
 
+#beatCountParent {
+    background: transparent;
+    width: 40%;
+    flex-direction: row;
+    bottom: 20px;
+    right: 20px;
+    text-align: center;
+    /* color: #000000; */
+    font-size: 56px;
+    font-family: 'Jost', sans-serif;
+    color: #ffffff;
+    height: 100px;
+    position: absolute;
+    max-width: 20%;
+}
+
 .column {
     background-color: white;
 

@@ -351,6 +351,7 @@ class bubbleProcessor extends AudioWorkletProcessor {
 const NUM_FRAMES = 128;
 try {
     registerProcessor('bubble', bubbleProcessor);
+    console.log("registered BUBBLE PROCESSOR");
 } catch (error) {
     console.warn(error);
 }

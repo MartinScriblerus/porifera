@@ -1438,7 +1438,7 @@ export function pitchConversion(latestPitch){
       let lowNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + game.room.id.targetOctave);
       game.room.id.lowestNoteOnScreen = lowNote.midiNoteNumber;
       let octaveUp = parseInt(game.room.id.targetOctave) + parseInt(game.room.id.targetOctaveRange);
-console.log("what is octave up? ", octaveUp);
+
       if(game.room.id.targetKey.indexOf("b") !== -1){
         switch(game.room.id.targetKey){
           case "Ab":
@@ -1464,7 +1464,7 @@ console.log("what is octave up? ", octaveUp);
             break;
         }
       }
-      console.log("whjat ioss target key?? ", game.room.id.targetKey);
+
       let highNote = game.noteToNumberConverter(game.room.id.targetKey + "_" + octaveUp); 
       
       game.room.id.highestNoteOnScreen = highNote.midiNoteNumber;
@@ -1771,10 +1771,10 @@ setRunningBtn.addEventListener("click", async function(){
     setRunning(true);
     document.getElementById("pitchBox").display = "flex";
 
-    // INITIAL BOX ROW (TODO: MOVE THIS OUT OF HERE // time it better)
+
     if(game){
       try{
-        // game.createBoxRow(true);
+ 
         game.room.id.triggerExpectedAudio();
         
       } catch(e){

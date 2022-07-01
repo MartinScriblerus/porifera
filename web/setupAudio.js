@@ -176,7 +176,6 @@ async function setupAudio(onPitchDetectedCallback) {
   //   mediaStream.enabled = true;
   // }
 
-  
 
   return { context, node };
 }
