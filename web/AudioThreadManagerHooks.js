@@ -67,7 +67,7 @@ game.room.id.updateTargetNoteDom = () => {
 
 
   setFutureNotes(game.room.id.recommendationsScale.ascending);
-  game.createBoxRow(true, game.room.id.recommendationsScale.ascending)
+  //game.createBoxRow(true, game.room.id.recommendationsScale.ascending)
   let targetNoteDOM = document.getElementById("targetNoteDisplay");
   game.room.id.updateFutureNotesDom();
   if(targetNoteDOM){
@@ -1770,18 +1770,18 @@ setRunningBtn.addEventListener("click", async function(){
     setAudio(await setupAudio(setLatestPitch()));
     setRunning(true);
     document.getElementById("pitchBox").display = "flex";
-
-
-    if(game){
-      try{
- 
-        game.room.id.triggerExpectedAudio();
-        
-      } catch(e){
-
-      }
-    }
     game.room.id.startGameTick = window.__emscripten_date_now();
+
+    // if(game){
+    //   try{
+ 
+    //     game.room.id.triggerExpectedAudio();
+        
+    //   } catch(e){
+
+    //   }
+    // }
+   // game.room.id.startGameTick = window.__emscripten_date_now();
 
     setRunningBtn.style.display = "none";
     devicesBoxDiv.style.display = "none";

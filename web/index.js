@@ -28,6 +28,14 @@ game.user.id.latestMidiNoteNumber = game.user.id.latestMidiNoteNumber || null;
 game.room.id.lowestNoteOnScreen = game.room.id.lowestNoteOnScreen || 0;
 game.room.id.highestNoteOnScreen = game.room.id.highestNoteOnScreen || 0;
 
+game.room.id.beatCountPosition = game.room.id.beatCountPosition || 0; 
+game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
+game.room.id.bpm = (120/game.room.id.bpmInverted) * 120;        
+
+game.room.id.countNumerator = game.countNumerator || 4;
+game.room.id.countDenominator = game.countDenominator || 4;
+game.currentCount = game.currentCount || 0;
+
 game.room.id.previousTick = game.room.id.previousTick || window.__emscripten_date_now();
 game.room.id.nextTick = game.room.id.delta + game.room.id.previousTick;
 game.room.id.startGameTick = game.room.id.startGameTick || null;
@@ -54,10 +62,10 @@ game.room.id.targetNote = game.room.id.targetNote|| game.room.id.targetKey;
 game.room.id.targetScale = game.room.id.targetScale|| "Major";
 game.room.id.scalePosition = game.room.id.scalePosition || 0;
 game.room.id.intervalPosition = game.room.id.intervalPosition || 0;
-game.room.id.bpmInverted = game.room.id.bpmInverted || 120;
+
 game.room.id.deltaBPMAdjusted = game.room.id.deltaBPMAdjusted || game.room.id.bpmInverted;
 // game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
-game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 4000);
+game.room.id.boxAnimationAcrossScreen =  game.room.id.boxAnimationAcrossScreen || ((60/(120 *120/game.room.id.bpmInverted)) * 1000);
 game.room.id.currentLetterMesh = game.room.id.currentLetterMesh || [];
 
 game.room.id.recommendationsScale = game.room.id.recommendationsScale || {};
@@ -83,10 +91,6 @@ game.faustNodes.bubbleNode = game.faustNodes.bubbleNode || {};
 
 game.user.id.toPy = game.user.id.toPy || undefined;
 game.room.id.noteLetterMeshes = game.room.id.noteLetterMeshes || [];
-
-game.countNumerator = game.countNumerator || 4;
-game.countDenominator = game.countDenominator || 4;
-game.currentCount = game.currentCount || 0;
 
 window.onscroll = () => { window.scroll(0, 0); };
 console.log("we do hit index.js even though nothing is here **** ");
